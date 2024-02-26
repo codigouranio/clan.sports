@@ -11,6 +11,7 @@ import string
 from datetime import datetime, timedelta
 from http import HTTPStatus
 
+from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, abort
 from flask import current_app as app
 from flask import flash, jsonify, redirect, request, session, url_for
@@ -22,13 +23,13 @@ from sqlalchemy.orm import Session, sessionmaker
 from .models import Base, RequestCode, User
 from .repo import Repo
 from .sessions import Sessions
+from .smsService import SmsService
 
 engine = create_engine("sqlite:///database.db", echo=True)
 Base.metadata.create_all(engine)
 
-
-
 api_blueprint = Blueprint('api', __name__, url_prefix='/api')
+smsService: SmsService = app.container.sms_service()
 
 def generate_session_id(length=256):
     characters = string.ascii_letters + string.digits + string.punctuation

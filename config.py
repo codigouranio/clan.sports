@@ -3,6 +3,7 @@ import subprocess
 from os import environ, path
 
 from dotenv import load_dotenv
+# from .container import Container
 
 BASE_DIR = path.abspath(path.dirname(__file__))
 load_dotenv(path.join(BASE_DIR, ".env"))
@@ -26,17 +27,3 @@ class Config:
 
     # UI APP
     UI_APP_STATIC_FOLDER = "./ui-app/build"
-
-    # Flask-Assets
-    if ENVIRONMENT == "development":
-        # Check if `lessc` is installed
-        LESS_BIN = subprocess.call("which lessc", shell=True)
-        if LESS_BIN is None:
-            raise ValueError("Flask requires `lessc` to be installed to compile styles.")
-        else:
-            # Check if `nodejs` is installed
-            NODE_JS = subprocess.call("which node", shell=True)
-            if NODE_JS is None:
-                raise ValueError(
-                    "Application running in `development` mode cannot create assets without `node` installed."
-                )
