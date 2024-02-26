@@ -16,4 +16,4 @@ Submit a pull request detailing your changes, providing a clear description and 
 
 # Contact
 
-If you have any questions, suggestions, or feedback, feel free to reach out to us at your-dev@clansports.com.
+If you have any questions, suggestions, or feedback, feel free to reach out to us at dev@clansports.com.
