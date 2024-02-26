@@ -354,6 +354,7 @@ Temporary Items
 
 # Flask stuff:
 flask_session/
+database.db
 
 # Scrapy stuff:
 

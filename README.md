@@ -4,7 +4,7 @@ Welcome to the Clan Sports! This application is designed to help young sports en
 
 ## Patent Notice
 
-This project includes patents pending. For more information about the patents and their implications, please contact your-email@example.com.
+This project includes patents pending. For more information about the patents and their implications, please contact dev@clansports.com.
 
 ## Contributing
 
