@@ -19,6 +19,8 @@ class Config:
     SECRET_KEY = environ.get("SECRET_KEY")
     FLASK_DEBUG = environ.get("FLASK_DEBUG")
     FLASK_APP = "wsgi.py"
+    
+    DATABASE = "sqlite:///database.db"
 
     # Static Assets
     STATIC_FOLDER = "static"

@@ -1,16 +1,16 @@
-import Component from './component';
-import { getData, setData } from './data';
-import PhoneInput from './phoneInput';
-import RequestCodeButton from './requestCodeButton';
+import Component from "./component";
+import { getData, setData } from "./data";
+import PhoneInput from "./phoneInput";
+import RequestCodeButton from "./requestCodeButton";
 
 class RequestCode extends Component {
   constructor(id) {
     super(id);
-    this.requestCodeButton = new RequestCodeButton('#request_code');
+    this.requestCodeButton = new RequestCodeButton("#request-code-button");
     this.requestCodeButton.click = async () => {
       await this.request(getData()?.form || {});
     };
-    this.phoneInput = new PhoneInput('#phone');
+    this.phoneInput = new PhoneInput("#phone");
   }
 
   async request(form) {
@@ -18,15 +18,15 @@ class RequestCode extends Component {
     if (!phoneNumber || !isValidNumberPrecise) {
       return;
     }
-    console.log('request', phoneNumber);
-    const response = await fetch('/api/requestCode', {
-      method: 'POST',
-      mode: 'cors',
+    console.log("request", phoneNumber);
+    const response = await fetch("/api/requestCode", {
+      method: "POST",
+      mode: "cors",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
       body: JSON.stringify({
         phoneNumber,
       }),
@@ -35,20 +35,19 @@ class RequestCode extends Component {
     setData({
       ...getData(),
       ...{
-        requestCode: resp,
+        requestedCode: resp,
       },
     });
     return resp;
   }
 
   render() {
-    const { requestCode } = getData();
-    if (requestCode) {
-      console.log([requestCode, this.obj]);
+    const { requestedCode } = getData();
+    if (requestedCode) {
       this.hide();
-      this.obj.innerHTML = `<p>Request code: ${
-        getData()?.requestCode?.phoneNumber
-      }</p>`;
+      this.phoneInput.reset();
+    } else {
+      this.show();
     }
   }
 }

@@ -1,49 +1,74 @@
-var webpack = require('webpack');
-var path = require('path');
+const webpack = require("webpack");
+const path = require("path");
+const fs = require("fs");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+const pageFiles = fs.readdirSync("./src/assets/").filter(function (file) {
+  return file.match(/.*\.html$/);
+});
+
+const pageEntries = pageFiles.map((filename) => {
+  return new HtmlWebpackPlugin({
+    template: path.join("./src/assets/", filename),
+    filename: filename,
+  });
+});
 
 module.exports = {
   entry: {
-    app: './src/app.js',
+    app: "./src/app.js",
   },
   resolve: {
-    modules: [path.resolve(__dirname, './src'), 'node_modules'],
+    modules: [path.resolve(__dirname, "./src"), "node_modules"],
   },
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: [
-          'style-loader', // Tells webpack how to append CSS to the DOM as a style tag.
-          'css-loader', // Tells webpack how to read a CSS file.
-        ],
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: "asset/resource",
       },
       {
-        test: [/\.jpg$/, /\.png$/],
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.(sc|sa|c)ss/,
         use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-            },
-          },
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "postcss-loader",
+          "sass-loader",
         ],
+        include: [path.resolve(__dirname, "src")],
       },
       {
         test: /\.js$/,
-        exclude: /node_modules/,
-        use: ['babel-loader'],
+        exclude: [/node_modules/, /assets/],
+        use: ["babel-loader"],
       },
       {
         test: /\.ts?$/,
-        use: 'ts-loader',
+        use: "ts-loader",
         exclude: /node_modules/,
       },
     ],
   },
-  mode: 'development',
+  mode: "development",
   output: {
-    path: __dirname + '/static/js',
-    filename: 'bundle.js',
+    path: path.join(__dirname, "/site/"),
+    filename: "./bundle.js",
   },
-  plugins: [],
+  plugins: [
+    ...pageEntries,
+    new MiniCssExtractPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [{ from: "./src/assets/vendor", to: "vendor" }],
+    }),
+    new WebpackManifestPlugin(),
+    new CleanWebpackPlugin(),
+  ],
 };

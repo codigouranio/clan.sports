@@ -9,18 +9,16 @@ from flask_assets import Environment
 from flask_cors import CORS
 from flask_login import LoginManager
 from sqlalchemy import create_engine
-from .container import Container
 
 from flask_session import Session
 
+from .container import Container
 
-@inject
+
 def create_app():
     """Create Flask application."""
-    app = Flask(
-        __name__, 
-        instance_relative_config=False)
-    
+    app = Flask(__name__, instance_relative_config=False)
+
     app.logger.setLevel(logging.DEBUG)
 
     app.config["SESSION_PERMANENT"] = True
@@ -28,13 +26,13 @@ def create_app():
     app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=5)
     app.config["SESSION_COOKIE_SAMESITE"] = "None"
     app.config["SESSION_COOKIE_SECURE"] = True
-    
+
     app.config.from_object("config.Config")
-    
+
     app.container = Container()
     app.container.init_resources()
     app.container.wire(modules=[__name__])
-    
+
     CORS(app)
     Session(app)
 
@@ -42,11 +40,10 @@ def create_app():
     assets.init_app(app)
 
     Session(app)
-    
+
     app.login_manager = LoginManager()
     app.login_manager.init_app(app)
-    
-    
+
     @app.before_request  # runs before FIRST request (only once)
     def catch_all_requests():
         # session.permanent = True
@@ -56,7 +53,6 @@ def create_app():
     with app.app_context():
         # Import parts of our application
         from .api import api
-        from .assets import compile_static_assets
         from .home import home
         from .ui import ui
 
@@ -64,8 +60,5 @@ def create_app():
         app.register_blueprint(home.home_blueprint)
         app.register_blueprint(api.api_blueprint)
         app.register_blueprint(ui.ui_blueprint)
-
-        # Compile static assets
-        compile_static_assets(assets)
 
         return app

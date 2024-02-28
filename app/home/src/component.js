@@ -1,30 +1,66 @@
+import { asyncDebounce } from "./utils";
+import sanitizeHtml from "sanitize-html";
+
 class Component {
-  constructor(id) {
+  changedVisibility = async (visible) => {};
+  parent = null;
+
+  constructor(id, parent) {
     this.obj = document.querySelector(id);
-    window.addEventListener('__init_state__', () => this.init());
+    this.parent = parent;
+    window.addEventListener("__init_state__", () => this.init());
+    this.visible = this.isVisible();
     this.init();
   }
 
+  getParent() {
+    return this.parent;
+  }
+
   init() {
-    window.addEventListener('__popstate__', () => this.render());
+    window.addEventListener("__popstate__", () => this.render());
   }
 
   destroy() {
-    window.removeEventListener('__init_state__', () => this.render());
-    window.removeEventListener('__popstate__', () => this.render());
+    window.removeEventListener("__init_state__", () => this.render());
+    window.removeEventListener("__popstate__", () => this.render());
   }
 
-  hide() {
-    if (!this.obj.classList.contains('hide')) {
-      this.obj.classList.add('hide');
-    }
+  hide(delay = 0) {
+    asyncDebounce(() => {
+      if (this.isVisible()) {
+        this.obj.classList.add("hide");
+        this.handleChangedVisibility(false);
+      }
+    }, delay)();
   }
 
-  show() {
-    if (this.obj.classList.contains('hide')) {
-      this.obj.classList.remove('hide');
-    }
+  show(delay = 0) {
+    asyncDebounce(() => {
+      if (!this.isVisible()) {
+        this.obj.classList.remove("hide");
+        this.handleChangedVisibility(true);
+      }
+    }, delay)();
   }
+
+  setText(text) {
+    this.obj.innerHTML = sanitizeHtml(text);
+  }
+
+  reset() {
+    this.obj.val = "";
+  }
+
+  isVisible() {
+    return !this.obj.classList.contains("hide");
+  }
+
+  handleChangedVisibility(visible) {
+    this.changedVisibility(visible);
+  }
+
+  render() {}
 }
 
 export default Component;

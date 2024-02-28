@@ -1,8 +1,16 @@
-const source = { data: {} };
+const source = {
+  data: {
+    form: {},
+    requestedCode: null,
+  },
+};
 
 const setData = (value) => {
   source.data = Object.assign(source.data, value);
-  window.dispatchEvent(new Event('__popstate__'));
+  console.log(source.data);
+  // Object.assign(source.data, value);
+  // source.data = value;
+  window.dispatchEvent(new Event("__popstate__"));
 };
 const getData = () => source.data;
 

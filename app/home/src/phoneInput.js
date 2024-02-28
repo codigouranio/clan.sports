@@ -1,9 +1,9 @@
-import intlTelInput from 'intl-tel-input';
-import 'intl-tel-input/build/css/intlTelInput.css';
-import 'intl-tel-input/build/js/utils.js';
+import intlTelInput from "intl-tel-input";
+import "intl-tel-input/build/css/intlTelInput.css";
+import "intl-tel-input/build/js/utils.js";
 
-import Component from './component';
-import { getData, setData } from './data';
+import Component from "./component";
+import { getData, setData } from "./data";
 
 class PhoneInput extends Component {
   constructor(id) {
@@ -23,16 +23,20 @@ class PhoneInput extends Component {
       });
     };
 
-    this.obj.addEventListener('change', op);
-    this.obj.addEventListener('keydown', op);
-    this.obj.addEventListener('paste', op);
-    this.obj.addEventListener('input', op);
+    this.obj.addEventListener("change", op);
+    this.obj.addEventListener("keydown", op);
+    this.obj.addEventListener("paste", op);
+    this.obj.addEventListener("input", op);
 
     this.iti = intlTelInput(this.obj, {
-      preferredCountries: ['us', 'ca'],
+      preferredCountries: ["us", "ca"],
       separateDialCode: true,
-      utilsScript: 'intl-tel-input/build/js/utils.js',
+      utilsScript: "intl-tel-input/build/js/utils.js",
     });
+  }
+
+  reset() {
+    this.iti.setNumber("");
   }
 
   render() {}
