@@ -66,7 +66,9 @@ module.exports = {
     ...pageEntries,
     new MiniCssExtractPlugin(),
     new CopyWebpackPlugin({
-      patterns: [{ from: "./src/assets/vendor", to: "vendor" }],
+      patterns: [
+        { from: "./src/assets/vendor", to: "vendor", noErrorOnMissing: true },
+      ],
     }),
     new WebpackManifestPlugin(),
     new CleanWebpackPlugin(),
