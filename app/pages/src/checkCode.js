@@ -17,8 +17,7 @@ class CheckCode extends Component {
     );
 
     this.checkCodeButton.click = async () => {
-      console.log("checkCodeButton click");
-      // this.checkCodeAlertWarning.reset();
+      this.checkCodeAlertWarning.reset();
       this.loadingBackground.show();
       this.loadingBarSpinner.show();
       // this.disable(true);
@@ -134,7 +133,6 @@ class CheckCode extends Component {
       }),
     });
     const resp = await response.json();
-    console.log(resp);
     return resp;
   }
 }
