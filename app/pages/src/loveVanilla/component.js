@@ -32,8 +32,6 @@ class Component {
         child.init();
       }
     }
-    // this.visible = this.isVisible();
-    // return this;
   }
 
   destroy() {
