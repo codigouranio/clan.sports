@@ -1,0 +1,163 @@
+// $flagsImagePath: '~intl-tel-input/build/img/';
+// @import '~intl-tel-input/src/css/intlTelInput';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.code-input {
+  width: 50px;
+  height: 50px;
+  padding: 10px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 18px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+#code-inputs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.iti {
+  width: 100%;
+}
+
+#loading-bar-spinner.spinner {
+  left: 50%;
+  margin-left: -20px;
+  top: 50%;
+  margin-top: -20px;
+  position: absolute;
+  z-index: 9999 !important;
+  animation: loading-bar-spinner 400ms linear infinite;
+}
+
+#loading-bar-spinner.spinner .spinner-icon {
+  width: 60px;
+  height: 60px;
+  border: solid 10px transparent;
+  border-top-color: #00c8b1 !important;
+  border-left-color: #00c8b1 !important;
+  border-radius: 50%;
+}
+
+@keyframes loading-bar-spinner {
+  0% {
+    transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+#loading-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(1px); /* Apply a blur effect */
+  -webkit-backdrop-filter: blur(1px); /* For Safari */
+  /* Ensure it appears above other elements */
+  z-index: 9998;
+  /* Initially hidden */
+  display: none;
+}
+
+// /* Styling for the login form */
+// .medio {
+//   font-family: Arial, sans-serif;
+//   margin: 0;
+//   padding: 0;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   height: 100vh;
+//   background-color: #f9f9f9;
+// }
+
+// #request-code {
+//   max-width: 400px;
+// }
+
+// #check-node {
+//   max-width: 500px;
+// }
+
+// .login-form {
+//   background-color: #fff;
+//   padding: 40px;
+//   border-radius: 10px;
+//   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+//   width: 100%;
+//   text-align: center;
+// }
+
+// h2 {
+//   margin-bottom: 30px;
+//   color: #333;
+//   font-weight: 700;
+//   font-size: 28px;
+// }
+
+// .form-group {
+//   margin-bottom: 30px;
+//   text-align: left;
+// }
+
+// label {
+//   display: block;
+//   margin-bottom: 10px;
+//   color: #555;
+//   font-weight: 500;
+//   font-size: 16px;
+// }
+
+// .pt-sans-regular {
+//   font-family: "PT Sans", sans-serif;
+//   font-weight: 400;
+//   font-style: normal;
+// }
+
+// .pt-sans-bold {
+//   font-family: "PT Sans", sans-serif;
+//   font-weight: 700;
+//   font-style: normal;
+// }
+
+// .pt-sans-regular-italic {
+//   font-family: "PT Sans", sans-serif;
+//   font-weight: 400;
+//   font-style: italic;
+// }
+
+// .pt-sans-bold-italic {
+//   font-family: "PT Sans", sans-serif;
+//   font-weight: 700;
+//   font-style: italic;
+// }
+
+// /* Style for the backdrop covering the entire screen */
+
+// .alert-warning {
+//   margin: 1em;
+//   display: flex; /* Use flexbox */
+//   flex-direction: column; /* Arrange items vertically */
+//   align-items: center;
+//   justify-content: center;
+
+//   .label {
+//     font-size: large !important;
+//   }
+
+//   #request-new-code-button {
+//     margin-top: 1em;
+//   }
+// }

@@ -1,11 +1,13 @@
 import './App.css';
 import logo from './logo.svg';
 import React, { Suspense, lazy } from 'react';
+// import Dashboard from './Dashboard';
 
 const NoAccess = lazy(() => import(/* webpackChunkName: "no-access" */ './NoAccess'));
 const Test = lazy(() => import(/* webpackChunkName: "test" */ './Test'));
+const Dashboard = lazy(() => import(/* webpackChunkName: "dashboard" */ './Dashboard'));
 
-const permission = true;
+const permission = false;
 
 function App() {
   return (
@@ -14,7 +16,8 @@ function App() {
         {permission &&
           <Test></Test>
         }
-        <header className="App-header">
+        <Dashboard></Dashboard>
+        {/* <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
             Edit <code>src/App.tsx</code> and save to reload.
@@ -27,7 +30,7 @@ function App() {
           >
             Learn React
           </a>
-        </header>
+        </header> */}
       </Suspense>
     </div>
   );

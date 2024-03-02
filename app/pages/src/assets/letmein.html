@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html class="no-js">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Let Me In!</title>
+  <!-- <link rel="stylesheet" href="vendor/css/foundation.css" /> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+    rel="stylesheet" />
+</head>
+
+<body class="pt-sans-regular">
+
+  <div id="loading-backdrop"></div>
+
+  <div id="loading-bar-spinner" class="spinner hidden">
+    <div class="spinner-icon"></div>
+  </div>
+
+  <div class="flex justify-center items-center h-screen">
+    <div class="w-auto">
+      <form id="request-code" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+            Enter your phone number:
+          </label>
+          <input id="phone"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="tel" name="phone" />
+        </div>
+        <div class="flex items-center justify-center">
+          <button id="request-code-button"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button">
+            Send me a code
+          </button>
+        </div>
+      </form>
+      <form id="check-code" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 hidden">
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+            Enter the code:
+          </label>
+        </div>
+
+        <div class="flex items-center justify-center space-x-2 mb-4">
+          <input type="text" maxlength="1"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
+          <input type="text" maxlength="1"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
+          <input type="text" maxlength="1"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
+          <input type="text" maxlength="1"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
+          <input type="text" maxlength="1"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
+          <input type="text" maxlength="1"
+            class="w-12 h-12 text-center border border-gray-300 rounded focus:outline-none focus:border-blue-500" />
+        </div>
+
+        <div class="flex items-center justify-center">
+          <button id="check-code-button"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button">
+            Verify
+          </button>
+        </div>
+      </form>
+      <div id="check-code-alert-warning"
+        class="bg-red-100 mb-4 border border-red-400 text-red-700 px-4 py-3 rounded relative hidden" role="alert">
+        Oops something seriously bad happened.
+      </div>
+      <p class="text-center text-gray-500 text-xs">
+        &copy;2025 Clan Sport. All rights reserved.
+      </p>
+    </div>
+  </div>
+
+
+  <div id="2check-node" class="login-form hidden">
+    <div class="form-group">
+      <form id="login" onsubmit="process(event)">
+        <p>Enter the code:</p>
+      </form>
+      <div id="code-inputs">
+        <input class="code-input" type="text" id="digit1" maxlength="1" />
+        <input class="code-input" type="text" id="digit2" maxlength="1" />
+        <input class="code-input" type="text" id="digit3" maxlength="1" />
+        <input class="code-input" type="text" id="digit4" maxlength="1" />
+        <input class="code-input" type="text" id="digit5" maxlength="1" />
+        <input class="code-input" type="text" id="digit6" maxlength="1" />
+      </div>
+    </div>
+    <div class="check-code-button-group">
+      <button id="check-code-button" type="button" class="button">Verify</button>
+    </div>
+    <div id="check-code-alert-warning" class="alert-warning">
+      <span class="label secondary">Warning! Warning!</span>
+      <button id="request-new-code-button" type="button" class="button">I want a new code</button>
+    </div>
+  </div>
+
+
+  <!-- <script type="text/javascript" src="/vendor/jquery.js" defer></script>
+  <script type="text/javascript" src="/vendor/foundation.js" defer></script>
+  <script type="text/javascript" src="/vendor/what-input.js" defer></script>
+  <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", (event) => {
+      $(document).foundation();
+    });
+  </script> -->
+</body>
+
+</html>

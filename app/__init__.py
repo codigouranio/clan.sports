@@ -53,12 +53,14 @@ def create_app():
     with app.app_context():
         # Import parts of our application
         from .api import api
-        from .home import home
-        from .ui import ui
+        from .pages import pages
+        from .react_app import react_app
+
+        # from .ui import ui
 
         # Register Blueprints
-        app.register_blueprint(home.home_blueprint)
+        app.register_blueprint(pages.pages_blueprint)
         app.register_blueprint(api.api_blueprint)
-        app.register_blueprint(ui.ui_blueprint)
+        app.register_blueprint(react_app.react_app_blueprint)
 
         return app
