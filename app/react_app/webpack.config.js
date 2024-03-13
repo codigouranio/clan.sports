@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: "./src/index.tsx",
@@ -10,7 +11,6 @@ module.exports = {
     chunkFilename: "[name].bundle.js",
     path: path.resolve(__dirname, "build"),
   },
-
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
@@ -25,6 +25,10 @@ module.exports = {
       inject: true,
       chunks: ["main", "test.bundle"],
     }),
+    new MiniCssExtractPlugin({
+      filename: "[name].css",
+      chunkFilename: "[id].css",
+    }),
   ],
   module: {
     rules: [
@@ -35,6 +39,20 @@ module.exports = {
       {
         test: /\.css$/i,
         use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        exclude: /node_modules/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              sourceMap: true,
+            },
+          },
+          "sass-loader",
+        ],
       },
       {
         test: /\.(ts|tsx)$/,

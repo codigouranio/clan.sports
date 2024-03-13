@@ -7,8 +7,20 @@
         "useBuiltIns": "entry",
         "corejs": "3.36"
       }
-    ], 
-    "@babel/preset-react",
+    ],
+    ["@babel/preset-react", { "runtime": "automatic" }],
     "@babel/preset-typescript"
+  ],
+  "plugins": [
+    [
+      "babel-plugin-direct-import",
+      {
+        "modules": [
+          "@mui/system",
+          "@mui/material",
+          "@mui/icons-material"
+        ]
+      }
+    ]
   ]
 }

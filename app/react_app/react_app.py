@@ -38,3 +38,11 @@ def catch_all(path):
 def catch_all_1_level(path_1, path):
     # print(home_blueprint.root_path)
     return react_app_blueprint.send_static_file(safe_join("./static/", path_1, path))
+
+
+@react_app_blueprint.errorhandler(404)
+def not_found(e):
+    return react_app_blueprint.send_static_file("index.html")
+    # return render_template(
+    #     "404.html", title="Not Found", template="404.html", test={"test": "test"}
+    # )
