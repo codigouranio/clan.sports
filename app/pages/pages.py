@@ -67,3 +67,16 @@ def test() -> str:
     return render_template(
         "test.html", title="Test", template="test-template", test={"test": "test"}
     )
+
+
+@pages_blueprint.errorhandler(404)
+def not_found(e):
+    return render_template(
+        "404.html", title="Not Found", template="404.html", test={"test": "test"}
+    )
+
+
+# # app name
+# @app.errorhandler(404)
+# def not_found(e):
+#     return render_template("404.html")

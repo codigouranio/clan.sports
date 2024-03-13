@@ -6,15 +6,16 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import WebhookIcon from '@mui/icons-material/Webhook';
-import { AppBar, Badge, Divider, FormControlLabel, FormGroup, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Switch, Toolbar, Typography } from '@mui/material';
+import { AppBar, Badge, Breadcrumbs, Divider, FormControlLabel, FormGroup, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Switch, Toolbar, Typography } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import {
   Experimental_CssVarsProvider as CssVarsProvider,
   ThemeProvider, createTheme
 } from '@mui/material/styles';
+import * as _ from 'lodash';
 import React, { Suspense, lazy } from 'react';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import './App.scss';
-import { Link, Outlet } from 'react-router-dom';
 
 const NoAccess = lazy(() => import(/* webpackChunkName: "no-access" */ './NoAccess'));
 const Test = lazy(() => import(/* webpackChunkName: "test" */ './Test'));
@@ -56,6 +57,9 @@ function App() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const location = useLocation();
+  const { hash, pathname, search } = location;
 
   return (
     <CssVarsProvider>
@@ -103,14 +107,24 @@ function App() {
                 backgroundColor: 'gray',
                 paddingTop: '2px',
               }}>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  sx={{ flexGrow: 1, textAlign: 'left', cursor: 'pointer' }}
-                >
-                  <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Home</Link>
-                </Typography>
-
+                <Breadcrumbs aria-label="breadcrumb" style={{ textDecoration: "none", color: "inherit" }}>
+                  <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{ flexGrow: 1, textAlign: 'left', cursor: 'pointer' }}
+                  >
+                    <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Home</Link>
+                  </Typography>
+                  {pathname !== "/" &&
+                    <Typography
+                      variant="h6"
+                      component="div"
+                      sx={{ flexGrow: 1, textAlign: 'left', cursor: 'pointer' }}
+                    >
+                      {_.capitalize(pathname.replace("/", ""))}
+                    </Typography>
+                  }
+                </Breadcrumbs>
                 <Typography variant="subtitle1" component="div" sx={{ flexGrow: 1, textAlign: 'right', }}>
                   (90*-***-3015)
                 </Typography>
