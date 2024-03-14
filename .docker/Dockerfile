@@ -1,11 +1,3 @@
-# docker build --progress=plain --no-cache -t clan-sports-app:latest -f .docker/Dockerfile .
-# docker inspect --format '{{.Confing.Env}}'
-# docker run -p 3000:3000 clan-sports-app 
-# conda env export > environment_droplet.yml
-# conda env create -f environment.yml
-# docker run -p 3000:3000 clan-sports-app  
-# docker run -i -t clan-sports-app:latest /bin/bash
-
 FROM node:19-alpine as base
 
 RUN apk update && apk upgrade
