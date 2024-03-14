@@ -21,13 +21,13 @@ COPY ./app/pages .
 COPY --from=deps_pages /home/node/app/node_modules ./node_modules
 RUN npm run build
 
-FROM base AS deps_react_app
-COPY ./app/react_app/package.json .
+FROM base AS deps_home
+COPY ./app/home/package.json .
 RUN npm i --no-scripts
 
-FROM base as build_react_app
-COPY ./app/react_app .
-COPY --from=deps_react_app /home/node/app/node_modules ./node_modules
+FROM base as build_home
+COPY ./app/home .
+COPY --from=deps_home /home/node/app/node_modules ./node_modules
 RUN npm run build
 
 FROM python:3.9 AS release
@@ -52,8 +52,8 @@ WORKDIR /home/flask/app
 
 COPY --from=deps_pages /home/node/app/node_modules ./app/pages/node_modules
 COPY --from=build_pages /home/node/app/build ./app/pages/build
-COPY --from=deps_react_app /home/node/app/node_modules ./app/react_app/node_modules
-COPY --from=build_react_app /home/node/app/build ./app/react_app/build
+COPY --from=deps_home /home/node/app/node_modules ./app/home/node_modules
+COPY --from=build_home /home/node/app/build ./app/home/build
 
 COPY ./ .  
 # && rm -rf $POETRY_CACHE_DIR
