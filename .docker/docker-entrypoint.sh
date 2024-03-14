@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -eq 0 ]; then
-  exec flask run
+  exec uwsgi --ini ./uwsgi.ini
 else
   exec "$@"
 fi

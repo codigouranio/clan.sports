@@ -57,7 +57,6 @@ def create_app():
         from .react_app import react_app
 
         # from .ui import ui
-
         # Register Blueprints
         app.register_blueprint(pages.pages_blueprint)
         app.register_blueprint(api.api_blueprint)
