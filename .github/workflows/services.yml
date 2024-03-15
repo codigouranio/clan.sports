@@ -87,7 +87,7 @@ jobs:
           string: "${{ steps.current-time.outputs.time }}"
           replace-with: "-"
           flags: "g"
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v3
         with:
           name: deploy.zip
       - name: Rename deploy file to version
