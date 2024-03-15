@@ -29,7 +29,7 @@ ENV POETRY_VERSION=1.1.11 \
   POETRY_NO_INTERACTION=1 \
   POETRY_VIRTUALENVS_CREATE=false
 
-# ENV POETRY_CACHE_DIR=/tmp/poetry_cache
+ENV POETRY_CACHE_DIR=/tmp/poetry_cache
 
 ENV FLASK_RUN_HOST=0.0.0.0 \
   FLASK_RUN_PORT=5000
@@ -48,8 +48,8 @@ COPY --from=deps_home /home/node/app/node_modules ./app/home/node_modules
 COPY --from=build_home /home/node/app/build ./app/home/build
 
 COPY ./ .  
-# && rm -rf $POETRY_CACHE_DIR
-RUN poetry install --no-root --no-dev
+
+RUN poetry install --no-root --no-dev && rm -rf $POETRY_CACHE_DIR
 
 # --no-dev --only main 
 
@@ -58,8 +58,6 @@ EXPOSE 3000
 RUN mv .docker/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT [ "docker-entrypoint.sh" ]
-
-# ENTRYPOINT ["uwsgi", "--ini", "./wsgi.ini"]
 
 
 
