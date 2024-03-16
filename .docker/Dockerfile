@@ -53,7 +53,7 @@ RUN poetry install --no-root --no-dev && rm -rf $POETRY_CACHE_DIR
 
 # --no-dev --only main 
 
-EXPOSE 80
+EXPOSE 3000
 
 RUN mv .docker/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
