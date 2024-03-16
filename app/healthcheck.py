@@ -7,6 +7,6 @@ healthcheck_blueprint = Blueprint(
 
 
 @healthcheck_blueprint.route("/")
-def catch_all_1_level():
+def healthcheck():
     # print(home_blueprint.root_path)
     return jsonify({"ok": "ok"})
