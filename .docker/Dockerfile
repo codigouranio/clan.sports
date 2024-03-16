@@ -22,39 +22,68 @@ COPY ./app/home .
 COPY --from=deps_home /home/node/app/node_modules ./node_modules
 RUN npm run build
 
-FROM python:3.9 AS release
+FROM python:3.9 AS builder
 
-ENV POETRY_VERSION=1.1.11 \
-  POETRY_HOME="/opt/poetry" \
-  POETRY_NO_INTERACTION=1 \
-  POETRY_VIRTUALENVS_CREATE=false
+WORKDIR /home/flask/app
 
-ENV POETRY_CACHE_DIR=/tmp/poetry_cache
+RUN apt-get update && \
+  apt-get install -y && \
+  pip3 install poetry
+
+COPY ./pyproject.toml .  
+RUN poetry export -f requirements.txt --output requirements.txt
+
+FROM python:3.9-alpine as release
+
+EXPOSE 3000
+
+WORKDIR /home/flask/app
 
 ENV FLASK_RUN_HOST=0.0.0.0 \
   FLASK_RUN_PORT=5000
 
 ENV ENVIRONMENT=dev
 
-RUN apt-get update && \
-  apt-get install -y && \
-  pip3 install poetry
+RUN apk update && \
+  apk add --no-cache build-base \
+  musl-dev linux-headers && \
+  apk add uwsgi-python3
 
-WORKDIR /home/flask/app
+RUN pip install --upgrade pip
+RUN pip install flask
 
-COPY --from=deps_pages /home/node/app/node_modules ./app/pages/node_modules
+COPY --from=builder /home/flask/app/requirements.txt ./
+RUN pip install -r requirements.txt
+
+# COPY --from=deps_pages /home/node/app/node_modules ./app/pages/node_modules
 COPY --from=build_pages /home/node/app/build ./app/pages/build
-COPY --from=deps_home /home/node/app/node_modules ./app/home/node_modules
+# COPY --from=deps_home /home/node/app/node_modules ./app/home/node_modules
 COPY --from=build_home /home/node/app/build ./app/home/build
 
-COPY ./ .  
+COPY . ./
 
-RUN poetry install --no-root --no-dev && rm -rf $POETRY_CACHE_DIR
-
-# --no-dev --only main 
-
-EXPOSE 3000
+COPY .docker/docker-entrypoint.sh .
 
 RUN mv .docker/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT [ "docker-entrypoint.sh" ]
+
+# ENTRYPOINT [ "uwsgi", "--ini", "./wsgi.ini" ]
+
+# EXPOSE 3000
+
+
+
+# WORKDIR /home/flask/app
+
+# COPY --from=builder /home/node/app/node_modules ./app/pages/node_modules
+
+
+
+# COPY .docker/docker-entrypoint.sh .
+
+# RUN ls ./ -la
+
+# RUN mv .docker/docker-entrypoint.sh /usr/local/bin/
+# RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+# ENTRYPOINT [ "docker-entrypoint.sh" ]
