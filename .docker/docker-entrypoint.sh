@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ $# -eq 0 ]; then
-  exec uwsgi --ini ./uwsgi.ini
+  exec uwsgi --ini ./wsgi.ini
 else
   exec "$@"
 fi
