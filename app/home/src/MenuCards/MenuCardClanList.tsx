@@ -1,5 +1,6 @@
 import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
 import {
+  Card,
   CardActions,
   CardContent,
   Paper,
@@ -10,7 +11,7 @@ import { Link } from "react-router-dom";
 
 const MenuCardClanList = ({ card }) => (
   <React.Fragment>
-    <Paper elevation={0} sx={{
+    <Card elevation={0} sx={{
       backgroundColor: 'transparent',
       color: 'black'
     }}>
@@ -19,7 +20,7 @@ const MenuCardClanList = ({ card }) => (
           <Typography sx={{ mb: 0.2 }}>
             <AllInclusiveIcon sx={{ fontSize: "12em" }} />
           </Typography>
-          <Typography variant="h5" component="div">
+          <Typography variant="h3" component="div">
             {card?.description}
           </Typography>
           <Typography variant="body2">
@@ -32,7 +33,7 @@ const MenuCardClanList = ({ card }) => (
       <CardActions>
 
       </CardActions>
-    </Paper>
+    </Card>
   </React.Fragment>
 );
 

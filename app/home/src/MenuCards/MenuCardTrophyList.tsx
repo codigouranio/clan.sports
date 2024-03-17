@@ -1,11 +1,11 @@
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import { Button, CardActions, CardContent, Paper, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, Paper, Typography } from "@mui/material";
 import React from "react";
 import { Link } from 'react-router-dom';
 
 const MenuCardTrophyList = ({ card }) =>
   <React.Fragment>
-    <Paper elevation={0} sx={{
+    <Card elevation={0} sx={{
       backgroundColor: 'transparent',
       color: 'gold'
 
@@ -15,14 +15,14 @@ const MenuCardTrophyList = ({ card }) =>
           <Typography sx={{ mb: 0.2 }}>
             <EmojiEventsIcon sx={{ fontSize: '12em' }} />
           </Typography>
-          <Typography variant="h5" component="div">
+          <Typography variant="h3" component="div">
             {card?.description}
           </Typography>
           <Typography sx={{ mb: 0.1 }} color="text.secondary">
-            Awarded: {card.sent}
+            Awarded {card.sent}
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Received: {card.received}
+            Received {card.received}
           </Typography>
         </CardContent>
       </Link>
@@ -30,7 +30,7 @@ const MenuCardTrophyList = ({ card }) =>
         <Button size="small">Craft</Button>
         <Button size="small">Award</Button>
       </CardActions>
-    </Paper>
+    </Card>
   </React.Fragment >
 
 export default MenuCardTrophyList;

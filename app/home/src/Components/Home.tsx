@@ -58,6 +58,8 @@ export default function Home() {
     padding: theme.spacing(1),
     textAlign: 'center',
     fontSize: '70px',
+    boxShadow: theme.shadows[3],
+    border: '0px solid #919491',
     color: theme.palette.text.secondary,
   }));
 

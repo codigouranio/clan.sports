@@ -85,6 +85,9 @@ function App() {
                     paddingBottom: '2px',
                     paddingLeft: '5px',
                     paddingRight: '2px',
+                    stroke: 'ActiveBorder',
+                    strokeWidth: '1.5px',
+                    fill: 'yellow'
                     // margin: '0.5rem'
                   }}
                 >
