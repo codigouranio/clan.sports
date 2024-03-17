@@ -1,5 +1,6 @@
 
 import '@fontsource/share-tech-mono';
+import '@fontsource/bangers';
 import { AccountCircle } from '@mui/icons-material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
@@ -10,36 +11,45 @@ import { AppBar, Badge, Breadcrumbs, Divider, FormControlLabel, FormGroup, IconB
 import CssBaseline from '@mui/material/CssBaseline';
 import {
   Experimental_CssVarsProvider as CssVarsProvider,
-  ThemeProvider, createTheme
+  ThemeProvider,
+  createTheme, responsiveFontSizes
 } from '@mui/material/styles';
 import * as _ from 'lodash';
 import React, { Suspense, lazy } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import './App.scss';
+import Copyright from './Components/Copyright';
 
 const NoAccess = lazy(() => import(/* webpackChunkName: "no-access" */ './NoAccess'));
 const Test = lazy(() => import(/* webpackChunkName: "test" */ './Test'));
 
-const defaultTheme = createTheme();
+const theme = createTheme({
+  typography: {
+    "fontFamily": `"Bangers", "Helvetica", "Arial", sans-serif`,
+    "fontWeightLight": 300,
+    "fontWeightRegular": 400,
+    "fontWeightMedium": 500
+  },
+  components: {
+    // Name of the component
+    MuiButton: {
+      defaultProps: {
+      },
+      styleOverrides: {
+        // Name of the slot
+        root: {
+          // Some CSS
+          fontSize: '1.2rem',
+        },
+      },
+    },
+  },
+});
+// const theme = responsiveFontSizes(defaultTheme);
 
 const permission = false;
 
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="left"
-      {...props}
-    >
-      {'Copyright © '}
-      CLAN SPoRTS LLC
-      {'.'}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+
 
 function App() {
 
@@ -63,7 +73,7 @@ function App() {
 
   return (
     <CssVarsProvider>
-      <ThemeProvider theme={defaultTheme}>
+      <ThemeProvider theme={theme}>
         <div className="App">
           <Suspense fallback={<div>Loading...</div>}>
             {permission &&

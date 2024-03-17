@@ -44,3 +44,9 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+```
+magick convert medal.png -background none -resize 192x192 logo192.png 
+magick convert medal.png -background none -resize 512x512 logo512.png 
+magick convert medal.png -define icon:auto-resize="256,128,96,64,48,32,16" -background none favicon.ico
+```

@@ -1,4 +1,4 @@
-export default function Notifications() {
+export default function NotificationList() {
   return (
     <div>Notifications</div>
   );

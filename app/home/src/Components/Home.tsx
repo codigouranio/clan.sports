@@ -133,7 +133,7 @@ export default function Home() {
       <Grid container spacing={2} columns={16} justifyContent="center">
         {cards.map((card, index) => (
           <Grid item xs="auto" key={index}>
-            <div key={index}>
+            <div key={index} className='pepito'>
               {card.type === "clan_list" && <Item><MenuCardClanList card={card} /></Item>}
               {card.type === "profile_list" && <Item><MenuCardProfileList card={card} /></Item>}
               {card.type === "trophy_list" && <Item><MenuCardTrophyList card={card} /></Item>}

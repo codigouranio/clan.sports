@@ -11,11 +11,11 @@ const MenuCardPoints = ({ card }) =>
     }}>
       <Link to="points" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
+          <Typography variant="body2" sx={{ mb: 0.2 }}>
+            <MoneyIcon sx={{ fontSize: '12em' }} />
+          </Typography>
           <Typography variant="h5" component="div">
             {card?.description}
-          </Typography>
-          <Typography variant="body2">
-            <MoneyIcon sx={{ fontSize: '12em' }} />
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             Current Balance

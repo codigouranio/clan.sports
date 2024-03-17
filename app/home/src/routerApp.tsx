@@ -11,6 +11,7 @@ const TrophyList = lazy(() => import(/* webpackChunkName: "trophyList" */ './Com
 const PointList = lazy(() => import(/* webpackChunkName: "pointList" */ './Components/PointList'));
 const ErrorGeneric = lazy(() => import(/* webpackChunkName: "errorGeneric" */ './Components/ErrorGeneric'));
 const Error404 = lazy(() => import(/* webpackChunkName: "error404" */ './Components/Error404'));
+const NotificationList = lazy(() => import(/* webpackChunkName: "notificationList" */ './Components/NotificationList'));
 
 export const routerApp = createBrowserRouter([
   {
@@ -51,6 +52,11 @@ export const routerApp = createBrowserRouter([
       {
         path: "points",
         element: <PointList />,
+        errorElement: <ErrorGeneric />,
+      },
+      {
+        path: "notifications",
+        element: <NotificationList />,
         errorElement: <ErrorGeneric />,
       },
     ]

@@ -5,14 +5,17 @@ import { Link } from 'react-router-dom';
 
 const MenuCardPassList = ({ card }) =>
   <React.Fragment>
-    <Paper elevation={0}>
+    <Paper elevation={0} sx={{
+      backgroundColor: 'transparent',
+      color: 'darkgray'
+    }}>
       <Link to="passes" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
+          <Typography sx={{ mb: 0.2 }}>
+            <QrCode2Icon sx={{ fontSize: '12em' }} />
+          </Typography>
           <Typography variant="h5" component="div">
             {card?.description}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }}>
-            <QrCode2Icon sx={{ fontSize: '12em' }} />
           </Typography>
           <Typography sx={{ mb: 0.5 }} color="text.secondary">
             Current: <span>{`${card.current}`}</span>

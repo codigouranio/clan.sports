@@ -7,16 +7,16 @@ const MenuCardTrophyList = ({ card }) =>
   <React.Fragment>
     <Paper elevation={0} sx={{
       backgroundColor: 'transparent',
-      color: 'blue'
+      color: 'gold'
 
     }}>
       <Link to="trophies" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
+          <Typography sx={{ mb: 0.2 }}>
+            <EmojiEventsIcon sx={{ fontSize: '12em' }} />
+          </Typography>
           <Typography variant="h5" component="div">
             {card?.description}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }}>
-            <EmojiEventsIcon sx={{ fontSize: '12em' }} />
           </Typography>
           <Typography sx={{ mb: 0.1 }} color="text.secondary">
             Awarded: {card.sent}
