@@ -11,8 +11,8 @@ const MenuCardBadgeList = ({ card }) =>
           <Typography variant="h5" component="div">
             {card?.description}
           </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            <WorkspacePremiumIcon />
+          <Typography sx={{ mb: 1.5 }} >
+            <WorkspacePremiumIcon sx={{ fontSize: '12em' }} />
           </Typography>
           <Typography sx={{ mb: 0.1 }} color="text.secondary">
             Issued: {card.sent}

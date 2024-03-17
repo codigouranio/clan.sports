@@ -55,13 +55,13 @@ def create_app():
         from .api import api
         from . import pages
         from . import home
-        from . import healthcheck
+        from . import heartbeat
 
         # from .ui import ui
         # Register Blueprints
         app.register_blueprint(pages.pages_blueprint)
         app.register_blueprint(api.api_blueprint)
         app.register_blueprint(home.home_blueprint)
-        app.register_blueprint(healthcheck.healthcheck_blueprint)
+        app.register_blueprint(heartbeat.heartbeat_blueprint)
 
         return app

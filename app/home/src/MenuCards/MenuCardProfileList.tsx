@@ -11,8 +11,8 @@ const MenuCardProfileList = ({ card }) =>
           <Typography variant="h5" component="div">
             {card?.description}
           </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            <GroupIcon />
+          <Typography sx={{ mb: 1.5 }}>
+            <GroupIcon sx={{ fontSize: '12em' }} />
           </Typography>
           <Typography variant="body2">
             Managing
@@ -22,7 +22,6 @@ const MenuCardProfileList = ({ card }) =>
         </CardContent>
       </Link>
       <CardActions>
-        <Button size="small">View</Button>
         <Button size="small">Transfer</Button>
       </CardActions>
     </Paper>

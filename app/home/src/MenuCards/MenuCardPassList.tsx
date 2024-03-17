@@ -11,8 +11,8 @@ const MenuCardPassList = ({ card }) =>
           <Typography variant="h5" component="div">
             {card?.description}
           </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            <QrCode2Icon />
+          <Typography sx={{ mb: 1.5 }}>
+            <QrCode2Icon sx={{ fontSize: '12em' }} />
           </Typography>
           <Typography sx={{ mb: 0.5 }} color="text.secondary">
             Current: <span>{`${card.current}`}</span>
@@ -23,7 +23,6 @@ const MenuCardPassList = ({ card }) =>
         </CardContent>
       </Link>
       <CardActions>
-        <Button size="small">View</Button>
         <Button size="small">Activate</Button>
       </CardActions>
     </Paper>

@@ -8,7 +8,6 @@ const MenuCardPoints = ({ card }) =>
     <Paper elevation={0} sx={{
       backgroundColor: 'transparent',
       color: 'green'
-
     }}>
       <Link to="points" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
@@ -16,7 +15,7 @@ const MenuCardPoints = ({ card }) =>
             {card?.description}
           </Typography>
           <Typography variant="body2">
-            <MoneyIcon />
+            <MoneyIcon sx={{ fontSize: '12em' }} />
           </Typography>
           <Typography sx={{ mb: 1.5 }} color="text.secondary">
             Current Balance
@@ -26,7 +25,6 @@ const MenuCardPoints = ({ card }) =>
         </CardContent>
       </Link>
       <CardActions>
-        <Button size="small">View</Button>
         <Button size="small">Buy</Button>
         <Button size="small">Shop</Button>
       </CardActions>

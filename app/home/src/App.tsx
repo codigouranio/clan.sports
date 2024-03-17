@@ -126,7 +126,6 @@ function App() {
                   }
                 </Breadcrumbs>
                 <Typography variant="subtitle1" component="div" sx={{ flexGrow: 1, textAlign: 'right', }}>
-                  (90*-***-3015)
                 </Typography>
                 <IconButton
                   size="large"

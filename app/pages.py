@@ -28,11 +28,6 @@ pages_blueprint = Blueprint(
 )
 
 
-@pages_blueprint.route("/heartbeat")
-def heartbeat():
-    return jsonify({"status": "healthy"})
-
-
 @pages_blueprint.route("/letmein", methods=["GET"])
 def letmein() -> str:
     if current_user.is_authenticated:

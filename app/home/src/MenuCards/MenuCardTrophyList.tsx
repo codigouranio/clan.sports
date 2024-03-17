@@ -15,8 +15,8 @@ const MenuCardTrophyList = ({ card }) =>
           <Typography variant="h5" component="div">
             {card?.description}
           </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            <EmojiEventsIcon />
+          <Typography sx={{ mb: 1.5 }}>
+            <EmojiEventsIcon sx={{ fontSize: '12em' }} />
           </Typography>
           <Typography sx={{ mb: 0.1 }} color="text.secondary">
             Awarded: {card.sent}
@@ -27,7 +27,6 @@ const MenuCardTrophyList = ({ card }) =>
         </CardContent>
       </Link>
       <CardActions>
-        <Button size="small">View</Button>
         <Button size="small">Craft</Button>
         <Button size="small">Award</Button>
       </CardActions>
