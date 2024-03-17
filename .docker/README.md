@@ -2,3 +2,4 @@
 # docker inspect --format '{{.Confing.Env}}'
 # docker run -p 3000:3000 clan-sports-app 
 # docker run -i -t clan-sports-app:latest /bin/bash
+# docker system prune --all --force
