@@ -1,5 +1,5 @@
 
-import '@fontsource/share-tech-mono';
+import '@fontsource/train-one';
 import '@fontsource/bangers';
 import { AccountCircle } from '@mui/icons-material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -11,49 +11,19 @@ import { AppBar, Badge, Breadcrumbs, Divider, FormControlLabel, FormGroup, IconB
 import CssBaseline from '@mui/material/CssBaseline';
 import {
   Experimental_CssVarsProvider as CssVarsProvider,
-  ThemeProvider,
-  createTheme, responsiveFontSizes
+  ThemeProvider
 } from '@mui/material/styles';
 import * as _ from 'lodash';
 import React, { Suspense, lazy } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import './App.scss';
 import Copyright from './Components/Copyright';
+import theme from './theme';
 
 const NoAccess = lazy(() => import(/* webpackChunkName: "no-access" */ './NoAccess'));
 const Test = lazy(() => import(/* webpackChunkName: "test" */ './Test'));
 
-const theme = createTheme({
-  typography: {
-    "fontFamily": `"Bangers", "Helvetica", "Arial", sans-serif`,
-    "fontWeightLight": 300,
-    "fontWeightRegular": 400,
-    "fontWeightMedium": 500
-  },
-  components: {
-    // Name of the component
-    MuiButton: {
-      defaultProps: {
-      },
-      styleOverrides: {
-        // Name of the slot
-        root: {
-          // Some CSS
-          fontSize: '1.2rem',
-        },
-      },
-    },
-    MuiCardContent: {
-      styleOverrides: {
-        root: {
-          backgroundColor: 'transparent',
-          boxShadow: 'none',
-        },
-      },
-    }
-  },
-});
-// const theme = responsiveFontSizes(defaultTheme);
+
 
 const permission = false;
 
@@ -105,9 +75,9 @@ function App() {
                   component="a"
                   href="#app-bar-with-responsive-menu"
                   sx={{
-                    fontFamily: 'Share Tech Mono, system-ui',
-                    fontWeight: 700,
-                    letterSpacing: '-0.1em',
+                    fontFamily: 'Train One, system-ui',
+                    fontWeight: 300,
+                    letterSpacing: '0em',
                     color: '#2C2323',
                     textDecoration: 'none',
                     // backgroundColor: '#DC0000',
@@ -118,7 +88,7 @@ function App() {
                     // margin: '0.5rem'
                   }}
                 >
-                  CLAN SPORTS
+                  CLANSPORTS.club
                 </Typography>
               </Toolbar>
               <Toolbar variant="dense" sx={{

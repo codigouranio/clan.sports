@@ -9,8 +9,8 @@ export default function Copyright(props: any) {
       {...props}
     >
       {'Copyright © '}
-      CLAN SPoRTS LLC
-      {'.'}
+      CLANSPORTS.club
+      {' '}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
