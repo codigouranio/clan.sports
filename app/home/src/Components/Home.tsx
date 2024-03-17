@@ -52,14 +52,6 @@ export default function Home() {
     setOpen(!open);
   };
 
-  // const MenuCardItem = styled(MenuCard)(({ theme }) => ({
-  //   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  //   ...theme.typography.body2,
-  //   padding: theme.spacing(1),
-  //   textAlign: 'center',
-  //   color: theme.palette.text.secondary,
-  // }));
-
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -133,7 +125,7 @@ export default function Home() {
       <Grid container spacing={2} columns={16} justifyContent="center">
         {cards.map((card, index) => (
           <Grid item xs="auto" key={index}>
-            <div key={index} className='pepito'>
+            <div key={index}>
               {card.type === "clan_list" && <Item><MenuCardClanList card={card} /></Item>}
               {card.type === "profile_list" && <Item><MenuCardProfileList card={card} /></Item>}
               {card.type === "trophy_list" && <Item><MenuCardTrophyList card={card} /></Item>}

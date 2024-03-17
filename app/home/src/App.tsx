@@ -43,6 +43,14 @@ const theme = createTheme({
         },
       },
     },
+    MuiCardContent: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'transparent',
+          boxShadow: 'none',
+        },
+      },
+    }
   },
 });
 // const theme = responsiveFontSizes(defaultTheme);
@@ -139,7 +147,7 @@ function App() {
                 </Typography>
                 <IconButton
                   size="large"
-                  aria-label="show 17 new notifications"
+                  aria-label="your-phone"
                   color="inherit"
                 >
                   <SmartphoneIcon />
@@ -148,6 +156,7 @@ function App() {
                   size="large"
                   aria-label="show 17 new notifications"
                   color="inherit"
+                  component={Link} to="/notifications"
                 >
                   <Badge badgeContent={17} color="info">
                     <NotificationsIcon />
@@ -217,7 +226,7 @@ function App() {
           </Suspense>
         </div>
       </ThemeProvider>
-    </CssVarsProvider>
+    </CssVarsProvider >
   );
 }
 
