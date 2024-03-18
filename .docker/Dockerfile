@@ -35,9 +35,15 @@ RUN poetry export -f requirements.txt --output requirements.txt
 
 FROM python:3.9-alpine as release
 
+ARG AWS_ACCESS_KEY_ID
+ARG AWS_SECRET_ACCESS_KEY
+
 EXPOSE 80
 
 WORKDIR /home/flask/app
+
+ENV AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+  AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 
 ENV FLASK_RUN_HOST=0.0.0.0 \
   FLASK_RUN_PORT=5000

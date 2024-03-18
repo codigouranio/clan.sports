@@ -1,33 +1,16 @@
-"""Class-based Flask app configuration."""
+import logging
+from datetime import timedelta
 
-import subprocess
-from os import environ, path
-
-from dotenv import load_dotenv
-
-# from .container import Container
-
-BASE_DIR = path.abspath(path.dirname(__file__))
-load_dotenv(path.join(BASE_DIR, ".env"))
-
-
-class Config:
-    """Configuration from environment variables."""
-
-    # General Config\
-    ENVIRONMENT = environ.get("ENVIRONMENT")
-
-    # Flask Config
-    SECRET_KEY = environ.get("SECRET_KEY")
-    FLASK_DEBUG = environ.get("FLASK_DEBUG")
-    FLASK_APP = "wsgi.py"
-
-    DATABASE = "sqlite:///database.db"
-
-    # Static Assets
-    STATIC_FOLDER = "static"
-    TEMPLATES_FOLDER = "templates"
-    COMPRESSOR_DEBUG = False
-
-    # UI APP
-    UI_APP_STATIC_FOLDER = "./build"
+DEBUG = True
+TESTING = True
+SECRET_KEY = "fe339b49-d1c9-499d-a6e1-193124697c9b"
+SESSION_TYPE = "filesystem"
+SESSION_PERMANENT = True
+PERMANENT_SESSION_LIFETIME = timedelta(days=31)
+SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_SECURE = True
+JWT_ALGORITHM = "HS256"
+COMPRESSOR_DEBUG = False
+APP_DATABASE = "sqlite:///database.db"
+MAX_COOKIE_SIZE = 4093
+LOGGER_LEVEL = logging.DEBUG

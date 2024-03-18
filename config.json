@@ -1,0 +1,7 @@
+{
+  "sms_service": {
+    "service_plant_id": "222",
+    "service_test": "test",
+    "service_url": "https://us.sms.api.sinch.com/xms/v1/11/batches"
+  }
+}

@@ -92,7 +92,7 @@ function App() {
                   }}
                   className='anim-text-flow'
                 >
-                  <span>C</span>LAN <span>S</span>PORT<span>S</span>
+                  <span>C</span>LAN <span>S</span>PORTS
                 </Typography>
               </Toolbar>
               <Toolbar variant="dense" sx={{

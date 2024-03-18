@@ -21,19 +21,30 @@ from flask_login import (
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from .models import Base, RequestCode, User
-from .repo import Repo
-from .sessions import Sessions
-from .smsService import SmsService
-from .utils import generate_session_id, generate_sha256_hash
+from .api.models import Base, RequestCode, User
+from .api.repo import Repo
+from .api.sessions import Sessions
+from .api.smsService import SmsService
+from .api.utils import generate_session_id, generate_sha256_hash
 
-engine = create_engine(app.config["DATABASE"], echo=True)
+engine = create_engine(app.config["APP_DATABASE"], echo=True)
 # Session = sessionmaker(bind=engine)
 
 Base.metadata.create_all(engine)
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
-smsService: SmsService = app.container.sms_service()
+smsService: SmsService = app.container.smsService()
+ssmClient = app.container.ssmClient()
+
+try:
+    print(ssmClient.get("/clan.sports.club/staging/test"))
+except:
+    print("An exception occurred")
+
+
+@api_blueprint.route("/test", methods=["GET"])
+def test():
+    return jsonify({"success": True})
 
 
 @api_blueprint.route("/requestCode", methods=["POST"])

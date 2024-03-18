@@ -1,7 +1,0 @@
-{
-  "smsService" : {
-    "servicePlanId": "222", 
-    "test": "test", 
-    "url": "https://us.sms.api.sinch.com/xms/v1/11/batches"
-  }
-}
