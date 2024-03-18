@@ -9,4 +9,4 @@ class Container(containers.DeclarativeContainer):
     config = providers.Configuration(json_files=["../config.json"])
 
     smsService = providers.Singleton(SmsServiceMock, servicePlanId=config.servicePlanId)
-    ssmClient = providers.Singleton(boto3.client, "ssm")
+    # ssmClient = providers.Singleton(boto3.client, "ssm")
