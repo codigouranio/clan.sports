@@ -9,11 +9,10 @@ packages = []
 
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.11"
 black = "^23.12.1"
 blinker = "^1.7.0"
 click = "^8.1.7"
-colorama = "0.4.6"
 cssmin = "^0.2.0"
 faker = "^21.0.0"
 flake8 = "^6.1.0"
@@ -50,6 +49,8 @@ redis = "^5.0.3"
 dependency-injector = "^4.41.0"
 uwsgi = "^2.0.24"
 requests = "^2.31.0"
+colorama = "0.2.5"
+awscli = "^1.32.65"
 
 
 [build-system]

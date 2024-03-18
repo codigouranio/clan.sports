@@ -22,7 +22,7 @@ COPY ./app/home .
 COPY --from=deps_home /home/node/app/node_modules ./node_modules
 RUN npm run build
 
-FROM python:3.9 AS builder
+FROM python:3.11 AS builder
 
 WORKDIR /home/flask/app
 
@@ -33,7 +33,7 @@ RUN apt-get update && \
 COPY ./pyproject.toml .  
 RUN poetry export -f requirements.txt --output requirements.txt
 
-FROM python:3.9-alpine as release
+FROM python:3.11-alpine as release
 
 ARG AWS_ACCESS_KEY_ID
 ARG AWS_SECRET_ACCESS_KEY
