@@ -71,12 +71,12 @@ function App() {
               }}>
                 <Typography
                   noWrap
-                  variant="h4"
+                  variant="h5"
                   component="a"
                   href="#app-bar-with-responsive-menu"
                   sx={{
-                    fontFamily: 'Train One, system-ui',
-                    fontWeight: 300,
+                    fontFamily: 'Outfit, system-ui',
+                    fontWeight: 500,
                     letterSpacing: '0em',
                     color: '#2C2323',
                     textDecoration: 'none',
@@ -90,8 +90,9 @@ function App() {
                     fill: 'yellow'
                     // margin: '0.5rem'
                   }}
+                  className='anim-text-flow'
                 >
-                  CLANSPORTS.club
+                  <span>C</span>LAN <span>S</span>PORT<span>S</span>
                 </Typography>
               </Toolbar>
               <Toolbar variant="dense" sx={{

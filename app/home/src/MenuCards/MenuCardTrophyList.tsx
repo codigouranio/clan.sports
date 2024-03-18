@@ -7,8 +7,7 @@ const MenuCardTrophyList = ({ card }) =>
   <React.Fragment>
     <Card elevation={0} sx={{
       backgroundColor: 'transparent',
-      color: 'gold'
-
+      color: '#DAA520'
     }}>
       <Link to="trophies" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
