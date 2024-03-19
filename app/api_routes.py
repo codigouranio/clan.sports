@@ -34,12 +34,16 @@ Base.metadata.create_all(engine)
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 smsService: SmsService = app.container.smsService()
-# ssmClient = app.container.ssmClient()
+ssmClient = app.container.ssmClient()
 
-# try:
-#     print(ssmClient.get("/clan.sports.club/staging/test"))
-# except:
-#     print("An exception occurred")
+try:
+    print(
+        ssmClient.get_parameter(Name="/clan.sports.club/staging/test")["Parameter"][
+            "Value"
+        ]
+    )
+except:
+    print("An exception occurred")
 
 
 @api_blueprint.route("/test", methods=["GET"])

@@ -10,7 +10,7 @@ class SmsService(ABC):
 
 class SmsServiceDefault(SmsService):
     def __init__(self, servicePlanId: str) -> None:
-        print(servicePlanId)
+        print("SmsServiceDefault __init__")
         # self.servicePlanId = servicePlanId
         # self.apiToken = apiToken
         # self.sinchNumber = sinchNumber
@@ -33,12 +33,12 @@ class SmsServiceDefault(SmsService):
         response = requests.post(url, json=payload, headers=headers)
 
         data = response.json()
-        print(data)
+        # print(data)
 
 
 class SmsServiceMock(SmsService):
     def __init__(self, servicePlanId: str) -> None:
-        print(servicePlanId)
+        print("SmsServiceDefault __init__")
 
     def send(self, phoneNumber: str, message: str) -> bool:
         print(phoneNumber, message)

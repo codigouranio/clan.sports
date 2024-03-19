@@ -73,10 +73,10 @@ function App() {
                   noWrap
                   variant="h5"
                   component="a"
-                  href="#app-bar-with-responsive-menu"
+                  href="/"
                   sx={{
                     fontFamily: 'Outfit, system-ui',
-                    fontWeight: 500,
+                    fontWeight: 700,
                     letterSpacing: '0em',
                     color: '#2C2323',
                     textDecoration: 'none',
@@ -92,7 +92,7 @@ function App() {
                   }}
                   className='anim-text-flow'
                 >
-                  <span>C</span>LAN <span>S</span>PORTS
+                  <span>C</span>LAN SP<span>ORTS</span>
                 </Typography>
               </Toolbar>
               <Toolbar variant="dense" sx={{

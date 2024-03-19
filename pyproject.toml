@@ -50,7 +50,7 @@ dependency-injector = "^4.41.0"
 uwsgi = "^2.0.24"
 requests = "^2.31.0"
 colorama = "0.2.5"
-awscli = "^1.32.65"
+boto3 = "^1.34.65"
 
 
 [build-system]
