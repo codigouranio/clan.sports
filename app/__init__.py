@@ -50,7 +50,6 @@ def create_app():
 
         from . import api_routes, pages_routes
 
-        # from .ui import ui
         # Register Blueprints
         app.register_blueprint(pages_routes.pages_blueprint)
         app.register_blueprint(api_routes.api_blueprint)
@@ -59,19 +58,8 @@ def create_app():
 
         return app
 
-        # app.config["APP_DATABASE"],
-        # app.engine = create_engine(url=, echo=True)
-        # Base.metadata.create_all(app.engine)
-
-        # Session(app)
-
         # @app.before_request  # runs before FIRST request (only once)
         # def catch_all_requests():
-        # session.permanent = True
-        # app.permanent_session_lifetime = timedelta(minutes=5)
-        return
+        #     session.permanent = True
+        #     app.permanent_session_lifetime = timedelta(minutes=5)
 
-    # with app.app_context():
-    # Import parts of our application
-
-    # return app
