@@ -10,11 +10,13 @@ from flask_assets import Environment
 from flask_cors import CORS
 from flask_login import LoginManager
 from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+from flask_sqlalchemy import SQLAlchemy
 
 from flask_session import Session
 
 from . import heartbeat_routes, home_routes
-
+from .api.models import Base
 from .container import Container
 
 
@@ -22,33 +24,31 @@ def create_app():
     """Create Flask application."""
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_pyfile("../config.py")
+
     app.logger.setLevel(app.config.get("LOGGER_LEVEL"))
 
     app.container = Container()
     app.container.init_resources()
     app.container.wire(modules=[__name__])
 
-    CORS(app)
-    Session(app)
-
-    assets = Environment()
-    assets.init_app(app)
-
-    Session(app)
-
     app.login_manager = LoginManager()
     app.login_manager.init_app(app)
 
-    @app.before_request  # runs before FIRST request (only once)
-    def catch_all_requests():
-        # session.permanent = True
-        # app.permanent_session_lifetime = timedelta(minutes=5)
-        return
+    app.assets = Environment()
+    app.assets.init_app(app)
+
+    app.db = SQLAlchemy(model_class=Base)
+    app.db.init_app(app)
 
     with app.app_context():
-        # Import parts of our application
-        from . import pages_routes
-        from . import api_routes
+        app.db.create_all()
+
+        app.config["SESSION_SQLALCHEMY"] = app.db
+        Session(app)
+
+        CORS(app)
+
+        from . import api_routes, pages_routes
 
         # from .ui import ui
         # Register Blueprints
@@ -58,3 +58,20 @@ def create_app():
         app.register_blueprint(heartbeat_routes.heartbeat_blueprint)
 
         return app
+
+        # app.config["APP_DATABASE"],
+        # app.engine = create_engine(url=, echo=True)
+        # Base.metadata.create_all(app.engine)
+
+        # Session(app)
+
+        # @app.before_request  # runs before FIRST request (only once)
+        # def catch_all_requests():
+        # session.permanent = True
+        # app.permanent_session_lifetime = timedelta(minutes=5)
+        return
+
+    # with app.app_context():
+    # Import parts of our application
+
+    # return app

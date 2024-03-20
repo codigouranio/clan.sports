@@ -1,10 +1,10 @@
-from datetime import datetime
 import hashlib
-from typing import List, Optional
 import uuid
+from datetime import datetime
+from typing import List, Optional
 
 from flask_login import UserMixin
-from sqlalchemy import Column, DateTime, Enum, ForeignKey, String
+from sqlalchemy import Column, DateTime, Enum, ForeignKey, PickleType, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from .serializablemixin import SerializableMixin
@@ -30,6 +30,9 @@ class User(Base, UserMixin, SerializableMixin):
 
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r}, phoneNumber={self.phoneNumber!r})"
+
+    def to_dict(self):
+        return {"id": self.id, "name": self.name}
 
 
 class RequestCode(Base, SerializableMixin):
@@ -107,3 +110,13 @@ class AssetNFT(Base, SerializableMixin):
 
         # Return the first 256 bits (32 bytes) of the hash in hexadecimal format
         return hash_bytes.hex()
+
+
+class SessionModel(Base):
+    __tablename__ = "sessions"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    session_id: Mapped[str] = mapped_column(String(256), unique=True, nullable=False)
+    data: Mapped[PickleType] = mapped_column(PickleType, nullable=False)
+    expiry: Mapped[DateTime] = mapped_column(DateTime)
+
+    # db.Column(db.PickleType, nullable=False)
