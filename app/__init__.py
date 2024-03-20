@@ -2,7 +2,7 @@
 
 import logging
 from datetime import timedelta
-from os import environ
+from os import environ, path
 
 from dependency_injector.wiring import Provide, inject
 from flask import Flask, json, session
@@ -23,7 +23,7 @@ from .container import Container
 def create_app():
     """Create Flask application."""
     app = Flask(__name__, instance_relative_config=False)
-    app.config.from_pyfile("../config.py")
+    app.config.from_pyfile(path.join("..", "config.{}.py".format(environ.get("ENVIRONMENT", "dev"))))
 
     app.logger.setLevel(app.config.get("LOGGER_LEVEL"))
 
