@@ -151,12 +151,12 @@ def getCurrentUser():
 
 @api_blueprint.route('/profiles')
 @login_required
-def list_tasks():
+def list_profiles():
     return ""
 
 @api_blueprint.route('/profiles/add', methods=['POST'])
 @login_required
-def add_task():
+def add_profile():
     return ""
 
 @api_blueprint.route('/profiles/<int:profile_id>/edit', methods=['PUT'])
@@ -179,9 +179,9 @@ def add_task():
 def edit_task(profile_id):
     return ""
 
-@api_blueprint.route('/tasks/<int:profile_id>/delete', methods=['POST'])
+@api_blueprint.route('/tasks/<int:profile_id>/hide', methods=['POST'])
 @login_required
-def delete_task(profile_id):
+def hide_task(profile_id):
     return ""
 
 @api_blueprint.route('/points')
