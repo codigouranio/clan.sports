@@ -147,3 +147,64 @@ def getCurrentUser():
     # users = Repo().getAllUsers()
     # user_list = [user.to_dict() for user in users]
     # return jsonify({ "users": user_list, "request": data })
+
+
+@api_blueprint.route('/profiles')
+@login_required
+def list_tasks():
+    return ""
+
+@api_blueprint.route('/profiles/add', methods=['POST'])
+@login_required
+def add_task():
+    return ""
+
+@api_blueprint.route('/profiles/<int:profile_id>/edit', methods=['PUT'])
+@login_required
+def edit_task(profile_id):
+    return ""
+
+@api_blueprint.route('/profiles')
+@login_required
+def list_tasks():
+    return ""
+
+@api_blueprint.route('/profiles/add', methods=['POST'])
+@login_required
+def add_task():
+    return ""
+
+@api_blueprint.route('/profiles/<int:profile_id>/edit', methods=['PUT'])
+@login_required
+def edit_task(profile_id):
+    return ""
+
+@api_blueprint.route('/tasks/<int:profile_id>/delete', methods=['POST'])
+@login_required
+def delete_task(profile_id):
+    return ""
+
+@api_blueprint.route('/points')
+@login_required
+def list_points():
+    return ""
+
+@api_blueprint.route('/passes')
+@login_required
+def list_passes():
+    return ""
+
+@api_blueprint.route('/trophies')
+@login_required
+def list_passes():
+    return ""
+
+@api_blueprint.route('/badges')
+@login_required
+def list_passes():
+    return ""
+
+@api_blueprint.route('/clans')
+@login_required
+def list_passes():
+    return ""
