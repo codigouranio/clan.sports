@@ -92,7 +92,7 @@ function App() {
                   }}
                   className='anim-text-flow'
                 >
-                  <span>C</span><span>L</span><span>A</span><span>N</span> SPORTS
+                  <span>C</span>ln Sp🥇rts
                 </Typography>
               </Toolbar>
               <Toolbar variant="dense" sx={{
