@@ -61,9 +61,12 @@ class Address(Base, SerializableMixin):
 class ProfileType(Base):
     __tablename__ = "profile_type"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    code: Mapped[str] = mapped_column(String(6))
+    # id: Mapped[int] = mapped_column(primary_key=True)
+    code: Mapped[str] = mapped_column(String(6), primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
+    
+    def to_dict(self):
+        return {"id": self.id, "code": self.code, "name": self.name}
 
 
 class Profile(Base, SerializableMixin):
@@ -71,7 +74,7 @@ class Profile(Base, SerializableMixin):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
     user: Mapped["User"] = relationship(back_populates="profiles")
-    profile_type_id: Mapped[int] = mapped_column(ForeignKey("profile_type.id"))
+    profile_type_code: Mapped[int] = mapped_column(ForeignKey("profile_type.code"))
     bio: Mapped[str] = mapped_column(String(255))
     name: Mapped[str] = mapped_column(String(30))
     last_name: Mapped[str] = mapped_column(String(30))
@@ -80,6 +83,11 @@ class Profile(Base, SerializableMixin):
     state_province: Mapped[str] = mapped_column(String(30))
     postal_code: Mapped[str] = mapped_column(String(30))
     country: Mapped[str] = mapped_column(String(30))
+    
+    def to_dict(self, full = False):
+        if full:
+            return {}
+        return {"id": self.id, "profile_type_code": self.profile_type_code, "name": self.name}
 
 
 class AssetType(Enum):

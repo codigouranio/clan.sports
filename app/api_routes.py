@@ -19,7 +19,9 @@ from flask_login import (
     logout_user,
 )
 
-from .api.models import Base, RequestCode, User
+from app.api.schemas import ProfileSchema
+
+from .api.models import Base, Profile, ProfileType, RequestCode, User
 from .api.repo import Repo
 from .api.sessions import Sessions
 from .api.smsService import SmsService
@@ -28,17 +30,17 @@ from sqlalchemy.orm import Session, sessionmaker, scoped_session
 
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
-smsService: SmsService = app.container.smsService()
-ssmClient = app.container.ssmClient()
+# smsService: SmsService = app.container.smsService()
+# ssmClient = app.container.ssmClient()
 
-try:
-    print(
-        ssmClient.get_parameter(Name="/clan.sports.club/staging/test")["Parameter"][
-            "Value"
-        ]
-    )
-except:
-    print("An exception occurred")
+# try:
+#     print(
+#         ssmClient.get_parameter(Name="/clan.sports.club/staging/test")["Parameter"][
+#             "Value"
+#         ]
+#     )
+# except:
+#     print("An exception occurred")
 
 
 @api_blueprint.route("/test", methods=["GET"])
@@ -63,9 +65,9 @@ def requestCode():
         )
     )
     app.db.session.commit()
-    smsService.send(
-        phoneNumber=phoneNumber, message=f"Clan Sports code: {0}".format(code)
-    )
+    # smsService.send(
+    #     phoneNumber=phoneNumber, message=f"Clan Sports code: {0}".format(code)
+    # )
     return jsonify(
         {
             "code": code,
@@ -134,7 +136,6 @@ def load_user(user_id):
 @api_blueprint.route("/getCurrentUser", methods=["GET"])
 @login_required
 def getCurrentUser():
-    print(current_user)
     return jsonify({"id": current_user.id})
 
     # with Session(engine) as db:
@@ -149,62 +150,101 @@ def getCurrentUser():
     # return jsonify({ "users": user_list, "request": data })
 
 
-@api_blueprint.route('/profiles')
+@api_blueprint.route("/profiles")
 @login_required
 def list_profiles():
-    return ""
+    all_profiles = app.db.session.query(Profile).all()
+    return ProfileSchema(many=True).dump(all_profiles)
+    
+    
+    # full = request.args.get('full') or False
+    # items = app.db.session.query(Profile).all()
+    # print(items)
+    # item_list = [item.to_dict(full = full) for item in items]
+    # return jsonify({"profiles": item_list})
 
-@api_blueprint.route('/profiles/add', methods=['POST'])
+
+@api_blueprint.route("/profiles", methods=['POST'])
 @login_required
 def add_profile():
-    return ""
+    try:
+        data = request.get_json(force=True)
+        new_profile = Profile(
+            user_id=current_user.id,
+            profile_type_code=data["profile_type_code"],
+            name=data["name"],
+            last_name=data["last_name"],
+            bio=data.get("bio", ""),  # Providing a default value for optional fields
+            street_address=data.get("street_address", ""),
+            city=data.get("city", ""),
+            state_province=data.get("state_province", ""),
+            postal_code=data.get("postal_code", ""),
+            country=data.get("country", "")
+        )
+        app.db.session.add(new_profile)
+        app.db.session.commit()
 
-@api_blueprint.route('/profiles/<int:profile_id>/edit', methods=['PUT'])
-@login_required
-def edit_task(profile_id):
-    return ""
+        return jsonify({"message": "Profile added successfully", "profile_id": new_profile.id}), 201
+    except KeyError as e:
+        return jsonify({"error": "Missing required field: {}".format(str(e))}), 400
+    except Exception as e:
+        return jsonify({"error": "An error occurred while adding the profile: {}".format(str(e))}), 500
 
-@api_blueprint.route('/profiles')
-@login_required
-def list_tasks():
-    return ""
 
-@api_blueprint.route('/profiles/add', methods=['POST'])
+@api_blueprint.route("/profileTypes", methods=['GET'])
 @login_required
-def add_task():
-    return ""
+def get_profile_types():
+    items = app.db.session.query(ProfileType).all()
+    item_list = [item.to_dict() for item in items]
+    return jsonify({"profileTypes": item_list})
 
-@api_blueprint.route('/profiles/<int:profile_id>/edit', methods=['PUT'])
-@login_required
-def edit_task(profile_id):
-    return ""
 
-@api_blueprint.route('/tasks/<int:profile_id>/hide', methods=['POST'])
-@login_required
-def hide_task(profile_id):
-    return ""
+# @api_blueprint.route('/profiles/<int:profile_id>/edit', methods=['PUT'])
+# @login_required
+# def edit_task(profile_id):
+#     return ""
 
-@api_blueprint.route('/points')
-@login_required
-def list_points():
-    return ""
+# @api_blueprint.route('/profiles')
+# @login_required
+# def list_tasks():
+#     return ""
 
-@api_blueprint.route('/passes')
-@login_required
-def list_passes():
-    return ""
+# @api_blueprint.route('/profiles/add', methods=['POST'])
+# @login_required
+# def add_task():
+#     return ""
 
-@api_blueprint.route('/trophies')
-@login_required
-def list_passes():
-    return ""
+# @api_blueprint.route('/profiles/<int:profile_id>/edit', methods=['PUT'])
+# @login_required
+# def edit_task(profile_id):
+#     return ""
 
-@api_blueprint.route('/badges')
-@login_required
-def list_passes():
-    return ""
+# @api_blueprint.route('/tasks/<int:profile_id>/hide', methods=['POST'])
+# @login_required
+# def hide_task(profile_id):
+#     return ""
 
-@api_blueprint.route('/clans')
-@login_required
-def list_passes():
-    return ""
+# @api_blueprint.route('/points')
+# @login_required
+# def list_points():
+#     return ""
+
+# @api_blueprint.route('/passes')
+# @login_required
+# def list_passes():
+#     return ""
+
+# @api_blueprint.route('/trophies')
+# @login_required
+# def list_passes():
+#     return ""
+
+# @api_blueprint.route('/badges')
+# @login_required
+# def list_passes():
+#     return ""
+
+# @api_blueprint.route('/clans')
+# @login_required
+# def list_passes():
+#     return ""

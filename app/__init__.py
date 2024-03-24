@@ -12,6 +12,7 @@ from flask_login import LoginManager
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
 from flask_session import Session
 
@@ -39,9 +40,11 @@ def create_app():
 
     app.db = SQLAlchemy(model_class=Base)
     app.db.init_app(app)
+    
+    app.ma = Marshmallow(app)
 
     with app.app_context():
-        app.db.create_all()
+        # app.db.create_all()
 
         app.config["SESSION_SQLALCHEMY"] = app.db
         Session(app)
