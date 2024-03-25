@@ -1,32 +1,29 @@
 import GroupIcon from '@mui/icons-material/Group';
-import { Button, Card, CardActions, CardContent, Paper, Typography } from "@mui/material";
-import React from "react";
+import { Button, Card, CardActions, CardContent, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
+import { MenuCardStyled } from './MenuCardStyled';
 
 const MenuCardProfileList = ({ card }) =>
-  <React.Fragment>
-    <Card elevation={0} sx={{
-      backgroundColor: 'transparent',
-      color: 'purple'
-
-    }}>
-      <Link to="profiles" style={{ textDecoration: "none", color: "inherit" }}>
-        <CardContent sx={{ cursor: 'pointer' }}>
-          <Typography sx={{ mb: 0.2 }}>
-            <GroupIcon sx={{ fontSize: '10em' }} />
-          </Typography>
-          <Typography variant="h3" component="div">
-            {card?.description}
-          </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
-            Total <span>{`${card.total}`}</span>
-          </Typography>
-        </CardContent>
-      </Link>
-      <CardActions>
-        <Button size="small">Transfer</Button>
-      </CardActions>
-    </Card>
-  </React.Fragment>
+  <MenuCardStyled elevation={0} sx={{
+    backgroundColor: 'transparent',
+    color: 'purple'
+  }} variant="outlined">
+    <Link to="profiles" style={{ textDecoration: "none", color: "inherit" }}>
+      <CardContent sx={{ cursor: 'pointer' }}>
+        <Typography sx={{}}>
+          <GroupIcon sx={{ fontSize: '8em' }} />
+        </Typography>
+        <Typography variant="h3" component="div">
+          {card?.description}
+        </Typography>
+        <Typography sx={{}} color="text.secondary">
+          Total <span>{`${card.total}`}</span>
+        </Typography>
+      </CardContent>
+    </Link>
+    <CardActions>
+      <Button size="small">Transfer</Button>
+    </CardActions>
+  </MenuCardStyled>
 
 export default MenuCardProfileList;

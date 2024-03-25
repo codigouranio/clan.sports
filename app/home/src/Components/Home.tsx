@@ -1,4 +1,4 @@
-import { Container, Grid, Paper } from '@mui/material';
+import { Box, Container, Grid, Paper } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
 import * as React from 'react';
@@ -58,8 +58,8 @@ export default function Home() {
     padding: theme.spacing(1),
     textAlign: 'center',
     fontSize: '70px',
-    boxShadow: theme.shadows[3],
-    border: '0px solid #919491',
+    // boxShadow: theme.shadows[3],
+    // border: '0px solid #919491',
     color: theme.palette.text.secondary,
   }));
 
@@ -124,20 +124,24 @@ export default function Home() {
 
   return (
     <Container maxWidth="md">
-      <Grid container spacing={2} columns={16} justifyContent="center">
-        {cards.map((card, index) => (
-          <Grid item xs="auto" key={index}>
-            <div key={index}>
-              {card.type === "clan_list" && <Item><MenuCardClanList card={card} /></Item>}
-              {card.type === "profile_list" && <Item><MenuCardProfileList card={card} /></Item>}
-              {card.type === "trophy_list" && <Item><MenuCardTrophyList card={card} /></Item>}
-              {card.type === "badge_list" && <Item><MenuCardBadgeList card={card} /></Item>}
-              {card.type === "pass_list" && <Item><MenuCardPassList card={card} /></Item>}
-              {card.type === "points" && <Item><MenuCardPoints card={card} /></Item>}
-            </div>
-          </Grid>
-        ))}
-      </Grid>
+      <Box sx={{ flexGrow: 1, p: 2 }}>
+        <Grid container rowSpacing={1} justifyContent="center">
+          {cards.map((card, index) => (
+            <Grid sm="auto" key={index} sx={{
+              // marginBlock: 1,
+              // marginRight: 2,
+              // marginLeft: 2
+            }}>
+              {card.type === "clan_list" && <MenuCardClanList card={card} />}
+              {card.type === "profile_list" && <MenuCardProfileList card={card} />}
+              {card.type === "trophy_list" && <MenuCardTrophyList card={card} />}
+              {card.type === "badge_list" && <MenuCardBadgeList card={card} />}
+              {card.type === "pass_list" && <MenuCardPassList card={card} />}
+              {card.type === "points" && <MenuCardPoints card={card} />}
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </Container >
   );
 }

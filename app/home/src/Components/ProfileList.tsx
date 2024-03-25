@@ -5,9 +5,11 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Grid } from '@mui/material';
+import { Grid, IconButton } from '@mui/material';
 // import { useStorage } from '../Storage';
 import useDataFetching from '../Fetch';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
 
 export default function ProfileList() {
 
@@ -67,6 +69,14 @@ export function BasicCard() {
       </CardContent>
       <CardActions>
         <Button size="small">Learn More</Button>
+        <CardActions disableSpacing>
+          <IconButton aria-label="add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="share">
+            <ShareIcon />
+          </IconButton>
+        </CardActions>
       </CardActions>
     </Card>
   );
