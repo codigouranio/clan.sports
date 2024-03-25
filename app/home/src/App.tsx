@@ -1,6 +1,6 @@
 
-import '@fontsource/train-one';
 import '@fontsource/bangers';
+import '@fontsource/train-one';
 import { AccountCircle } from '@mui/icons-material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
@@ -75,7 +75,7 @@ function App() {
                   component="a"
                   href="/"
                   sx={{
-                    fontFamily: 'Outfit, system-ui',
+                    fontFamily: 'Train One, system-ui',
                     fontWeight: 700,
                     letterSpacing: '0em',
                     color: '#2C2323',
@@ -92,7 +92,7 @@ function App() {
                   }}
                   className='anim-text-flow'
                 >
-                  <span>C</span>ln Sp🥇rts
+                  <span>C</span>LAN SPORTS
                 </Typography>
               </Toolbar>
               <Toolbar variant="dense" sx={{

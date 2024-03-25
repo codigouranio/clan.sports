@@ -12,7 +12,7 @@ const MenuCardPoints = ({ card }) =>
       <Link to="points" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
           <Typography variant="body2" sx={{ mb: 0.2 }}>
-            <MoneyIcon sx={{ fontSize: '12em' }} />
+            <MoneyIcon sx={{ fontSize: '10em' }} />
           </Typography>
           <Typography variant="h3" component="div">
             {card?.description}

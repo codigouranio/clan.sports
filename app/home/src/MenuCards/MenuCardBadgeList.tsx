@@ -12,7 +12,7 @@ const MenuCardBadgeList = ({ card }) =>
       <Link to="badges" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
           <Typography sx={{ mb: 0.2 }}>
-            <WorkspacePremiumIcon sx={{ fontSize: '12em', mb: '0em' }} />
+            <WorkspacePremiumIcon sx={{ fontSize: '10em', mb: '0em' }} />
           </Typography>
           <Typography variant="h3" component="div">
             {card?.description}

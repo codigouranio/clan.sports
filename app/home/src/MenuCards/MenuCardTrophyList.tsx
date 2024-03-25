@@ -12,7 +12,7 @@ const MenuCardTrophyList = ({ card }) =>
       <Link to="trophies" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
           <Typography sx={{ mb: 0.2 }}>
-            <EmojiEventsIcon sx={{ fontSize: '12em' }} />
+            <EmojiEventsIcon sx={{ fontSize: '10em' }} />
           </Typography>
           <Typography variant="h3" component="div">
             {card?.description}

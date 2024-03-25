@@ -18,7 +18,7 @@ const MenuCardClanList = ({ card }) => (
       <Link to="clans" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: "pointer" }}>
           <Typography sx={{ mb: 0.2 }}>
-            <AllInclusiveIcon sx={{ fontSize: "12em" }} />
+            <AllInclusiveIcon sx={{ fontSize: "10em" }} />
           </Typography>
           <Typography variant="h3" component="div">
             {card?.description}

@@ -4,6 +4,7 @@ import { RouterProvider } from 'react-router-dom';
 import './index.scss';
 import reportWebVitals from './reportWebVitals';
 import { routerApp } from './routerApp';
+import { Provider } from './Storage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -11,7 +12,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={routerApp} />
+    <Provider>
+      <RouterProvider router={routerApp} />
+    </Provider>
   </React.StrictMode>
 );
 

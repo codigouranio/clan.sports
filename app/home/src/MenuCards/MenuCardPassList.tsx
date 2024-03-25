@@ -12,7 +12,7 @@ const MenuCardPassList = ({ card }) =>
       <Link to="passes" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
           <Typography sx={{ mb: 0.2 }}>
-            <QrCode2Icon sx={{ fontSize: '12em' }} />
+            <QrCode2Icon sx={{ fontSize: '10em' }} />
           </Typography>
           <Typography variant="h3" component="div">
             {card?.description}
