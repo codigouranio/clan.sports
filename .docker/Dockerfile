@@ -68,6 +68,8 @@ COPY --from=build_home /home/node/app/build ./app/home/build
 
 COPY . ./
 
+RUN alembic upgrade head
+
 COPY .docker/docker-entrypoint.sh .
 
 RUN mv .docker/docker-entrypoint.sh /usr/local/bin/

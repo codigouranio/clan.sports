@@ -56,21 +56,21 @@ export const Storage = createContext<StorageStateContextType>({
   dispatch: () => { } // A no-op function
 });
 
-export function Provider({ children }: { children: ReactNode }) {
-  const [storageState, dispatch] = useReducer(storageReducer, {
+function initStorageState(): StorageState {
+  return {
     data: {
       items: {
-        profiles: {},
-        clans: {},
-        trophies: {},
-        passes: {},
-        points: {}
+        profiles: []
       },
       settings: {}
     },
     loading: false,
     error: null
-  });
+  };
+}
+
+export function Provider({ children }: { children: ReactNode }) {
+  const [storageState, dispatch] = useReducer(storageReducer, initStorageState());
 
   return (
     <Storage.Provider value={{ storageState, dispatch }}>

@@ -2,6 +2,6 @@ Generic single-database configuration.
 
 ```
 alembic revision --autogenerate -m "init"
-alembic revision -m "Populate data"\
+alembic revision -m "Populate data"
 alembic upgrade head
 ```

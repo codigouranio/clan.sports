@@ -1,10 +1,11 @@
 from datetime import datetime
 
+from flask import current_app as app
 from sqlalchemy import create_engine
 from sqlalchemy.ext.serializer import dumps, loads
 from sqlalchemy.orm import Session, sessionmaker
-from flask import current_app as app
-from .models import Address, Base, User
+
+from .models import Base, User
 
 # engine = create_engine("sqlite:///database.db", echo=True)
 # Base.metadata.create_all(engine)

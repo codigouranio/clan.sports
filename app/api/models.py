@@ -17,22 +17,18 @@ class Base(DeclarativeBase):
 class User(Base, UserMixin, SerializableMixin):
     __tablename__ = "user_account"
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(30))
-    phoneNumber: Mapped[str] = mapped_column(String(30))
-    fullname: Mapped[Optional[str]]
+    phone_number: Mapped[str] = mapped_column(String(30))
     is_active: Mapped[bool] = mapped_column(default=True)
-    addresses: Mapped[List["Address"]] = relationship(
-        back_populates="user", cascade="all, delete-orphan"
-    )
+    email_address: Mapped[str] = mapped_column(String(254), nullable=True, default=None)
     profiles: Mapped[List["Profile"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:
-        return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r}, phoneNumber={self.phoneNumber!r})"
+        return f"User(id={self.id!r}, phone_number={self.phone_number}, email_address={self.email_address}, is_active={self.is_active})"
 
     def to_dict(self):
-        return {"id": self.id, "name": self.name}
+        return {"id": self.id}
 
 
 class RequestCode(Base, SerializableMixin):
@@ -47,26 +43,14 @@ class RequestCode(Base, SerializableMixin):
         return f"RequestCode(id={self.id!r}, code={self.code!r})"
 
 
-class Address(Base, SerializableMixin):
-    __tablename__ = "address"
-    id: Mapped[int] = mapped_column(primary_key=True)
-    email_address: Mapped[str]
-    user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
-    user: Mapped["User"] = relationship(back_populates="addresses")
-
-    def __repr__(self) -> str:
-        return f"Address(id={self.id!r}, email_address={self.email_address!r})"
-
-
 class ProfileType(Base):
     __tablename__ = "profile_type"
 
-    # id: Mapped[int] = mapped_column(primary_key=True)
     code: Mapped[str] = mapped_column(String(6), primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
-    
+
     def to_dict(self):
-        return {"id": self.id, "code": self.code, "name": self.name}
+        return {"code": self.code, "name": self.name}
 
 
 class Profile(Base, SerializableMixin):
@@ -83,11 +67,15 @@ class Profile(Base, SerializableMixin):
     state_province: Mapped[str] = mapped_column(String(30))
     postal_code: Mapped[str] = mapped_column(String(30))
     country: Mapped[str] = mapped_column(String(30))
-    
-    def to_dict(self, full = False):
+
+    def to_dict(self, full=False):
         if full:
             return {}
-        return {"id": self.id, "profile_type_code": self.profile_type_code, "name": self.name}
+        return {
+            "id": self.id,
+            "profile_type_code": self.profile_type_code,
+            "name": self.name,
+        }
 
 
 class AssetType(Enum):
@@ -126,5 +114,3 @@ class SessionModel(Base):
     session_id: Mapped[str] = mapped_column(String(256), unique=True, nullable=False)
     data: Mapped[PickleType] = mapped_column(PickleType, nullable=False)
     expiry: Mapped[DateTime] = mapped_column(DateTime)
-
-    # db.Column(db.PickleType, nullable=False)

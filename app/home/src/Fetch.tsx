@@ -1,40 +1,52 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { ActionType, Storage } from './Storage';
 
 // Custom hook for fetching data
 function useDataFetching(url: string, method = 'GET', body = null) {
 
+  console.log('useDataFetching');
+
   const { storageState, dispatch } = useContext(Storage);
 
-  console.log(storageState);
+  const fetchData = async () => {
+
+    dispatch({
+      type: ActionType.SET_LOADING,
+      payload: true
+    });
+
+    try {
+      const options: RequestInit = {
+        credentials: 'include',
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : null
+      };
+      const response = await fetch(url, options);
+      const data = await response.json();
+      dispatch({ type: ActionType.SET_DATA, payload: data });
+    } catch (error: any) {
+      dispatch({ type: ActionType.SET_ERROR, payload: error.message });
+    }
+  };
+
+  const memoizedFetchData = useMemo(() => fetchData, [url, method, body, dispatch])
 
   useEffect(() => {
-    const fetchData = async () => {
-      dispatch({
-        type: ActionType.SET_LOADING,
-        payload: true
-      });
-      try {
-        const options = {
-          method,
-          headers: { 'Content-Type': 'application/json' },
-          body: body ? JSON.stringify(body) : null
-        };
-        const response = await fetch(url, options);
-        const data = await response.json();
-        dispatch({ type: ActionType.SET_DATA, payload: data });
-      } catch (error: any) {
-        dispatch({ type: ActionType.SET_ERROR, payload: error.message });
-      }
-    };
 
-    fetchData();
+    memoizedFetchData();
+
+    // fetchData();
 
     // Cleanup function
     return () => {
       // Any cleanup code here
     };
-  }, [url, method, body, dispatch]); // Dependency array including 'url', 'method', and 'body'
+  }, [memoizedFetchData]);
+
+  //url, method, body, dispatch
+
+  return storageState;
 }
 
 export default useDataFetching;

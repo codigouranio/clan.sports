@@ -6,15 +6,18 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
-import { useStorage } from '../Storage';
+// import { useStorage } from '../Storage';
+import useDataFetching from '../Fetch';
 
 export default function ProfileList() {
 
-  const { storageState } = useStorage();
+  // const { storageState } = useStorage();
 
-  console.log(storageState);
+  const { data, loading, error } = useDataFetching('/api/profiles');
+  console.log([data, loading, error]);
 
-  const items = Array.from({ length: 10 }, (_, index) => index + 1);
+  // const items = Array.from({ length: 10 }, (_, index) => index + 1);
+  const items: any[] = data?.items.profiles;
 
   return (
     <div>
@@ -24,23 +27,11 @@ export default function ProfileList() {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        { /* BasicCard */}
-        {items.map(item => (
-          <Grid key={item}><BasicCard></BasicCard></Grid>
+        {items && items.map((item: any, index: number) => (
+          <Grid item key={index}>
+            <BasicCard />
+          </Grid>
         ))}
-        <Grid>
-
-          <BasicCard></BasicCard>
-        </Grid>
-        <Grid>
-          <BasicCard></BasicCard>
-        </Grid>
-        <Grid>
-          <BasicCard></BasicCard>
-        </Grid>
-        <Grid>
-          <BasicCard></BasicCard>
-        </Grid>
       </Grid>
     </div>
   );

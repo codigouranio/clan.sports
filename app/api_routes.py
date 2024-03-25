@@ -18,16 +18,15 @@ from flask_login import (
     login_user,
     logout_user,
 )
+from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
-from app.api.schemas import ProfileSchema
+from app.api.schemas import ProfileSchema, ProfileTypeSchema, UserSchema
 
 from .api.models import Base, Profile, ProfileType, RequestCode, User
 from .api.repo import Repo
 from .api.sessions import Sessions
 from .api.smsService import SmsService
 from .api.utils import generate_session_id, generate_sha256_hash
-from sqlalchemy.orm import Session, sessionmaker, scoped_session
-
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 # smsService: SmsService = app.container.smsService()
@@ -89,10 +88,10 @@ def checkCode():
     if not code or code.expires < datetime.now():
         return jsonify({"success": False})
 
-    user = app.db.session.query(User).filter_by(phoneNumber=code.phoneNumber).first()
+    user = app.db.session.query(User).filter_by(phone_number=code.phoneNumber).first()
     if not user:
         print("adding user to db")
-        user = User(name="unknown", phoneNumber=code.phoneNumber)
+        user = User(phone_number=code.phoneNumber, email_address="")
         app.db.session.add(user)
         app.db.session.commit()
 
@@ -101,70 +100,33 @@ def checkCode():
     return jsonify({"success": True})
 
 
-def loadSession():
-    if "sessionId" in session:
-        return Repo().getUser(session["sessionId"])
-    return None
-
-
-@api_blueprint.route("/allUsers", methods=["POST"])
-@login_required
-def allUsers():
-    print(current_user)
-    with Session(app.engine) as db:
-        users = db.query(User).all()
-        user_list = [user.to_dict() for user in users]
-        return jsonify({"users": user_list})
-    # if not current_user.is_authenticated:
-    #     return jsonify({ "error": "Not authenticated" })
-
-
 @app.login_manager.user_loader
 def load_user(user_id):
     user = app.db.session.query(User).filter_by(id=user_id).first()
     return user
 
 
-# return User.get(user_id)
-
-# data = request.get_json(force=True)
-# users = Repo().getAllUsers()
-# user_list = [user.to_dict() for user in users]
-# return jsonify({ "users": user_list, "request": data })
-
-
-@api_blueprint.route("/getCurrentUser", methods=["GET"])
+@api_blueprint.route("/currentUser", methods=["GET"])
 @login_required
 def getCurrentUser():
-    return jsonify({"id": current_user.id})
-
-    # with Session(engine) as db:
-    #     user = db.query(User).filter_by(id=current_user.id).first()
-    #     return user
-
-    # return User.get(user_id)
-
-    # data = request.get_json(force=True)
-    # users = Repo().getAllUsers()
-    # user_list = [user.to_dict() for user in users]
-    # return jsonify({ "users": user_list, "request": data })
+    return UserSchema().dump(current_user)
 
 
 @api_blueprint.route("/profiles")
 @login_required
-def list_profiles():
+def get_profiles():
     all_profiles = app.db.session.query(Profile).all()
-    return ProfileSchema(many=True).dump(all_profiles)
-    
-    
-    # full = request.args.get('full') or False
-    # items = app.db.session.query(Profile).all()
-    # print(items)
-    # item_list = [item.to_dict(full = full) for item in items]
-    # return jsonify({"profiles": item_list})
+    return jsonify({"items": {"profiles": ProfileSchema(many=True).dump(all_profiles)}})
 
 
-@api_blueprint.route("/profiles", methods=['POST'])
+@api_blueprint.route("/profileTypes", methods=["GET"])
+@login_required
+def get_list_profile_types():
+    items = app.db.session.query(ProfileType).all()
+    return ProfileTypeSchema(many=True).dump(items)
+
+
+@api_blueprint.route("/profiles", methods=["POST"])
 @login_required
 def add_profile():
     try:
@@ -179,72 +141,71 @@ def add_profile():
             city=data.get("city", ""),
             state_province=data.get("state_province", ""),
             postal_code=data.get("postal_code", ""),
-            country=data.get("country", "")
+            country=data.get("country", ""),
         )
         app.db.session.add(new_profile)
         app.db.session.commit()
 
-        return jsonify({"message": "Profile added successfully", "profile_id": new_profile.id}), 201
+        return (
+            jsonify(
+                {"message": "Profile added successfully", "profile_id": new_profile.id}
+            ),
+            201,
+        )
     except KeyError as e:
         return jsonify({"error": "Missing required field: {}".format(str(e))}), 400
     except Exception as e:
-        return jsonify({"error": "An error occurred while adding the profile: {}".format(str(e))}), 500
+        return (
+            jsonify(
+                {
+                    "error": "An error occurred while adding the profile: {}".format(
+                        str(e)
+                    )
+                }
+            ),
+            500,
+        )
 
 
-@api_blueprint.route("/profileTypes", methods=['GET'])
+@api_blueprint.route("/users", methods=["GET"])
 @login_required
-def get_profile_types():
-    items = app.db.session.query(ProfileType).all()
-    item_list = [item.to_dict() for item in items]
-    return jsonify({"profileTypes": item_list})
+def get_list_users():
+    items = app.db.session.query(User).all()
+    return UserSchema(many=True).dump(items)
 
 
-# @api_blueprint.route('/profiles/<int:profile_id>/edit', methods=['PUT'])
-# @login_required
-# def edit_task(profile_id):
-#     return ""
+@api_blueprint.route("/user/<int:user_id>", methods=["GET"])
+@login_required
+def get_user(user_id):
+    item = app.db.session.query(User).filter_by(id=user_id).first()
+    if not item:
+        return jsonify({"message": "No item found"}), 404
+    return UserSchema().dump(item)
 
-# @api_blueprint.route('/profiles')
-# @login_required
-# def list_tasks():
-#     return ""
 
-# @api_blueprint.route('/profiles/add', methods=['POST'])
-# @login_required
-# def add_task():
-#     return ""
+@api_blueprint.route("/profile/<int:profile_id>", methods=["GET"])
+@login_required
+def get_profile(profile_id):
+    item = (
+        app.db.session.query(Profile)
+        .filter_by(user_id=current_user.id, id=profile_id)
+        .first()
+    )
+    if not item:
+        return jsonify({"message": "No item found"}), 404
+    return ProfileSchema().dump(item)
 
-# @api_blueprint.route('/profiles/<int:profile_id>/edit', methods=['PUT'])
-# @login_required
-# def edit_task(profile_id):
-#     return ""
 
-# @api_blueprint.route('/tasks/<int:profile_id>/hide', methods=['POST'])
-# @login_required
-# def hide_task(profile_id):
-#     return ""
-
-# @api_blueprint.route('/points')
-# @login_required
-# def list_points():
-#     return ""
-
-# @api_blueprint.route('/passes')
-# @login_required
-# def list_passes():
-#     return ""
-
-# @api_blueprint.route('/trophies')
-# @login_required
-# def list_passes():
-#     return ""
-
-# @api_blueprint.route('/badges')
-# @login_required
-# def list_passes():
-#     return ""
-
-# @api_blueprint.route('/clans')
-# @login_required
-# def list_passes():
-#     return ""
+@api_blueprint.route("/profile/<int:profile_id>", methods=["DELETE"])
+@login_required
+def del_profile(profile_id):
+    item = (
+        app.db.session.query(Profile)
+        .filter_by(user_id=current_user.id, id=profile_id)
+        .first()
+    )
+    if not item:
+        return jsonify({"message": "No item found"}), 404
+    app.db.session.delete(item)
+    app.db.session.commit()
+    return jsonify({"message": "Item deleted"}), 200

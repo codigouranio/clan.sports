@@ -24,7 +24,9 @@ from .container import Container
 def create_app():
     """Create Flask application."""
     app = Flask(__name__, instance_relative_config=False)
-    app.config.from_pyfile(path.join("..", "config.{}.py".format(environ.get("ENVIRONMENT", "dev"))))
+    app.config.from_pyfile(
+        path.join("..", "config.{}.py".format(environ.get("ENVIRONMENT", "dev")))
+    )
 
     app.logger.setLevel(app.config.get("LOGGER_LEVEL"))
 
@@ -40,15 +42,15 @@ def create_app():
 
     app.db = SQLAlchemy(model_class=Base)
     app.db.init_app(app)
-    
+
     app.ma = Marshmallow(app)
 
     with app.app_context():
+        app.config["SESSION_SQLALCHEMY"] = app.db
+
         # app.db.create_all()
 
-        app.config["SESSION_SQLALCHEMY"] = app.db
         Session(app)
-
         CORS(app)
 
         from . import api_routes, pages_routes
@@ -65,4 +67,3 @@ def create_app():
         # def catch_all_requests():
         #     session.permanent = True
         #     app.permanent_session_lifetime = timedelta(minutes=5)
-

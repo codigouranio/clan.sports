@@ -1,10 +1,11 @@
 """Populate data
 
-Revision ID: f10083f09576
-Revises: 13c898181df6
-Create Date: 2024-03-23 23:40:51.604758
+Revision ID: e04216aa3a63
+Revises: 9d5bbebcb2c9
+Create Date: 2024-03-24 20:26:24.355101
 
 """
+
 from typing import Sequence, Union
 
 from alembic import op
@@ -13,8 +14,8 @@ import app
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'f10083f09576'
-down_revision: Union[str, None] = '13c898181df6'
+revision: str = "e04216aa3a63"
+down_revision: Union[str, None] = "9d5bbebcb2c9"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -29,14 +30,23 @@ def upgrade():
     op.execute("INSERT INTO profile_type (code, name) VALUES ('ORG', 'Organization');")
     op.execute("INSERT INTO profile_type (code, name) VALUES ('TEAM', 'Team');")
     op.execute("INSERT INTO profile_type (code, name) VALUES ('STAFF', 'Staff');")
-    op.execute("INSERT INTO profile_type (code, name) VALUES ('VOLUNTEER', 'Volunteer');")
+    op.execute(
+        "INSERT INTO profile_type (code, name) VALUES ('VOLUNTEER', 'Volunteer');"
+    )
     op.execute("INSERT INTO profile_type (code, name) VALUES ('SPONSOR', 'Sponsor');")
     op.execute("INSERT INTO profile_type (code, name) VALUES ('MEDIA', 'Media');")
     op.execute("INSERT INTO profile_type (code, name) VALUES ('AGENT', 'Agent');")
     op.execute("INSERT INTO profile_type (code, name) VALUES ('SCOUT', 'Scout');")
-    op.execute("INSERT INTO profile_type (code, name) VALUES ('ADMIN', 'Administrator');")
-    op.execute("INSERT INTO profile_type (code, name) VALUES ('SUPPORTER', 'Supporter');")
-    op.execute("INSERT INTO profile_type (code, name) VALUES ('PARTICIPANT', 'Participant');")
+    op.execute(
+        "INSERT INTO profile_type (code, name) VALUES ('ADMIN', 'Administrator');"
+    )
+    op.execute(
+        "INSERT INTO profile_type (code, name) VALUES ('SUPPORTER', 'Supporter');"
+    )
+    op.execute(
+        "INSERT INTO profile_type (code, name) VALUES ('PARTICIPANT', 'Participant');"
+    )
+
 
 def downgrade():
     op.execute("DELETE FROM profile_type WHERE code='USER';")
