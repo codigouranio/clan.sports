@@ -68,6 +68,7 @@ COPY --from=build_home /home/node/app/build ./app/home/build
 
 COPY . ./
 
+RUN pip install alembic
 RUN alembic upgrade head
 
 COPY .docker/docker-entrypoint.sh .
