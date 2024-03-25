@@ -69,7 +69,7 @@ COPY --from=build_home /home/node/app/build ./app/home/build
 COPY . ./
 
 # RUN pip install alembic
-RUN mkdir -p /instance/
+RUN mkdir -p instance/
 RUN alembic upgrade head
 
 COPY .docker/docker-entrypoint.sh .
