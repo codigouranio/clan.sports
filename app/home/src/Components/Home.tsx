@@ -128,9 +128,6 @@ export default function Home() {
         <Grid container rowSpacing={1} justifyContent="center">
           {cards.map((card, index) => (
             <Grid sm="auto" key={index} sx={{
-              // marginBlock: 1,
-              // marginRight: 2,
-              // marginLeft: 2
             }}>
               {card.type === "clan_list" && <MenuCardClanList card={card} />}
               {card.type === "profile_list" && <MenuCardProfileList card={card} />}

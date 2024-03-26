@@ -13,12 +13,12 @@ import {
   Experimental_CssVarsProvider as CssVarsProvider,
   ThemeProvider
 } from '@mui/material/styles';
-import * as _ from 'lodash';
 import React, { Suspense, lazy } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import './App.scss';
 import Copyright from './Components/Copyright';
 import theme from './theme';
+import * as _ from 'lodash';
 
 const NoAccess = lazy(() => import(/* webpackChunkName: "no-access" */ './NoAccess'));
 const Test = lazy(() => import(/* webpackChunkName: "test" */ './Test'));
@@ -99,7 +99,7 @@ function App() {
                 backgroundColor: 'gray',
                 paddingTop: '2px',
               }}>
-                <Breadcrumbs aria-label="breadcrumb" style={{ textDecoration: "none", color: "inherit" }}>
+                <Breadcrumbs aria-label="breadcrumb" separator="/" style={{ textDecoration: "none", color: "inherit" }}>
                   <Typography
                     variant="h6"
                     component="div"
@@ -107,15 +107,15 @@ function App() {
                   >
                     <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Home</Link>
                   </Typography>
-                  {pathname !== "/" &&
-                    <Typography
-                      variant="h6"
-                      component="div"
-                      sx={{ flexGrow: 1, textAlign: 'left', cursor: 'pointer' }}
-                    >
-                      {_.capitalize(pathname.replace("/", ""))}
-                    </Typography>
-                  }
+                  {pathname !== "/" && pathname.split("/").slice(1, 3).map((path, index) => <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{ flexGrow: 1, textAlign: 'left', cursor: 'pointer' }}
+                    key={index}
+                  >
+                    {_.capitalize(path.replace("/", " / "))}
+                  </Typography>)}
+
                 </Breadcrumbs>
                 <Typography variant="subtitle1" component="div" sx={{ flexGrow: 1, textAlign: 'right', }}>
                 </Typography>

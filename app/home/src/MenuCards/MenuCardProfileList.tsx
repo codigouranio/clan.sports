@@ -19,6 +19,8 @@ const MenuCardProfileList = ({ card }) =>
         <Typography sx={{}} color="text.secondary">
           Total <span>{`${card.total}`}</span>
         </Typography>
+        <Typography sx={{}} color="body2">
+        </Typography>
       </CardContent>
     </Link>
     <CardActions>

@@ -36,15 +36,21 @@ def catch_all(path):
     return home_blueprint.send_static_file(path)
 
 
+@home_blueprint.route("/<string:path>/<string:path_2>")
+def catch_all_more_level(path=None, path_2=None):
+    return redirect(url_for("home_blueprint.catch_all"))
+
+
 @home_blueprint.route("/static/<string:path_1>/<string:path>")
 def catch_all_1_level(path_1, path):
-    # print(home_blueprint.root_path)
     return home_blueprint.send_static_file(safe_join("./static/", path_1, path))
+
+
+@home_blueprint.route("/static/<string:path_2>/<string:path_1>/<string:path>")
+def catch_all_2_level(path_2, path_1, path):
+    return home_blueprint.send_static_file(safe_join("./static/", path_2, path_1, path))
 
 
 @home_blueprint.errorhandler(404)
 def not_found(e):
     return home_blueprint.send_static_file("index.html")
-    # return render_template(
-    #     "404.html", title="Not Found", template="404.html", test={"test": "test"}
-    # )

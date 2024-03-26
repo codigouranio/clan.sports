@@ -4,7 +4,16 @@ import App from './App';
 
 const Home = lazy(() => import(/* webpackChunkName: "home" */ './Components/Home'));
 const ClanList = lazy(() => import(/* webpackChunkName: "clanList" */ './Components/ClanList'));
-const ProfileList = lazy(() => import(/* webpackChunkName: "profileList" */ './Components/ProfileList'));
+const ProfileAdd = lazy(() => {
+  return import(/* webpackChunkName: "profile" */"./Components/Profile").then(module => {
+    return { default: module.ProfileAdd };
+  });
+});
+const ProfileList = lazy(() => {
+  return import(/* webpackChunkName: "profile" */"./Components/Profile").then(module => {
+    return { default: module.ProfileList };
+  });
+});
 const PassList = lazy(() => import(/* webpackChunkName: "passList" */ './Components/PassList'));
 const BadgeList = lazy(() => import(/* webpackChunkName: "badgeList" */ './Components/BadgeList'));
 const TrophyList = lazy(() => import(/* webpackChunkName: "trophyList" */ './Components/TrophyList'));
@@ -12,6 +21,8 @@ const PointList = lazy(() => import(/* webpackChunkName: "pointList" */ './Compo
 const ErrorGeneric = lazy(() => import(/* webpackChunkName: "errorGeneric" */ './Components/ErrorGeneric'));
 const Error404 = lazy(() => import(/* webpackChunkName: "error404" */ './Components/Error404'));
 const NotificationList = lazy(() => import(/* webpackChunkName: "notificationList" */ './Components/NotificationList'));
+
+
 
 export const routerApp = createBrowserRouter([
   {
@@ -32,6 +43,11 @@ export const routerApp = createBrowserRouter([
       {
         path: "profiles",
         element: <ProfileList />,
+        errorElement: <ErrorGeneric />,
+      },
+      {
+        path: "profiles/add",
+        element: <ProfileAdd />,
         errorElement: <ErrorGeneric />,
       },
       {
