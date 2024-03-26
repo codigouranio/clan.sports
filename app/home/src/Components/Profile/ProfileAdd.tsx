@@ -102,7 +102,7 @@ export default function ProfileAdd() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign Up
+            Create
           </Button>
         </Box>
       </Container>

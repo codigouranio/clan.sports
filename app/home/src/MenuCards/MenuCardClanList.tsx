@@ -21,7 +21,7 @@ const MenuCardClanList = ({ card }) =>
         <Typography variant="h3" component="div">
           {card?.description}
         </Typography>
-        <Typography variant="body2">
+        <Typography variant="h5" color="text.secondary">
           Member of
           <br />
           <span>{`${card.total}`}</span> clans

@@ -100,13 +100,13 @@ function App() {
                 paddingTop: '2px',
               }}>
                 <Breadcrumbs aria-label="breadcrumb" separator="/" style={{ textDecoration: "none", color: "inherit" }}>
-                  <Typography
+                  {pathname !== "/" && <Typography
                     variant="h6"
                     component="div"
                     sx={{ flexGrow: 1, textAlign: 'left', cursor: 'pointer' }}
                   >
-                    <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Home</Link>
-                  </Typography>
+                    <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Back</Link>
+                  </Typography>}
                   {pathname !== "/" && pathname.split("/").slice(1, 3).map((path, index) => <Typography
                     variant="h6"
                     component="div"
@@ -115,6 +115,13 @@ function App() {
                   >
                     {_.capitalize(path.replace("/", " / "))}
                   </Typography>)}
+                  {pathname === "/" && <Typography
+                    variant="h6"
+                    component="div"
+                    sx={{ flexGrow: 1, textAlign: 'left', cursor: 'pointer' }}
+                  >
+                    <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Home</Link>
+                  </Typography>}
 
                 </Breadcrumbs>
                 <Typography variant="subtitle1" component="div" sx={{ flexGrow: 1, textAlign: 'right', }}>

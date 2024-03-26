@@ -16,10 +16,10 @@ const MenuCardProfileList = ({ card }) =>
         <Typography variant="h3" component="div">
           {card?.description}
         </Typography>
-        <Typography sx={{}} color="text.secondary">
+        <Typography variant="h5" color="text.secondary">
           Total <span>{`${card.total}`}</span>
         </Typography>
-        <Typography sx={{}} color="body2">
+        <Typography variant="h5" color="body2">
         </Typography>
       </CardContent>
     </Link>

@@ -16,10 +16,10 @@ const MenuCardPassList = ({ card }) =>
         <Typography variant="h3" component="div">
           {card?.description}
         </Typography>
-        <Typography sx={{}} color="text.secondary">
+        <Typography variant="h5" color="text.secondary">
           Current <span>{`${card.current}`}</span>
         </Typography>
-        <Typography variant="body2">
+        <Typography variant="h5" color="body2">
           Upcoming <span>{`${card.upcoming}`}</span>
         </Typography>
       </CardContent>

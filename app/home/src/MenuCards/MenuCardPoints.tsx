@@ -16,7 +16,7 @@ const MenuCardPoints = ({ card }) =>
         <Typography variant="h3" component="div">
           {card?.description}
         </Typography>
-        <Typography sx={{}} variant="body2">
+        <Typography variant="h5" color="text.secondary">
           Current Balance
           <br />
           {card?.currentBalance}

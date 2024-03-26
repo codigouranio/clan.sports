@@ -17,10 +17,10 @@ const MenuCardTrophyList = ({ card }) =>
         <Typography variant="h3" component="div">
           {card?.description}
         </Typography>
-        <Typography sx={{}} color="text.secondary">
+        <Typography variant="h5" color="text.secondary">
           Awarded {card.sent}
         </Typography>
-        <Typography sx={{}} variant="body2">
+        <Typography variant="h5" color="body2">
           Received {card.received}
         </Typography>
       </CardContent>

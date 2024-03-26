@@ -17,10 +17,10 @@ const MenuCardBadgeList = ({ card }) =>
         <Typography variant="h3" component="div">
           {card?.description}
         </Typography>
-        <Typography sx={{}} color="text.secondary">
+        <Typography variant="h5" color="text.secondary">
           Issued {card.sent}
         </Typography>
-        <Typography sx={{}} color="body2">
+        <Typography variant="h5" color="body2">
           Earned {card.received}
         </Typography>
       </CardContent>
