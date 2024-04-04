@@ -127,7 +127,7 @@ export default function Home() {
       <Box sx={{ flexGrow: 1, p: 2 }}>
         <Grid container rowSpacing={1} justifyContent="center">
           {cards.map((card, index) => (
-            <Grid sm="auto" key={index} sx={{
+            <Grid item sm="auto" key={index} sx={{
             }}>
               {card.type === "clan_list" && <MenuCardClanList card={card} />}
               {card.type === "profile_list" && <MenuCardProfileList card={card} />}
