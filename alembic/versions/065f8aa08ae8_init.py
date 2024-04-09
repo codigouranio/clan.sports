@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 9d5bbebcb2c9
+Revision ID: 065f8aa08ae8
 Revises: 
-Create Date: 2024-03-24 20:26:21.657794
+Create Date: 2024-04-08 21:20:57.462015
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import app
 
 
 # revision identifiers, used by Alembic.
-revision: str = '9d5bbebcb2c9'
+revision: str = '065f8aa08ae8'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -70,6 +70,10 @@ def upgrade() -> None:
     sa.Column('state_province', sa.String(length=30), nullable=False),
     sa.Column('postal_code', sa.String(length=30), nullable=False),
     sa.Column('country', sa.String(length=30), nullable=False),
+    sa.Column('favorite', sa.Boolean(), nullable=False),
+    sa.Column('sharing_url', sa.String(length=255), nullable=False),
+    sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('modified_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['profile_type_code'], ['profile_type.code'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user_account.id'], ),
     sa.PrimaryKeyConstraint('id')

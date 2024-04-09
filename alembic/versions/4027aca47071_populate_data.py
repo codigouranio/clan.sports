@@ -1,8 +1,8 @@
 """Populate data
 
-Revision ID: e04216aa3a63
-Revises: 9d5bbebcb2c9
-Create Date: 2024-03-24 20:26:24.355101
+Revision ID: 4027aca47071
+Revises: 065f8aa08ae8
+Create Date: 2024-04-08 21:21:20.063323
 
 """
 
@@ -14,8 +14,8 @@ import app
 
 
 # revision identifiers, used by Alembic.
-revision: str = "e04216aa3a63"
-down_revision: Union[str, None] = "9d5bbebcb2c9"
+revision: str = "4027aca47071"
+down_revision: Union[str, None] = "065f8aa08ae8"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -66,3 +66,7 @@ def downgrade():
     op.execute("DELETE FROM profile_type WHERE code='ADMIN';")
     op.execute("DELETE FROM profile_type WHERE code='SUPPORTER';")
     op.execute("DELETE FROM profile_type WHERE code='PARTICIPANT';")
+
+
+def downgrade() -> None:
+    pass

@@ -4,8 +4,6 @@ import { ActionType, Storage } from './Storage';
 // Custom hook for fetching data
 function useDataFetching(url: string, method = 'GET', body = null) {
 
-  console.log('useDataFetching');
-
   const { storageState, dispatch } = useContext(Storage);
 
   const fetchData = async () => {
@@ -30,21 +28,17 @@ function useDataFetching(url: string, method = 'GET', body = null) {
     }
   };
 
-  const memoizedFetchData = useMemo(() => fetchData, [url, method, body, dispatch])
+  const memoizedFetchData = useMemo(() => fetchData, [url, method, body, dispatch]);
 
   useEffect(() => {
 
     memoizedFetchData();
-
-    // fetchData();
 
     // Cleanup function
     return () => {
       // Any cleanup code here
     };
   }, [memoizedFetchData]);
-
-  //url, method, body, dispatch
 
   return storageState;
 }

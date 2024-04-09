@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import List, Optional
 
 from flask_login import UserMixin
-from sqlalchemy import Column, DateTime, Enum, ForeignKey, PickleType, String
+from sqlalchemy import Boolean, Column, DateTime, Enum, ForeignKey, PickleType, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from .serializablemixin import SerializableMixin
@@ -58,7 +58,6 @@ class Profile(Base, SerializableMixin):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
     user: Mapped["User"] = relationship(back_populates="profiles")
-    profile_type_code: Mapped[int] = mapped_column(ForeignKey("profile_type.code"))
     bio: Mapped[str] = mapped_column(String(255))
     name: Mapped[str] = mapped_column(String(30))
     last_name: Mapped[str] = mapped_column(String(30))
@@ -67,6 +66,28 @@ class Profile(Base, SerializableMixin):
     state_province: Mapped[str] = mapped_column(String(30))
     postal_code: Mapped[str] = mapped_column(String(30))
     country: Mapped[str] = mapped_column(String(30))
+    favorite: Mapped[Boolean] = mapped_column(Boolean, nullable=False, default=False)
+    sharing_url: Mapped[str] = mapped_column(String(255), nullable=False, default="")
+    profile_type: Mapped[ProfileType] = relationship("ProfileType")
+    profile_type_code: Mapped[str] = mapped_column(
+        String(6), ForeignKey("profile_type.code")
+    )
+    created_at = Column(DateTime, default=datetime.now)
+    modified_at = Column(DateTime, onupdate=datetime.now)
+
+    # def get_profile_type_name(self, session):
+    #     if hasattr(self, "_profile_type_name"):
+    #         return self._profile_type_name
+    #     if self.profile_type_code is not None:
+    #         # Assuming you have a ProfileType class defined with a 'name' attribute
+    #         profile_type = (
+    #             session.query(ProfileType)
+    #             .filter_by(code=self.profile_type_code)
+    #             .first()
+    #         )
+    #         self._profile_type_name = profile_type.name if profile_type else None
+    #         return self._profile_type_name
+    #     return None
 
     def to_dict(self, full=False):
         if full:
@@ -76,6 +97,10 @@ class Profile(Base, SerializableMixin):
             "profile_type_code": self.profile_type_code,
             "name": self.name,
         }
+
+    # @property
+    # def profileType(self):
+    #     return self.profile_type.name if self.profile_type else None
 
 
 class AssetType(Enum):

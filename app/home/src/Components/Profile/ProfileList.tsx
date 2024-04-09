@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import useDataFetching from '../../Fetch';
+import useDataFetching from '../../useDataFetching';
 import CardAdd from '../CardAdd';
 import ProfileCard from './ProfileCard';
 
@@ -8,7 +8,6 @@ export default function ProfileList() {
   const { data, loading, error } = useDataFetching('/api/profiles');
   console.log([data, loading, error]);
 
-  // const items = Array.from({ length: 10 }, (_, index) => index + 1);
   const items: any[] = data?.items.profiles;
 
   return (
@@ -24,7 +23,7 @@ export default function ProfileList() {
         </Grid>
         {items && items.map((item: any, index: number) => (
           <Grid item key={index}>
-            <ProfileCard />
+            <ProfileCard profile_data={item} />
           </Grid>
         ))}
       </Grid>

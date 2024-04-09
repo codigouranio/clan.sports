@@ -35,11 +35,11 @@ type Action = SetDataAction | SetLoadingAction | SetErrorAction;
 function storageReducer(state: StorageState, action: Action): StorageState {
   switch (action.type) {
     case ActionType.SET_DATA:
-      return { ...state, data: action.payload };
+      return { ...state, ...{ data: { ...state.data, ...action.payload } }, ...{ loading: false } };
     case ActionType.SET_LOADING:
-      return { ...state, loading: action.payload };
+      return { ...state, ...{ loading: action.payload || true } };
     case ActionType.SET_ERROR:
-      return { ...state, error: action.payload };
+      return { ...state, ...{ error: action.payload }, ...{ loading: false } };
     default:
       return state;
   }

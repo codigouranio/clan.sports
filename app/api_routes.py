@@ -145,10 +145,18 @@ def add_profile():
         )
         app.db.session.add(new_profile)
         app.db.session.commit()
-
+        # {"message": "Profile added successfully", "profile_id": new_profile.id}
         return (
             jsonify(
-                {"message": "Profile added successfully", "profile_id": new_profile.id}
+                {
+                    "added_profile": {
+                        "success": True,
+                        "profile_id": new_profile.id,
+                        "profile_type_name": new_profile.get_profile_type_name(
+                            app.db.session
+                        ),
+                    }
+                }
             ),
             201,
         )
