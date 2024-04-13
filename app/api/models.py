@@ -57,6 +57,9 @@ class Profile(Base, SerializableMixin):
     __tablename__ = "profile"
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
+    unique_id: Mapped[str] = mapped_column(
+        String(64), unique=True, nullable=False, default=str(uuid.uuid4())
+    )
     user: Mapped["User"] = relationship(back_populates="profiles")
     bio: Mapped[str] = mapped_column(String(255))
     name: Mapped[str] = mapped_column(String(30))
@@ -75,19 +78,19 @@ class Profile(Base, SerializableMixin):
     created_at = Column(DateTime, default=datetime.now)
     modified_at = Column(DateTime, onupdate=datetime.now)
 
-    # def get_profile_type_name(self, session):
-    #     if hasattr(self, "_profile_type_name"):
-    #         return self._profile_type_name
-    #     if self.profile_type_code is not None:
-    #         # Assuming you have a ProfileType class defined with a 'name' attribute
-    #         profile_type = (
-    #             session.query(ProfileType)
-    #             .filter_by(code=self.profile_type_code)
-    #             .first()
-    #         )
-    #         self._profile_type_name = profile_type.name if profile_type else None
-    #         return self._profile_type_name
-    #     return None
+    def get_profile_type_name(self, session):
+        if hasattr(self, "_profile_type_name"):
+            return self._profile_type_name
+        if self.profile_type_code is not None:
+            # Assuming you have a ProfileType class defined with a 'name' attribute
+            profile_type = (
+                session.query(ProfileType)
+                .filter_by(code=self.profile_type_code)
+                .first()
+            )
+            self._profile_type_name = profile_type.name if profile_type else None
+            return self._profile_type_name
+        return None
 
     def to_dict(self, full=False):
         if full:

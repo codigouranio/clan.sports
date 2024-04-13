@@ -1,8 +1,7 @@
-import ProfileList from './ProfileList';
 import ProfileAdd from './ProfileAdd';
+import ProfileList from './ProfileList';
+import { ProfileView } from './ProfileView';
 
-// export * from './ProfileAdd';
-// export * from './ProfileCard';
-export { ProfileList, ProfileAdd };
+export { ProfileAdd, ProfileList, ProfileView };
 
 

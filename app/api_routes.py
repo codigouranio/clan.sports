@@ -191,17 +191,17 @@ def get_user(user_id):
     return UserSchema().dump(item)
 
 
-@api_blueprint.route("/profile/<int:profile_id>", methods=["GET"])
+@api_blueprint.route("/profile/<string:profile_id>", methods=["GET"])
 @login_required
 def get_profile(profile_id):
     item = (
         app.db.session.query(Profile)
-        .filter_by(user_id=current_user.id, id=profile_id)
+        .filter_by(user_id=current_user.id, unique_id=profile_id)
         .first()
     )
     if not item:
         return jsonify({"message": "No item found"}), 404
-    return ProfileSchema().dump(item)
+    return jsonify({"profile": {profile_id: ProfileSchema().dump(item)}})
 
 
 @api_blueprint.route("/profile/<int:profile_id>", methods=["DELETE"])
@@ -217,3 +217,71 @@ def del_profile(profile_id):
     app.db.session.delete(item)
     app.db.session.commit()
     return jsonify({"message": "Item deleted"}), 200
+
+
+def add_profile_form():
+
+    # s = jsonify({"states-us": []})
+    states_us = [
+        "AK",
+        "AL",
+        "AR",
+        "AS",
+        "AZ",
+        "CA",
+        "CO",
+        "CT",
+        "DC",
+        "DE",
+        "FL",
+        "GA",
+        "GU",
+        "HI",
+        "IA",
+        "ID",
+        "IL",
+        "IN",
+        "KS",
+        "KY",
+        "LA",
+        "MA",
+        "MD",
+        "ME",
+        "MI",
+        "MN",
+        "MO",
+        "MP",
+        "MS",
+        "MT",
+        "NC",
+        "ND",
+        "NE",
+        "NH",
+        "NJ",
+        "NM",
+        "NV",
+        "NY",
+        "OH",
+        "OK",
+        "OR",
+        "PA",
+        "PR",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UM",
+        "UT",
+        "VA",
+        "VI",
+        "VT",
+        "WA",
+        "WI",
+        "WV",
+        "WY",
+    ]
+
+    return jsonify({"form": {"states-us": states_us}}), 200
+
+    # {"states_us": []]

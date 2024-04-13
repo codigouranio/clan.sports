@@ -21,6 +21,9 @@ function useDataFetching(url: string, method = 'GET', body = null) {
         body: body ? JSON.stringify(body) : null
       };
       const response = await fetch(url, options);
+      if (response.status === 401) {
+        throw new Error('UNAUTHORIZED');
+      }
       const data = await response.json();
       dispatch({ type: ActionType.SET_DATA, payload: data });
     } catch (error: any) {

@@ -7,7 +7,11 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SmartphoneIcon from '@mui/icons-material/Smartphone';
 import WebhookIcon from '@mui/icons-material/Webhook';
-import { AppBar, Badge, Breadcrumbs, Divider, FormControlLabel, FormGroup, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Switch, Toolbar, Typography } from '@mui/material';
+import {
+  AppBar, Badge, Box, Breadcrumbs, Container, Divider,
+  FormControlLabel, FormGroup, IconButton, LinearProgress,
+  Link as LinkUi, ListItemIcon, ListItemText, Menu, MenuItem, Switch, Toolbar, Typography
+} from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import {
   Experimental_CssVarsProvider as CssVarsProvider,
@@ -19,17 +23,17 @@ import './App.scss';
 import Copyright from './Components/Copyright';
 import theme from './theme';
 import * as _ from 'lodash';
+import useDataFetching from './useDataFetching';
 
 const NoAccess = lazy(() => import(/* webpackChunkName: "no-access" */ './NoAccess'));
 const Test = lazy(() => import(/* webpackChunkName: "test" */ './Test'));
 
-
-
 const permission = false;
 
-
-
 function App() {
+
+  const { data, loading, error } = useDataFetching('/api/currentUser');
+  console.log([data, loading, error]);
 
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -49,11 +53,46 @@ function App() {
   const location = useLocation();
   const { hash, pathname, search } = location;
 
+  if (error === 'UNAUTHORIZED') {
+    return (
+      <React.Fragment>
+        <CssVarsProvider>
+          <ThemeProvider theme={theme}>
+            <div className="App">
+              <Container component="main" maxWidth="md">
+                <LinkUi href='/letmein'>
+                  <h1>Sorry, your session is not available!</h1>
+                  <h2>Please, login again here</h2>
+                </LinkUi>
+              </Container>
+            </div>
+          </ThemeProvider>
+        </CssVarsProvider>
+      </React.Fragment >
+    );
+  }
+
+  if (loading) {
+    <React.Fragment>
+      <CssVarsProvider>
+        <ThemeProvider theme={theme}>
+          <div className="App">
+            <Box sx={{ width: '100%' }}>
+              <LinearProgress />
+            </Box>
+          </div>
+        </ThemeProvider>
+      </CssVarsProvider>
+    </React.Fragment>
+  }
+
   return (
     <CssVarsProvider>
       <ThemeProvider theme={theme}>
         <div className="App">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Box sx={{ width: '100%' }}>
+            <LinearProgress />
+          </Box>}>
             {permission &&
               <Test></Test>
             }

@@ -13,6 +13,7 @@ class ProfileSchema(app.ma.SQLAlchemySchema):
     __model__ = Profile
 
     id = app.ma.auto_field()
+    unique_id = app.ma.auto_field()
     name = app.ma.auto_field()
     last_name = app.ma.auto_field()
     bio = app.ma.auto_field()
