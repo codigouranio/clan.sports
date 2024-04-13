@@ -1,4 +1,5 @@
 import { Grid } from '@mui/material';
+import React from 'react';
 import useDataFetching from '../../useDataFetching';
 import CardAdd from '../CardAdd';
 import ProfileCard from './ProfileCard';
@@ -11,7 +12,7 @@ export default function ProfileList() {
   const items: any[] = data?.items.profiles;
 
   return (
-    <div>
+    <React.Fragment>
       <h1>Profile List</h1>
       <Grid container spacing={3} sx={{
         display: 'flex',
@@ -27,7 +28,7 @@ export default function ProfileList() {
           </Grid>
         ))}
       </Grid>
-    </div >
+    </React.Fragment>
   );
 }
 

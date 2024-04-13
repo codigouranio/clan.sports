@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import useDataFetching from "../../useDataFetching";
@@ -33,24 +33,35 @@ export const ProfileView: React.FC<any> = () => {
 
   return (
     <React.Fragment>
-      <h1>{JSON.stringify(searchParams.get("id") || "unknown")}</h1>
-      <p>{JSON.stringify(searchParams.get("id") || "unknown")}</p>
-      {Object.entries(profile).map(([key, value]) => (
-        <Grid item xs={12} sm={4} key={key}>{`${value}`}</Grid>
-      ))}
-      <Container component="main" maxWidth="md" sx={{ margin: '2em' }}>
-        <Grid container spacing={3} alignItems="center">
-          <Grid item xs={12} sm={4} sx={{ border: '2px solid black' }}>
-            <Typography variant="h4" gutterBottom>{profile?.name}</Typography>
-          </Grid>
-          <Grid item xs={12} sm={8} sx={{ border: '2px solid black' }}>
-            <Typography variant="h4" gutterBottom>{profile?.last_name}</Typography>
-          </Grid>
+      <Grid container spacing={1} sx={{ margin: '2em' }}>
+        <Grid item md={4} sx={{ border: '5px solid #000', padding: '20px', minHeight: '300px' }}>
+          <Typography variant="h2">{`${profile?.name} ${profile?.last_name}`}</Typography>
         </Grid>
-        <Typography variant="body1">
-          {profile?.bio}
-        </Typography>
-      </Container>
+        <Grid item md={8} alignContent={'flex-end'} direction={'column'} >
+          <Grid container md={12}>
+            <Grid item xs={3} sx={{minHeight: '50px'}}>
+              <Typography variant="h6">{'Name'}</Typography>
+            </Grid>
+          </Grid>
+          <Grid container md={12}>
+            <Grid item xs={3}>
+              <Typography variant="h6">{`${profile?.name}`}</Typography>
+            </Grid>
+          </Grid>
+
+
+        </Grid>
+        <Grid item md={12} textAlign="left" sx={{ marginTop: '1em' }}>
+          <Typography variant="h3">
+            BIO
+          </Typography>
+        </Grid>
+        <Grid item md={12} textAlign="left">
+          <Typography variant="body1">
+            {profile?.bio}
+          </Typography>
+        </Grid>
+      </Grid>
     </React.Fragment>
   );
 }
