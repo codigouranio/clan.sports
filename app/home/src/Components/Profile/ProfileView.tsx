@@ -33,35 +33,54 @@ export const ProfileView: React.FC<any> = () => {
 
   return (
     <React.Fragment>
-      <Grid container spacing={1} sx={{ margin: '2em' }}>
-        <Grid item md={4} sx={{ border: '5px solid #000', padding: '20px', minHeight: '300px' }}>
-          <Typography variant="h2">{`${profile?.name} ${profile?.last_name}`}</Typography>
-        </Grid>
-        <Grid item md={8} alignContent={'flex-end'} direction={'column'} >
-          <Grid container md={12}>
-            <Grid item xs={3} sx={{minHeight: '50px'}}>
-              <Typography variant="h6">{'Name'}</Typography>
-            </Grid>
+      <Container component="main">
+        <Grid container spacing={1} sx={{}}>
+          <Grid
+            item
+            md={2}
+            sx={{ border: "5px solid #000", padding: "20px", minHeight: "300px" }}
+          >
+            <Typography variant="h2">{`${profile?.name} ${profile?.last_name}`}</Typography>
           </Grid>
-          <Grid container md={12}>
-            <Grid item xs={3}>
-              <Typography variant="h6">{`${profile?.name}`}</Typography>
+          <Grid item md={10} alignContent={"flex-end"} >
+            <Grid item md={2} alignContent={"center"} sx={{ minHeight: "50px", color: "white", border: "5px solid #000", backgroundColor: "black" }}>
+              <Typography variant="h6">{"Name"}</Typography>
             </Grid>
+            <Grid item md={2} alignContent={"center"} sx={{ minHeight: "50px", color: "white", border: "5px solid #000", backgroundColor: "black" }}>
+              <Typography variant="h6">{"Name"}</Typography>
+            </Grid>
+            {/* <Grid item alignContent={"center"} sx={{ minHeight: "50px", color: "white", border: "5px solid #000", backgroundColor: "black" }}>
+              <Typography variant="h6">{"Name"}</Typography>
+            </Grid> */}
+            {/* <Grid container md={6}>
+              <Grid item md={12} alignContent={"center"} sx={{ minHeight: "50px", color: "white", border: "5px solid #000", backgroundColor: "black" }}>
+                <Typography variant="h6">{"Name"}</Typography>
+              </Grid>
+            </Grid> */}
+            {/* <Grid container md={6}>
+              <Grid item md={12} sx={{ border: "5px solid #000", padding: "1em" }}>
+                <Typography variant="h6">{`${profile?.name}`}</Typography>
+              </Grid>
+            </Grid> */}
+            {/* <Grid container md={6}>
+              <Grid item md={12} alignContent={"center"} sx={{ minHeight: "50px", color: "white", border: "5px solid #000", backgroundColor: "black" }}>
+                <Typography variant="h6">{"Last Name"}</Typography>
+              </Grid>
+            </Grid> */}
+            {/* <Grid container md={6}>
+              <Grid item md={12} sx={{ border: "5px solid #000", padding: "1em" }}>
+                <Typography variant="h6">{`${profile?.last_name}`}</Typography>
+              </Grid>
+            </Grid> */}
           </Grid>
-
-
+          <Grid item md={12} textAlign="left" sx={{ marginTop: "1em", backgroundColor: "black", color: "white" }}>
+            <Typography variant="h3">BIO</Typography>
+          </Grid>
+          <Grid item md={12} textAlign="left">
+            <Typography variant="body1">{profile?.bio}</Typography>
+          </Grid>
         </Grid>
-        <Grid item md={12} textAlign="left" sx={{ marginTop: '1em' }}>
-          <Typography variant="h3">
-            BIO
-          </Typography>
-        </Grid>
-        <Grid item md={12} textAlign="left">
-          <Typography variant="body1">
-            {profile?.bio}
-          </Typography>
-        </Grid>
-      </Grid>
+      </Container>
     </React.Fragment>
   );
-}
+};
