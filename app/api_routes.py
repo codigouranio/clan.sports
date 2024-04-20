@@ -219,9 +219,10 @@ def del_profile(profile_id):
     return jsonify({"message": "Item deleted"}), 200
 
 
-def add_profile_form():
+@api_blueprint.route("/profile/form", methods=["GET"])
+@login_required
+def profile_form():
 
-    # s = jsonify({"states-us": []})
     states_us = [
         "AK",
         "AL",
@@ -281,7 +282,19 @@ def add_profile_form():
         "WV",
         "WY",
     ]
+    profile_types = app.db.session.query(ProfileType).all()
+    profile_types_json = ProfileTypeSchema(many=True).dump(profile_types)
 
-    return jsonify({"form": {"states-us": states_us}}), 200
+    return (
+        jsonify(
+            {
+                "form": {
+                    "profile-types": profile_types_json,
+                    "states-by-country": {"us": states_us},
+                }
+            }
+        ),
+        200,
+    )
 
     # {"states_us": []]

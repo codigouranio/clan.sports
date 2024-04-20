@@ -1,24 +1,23 @@
 """Populate data
 
-Revision ID: 537af3351549
-Revises: 7e1d143436d5
-Create Date: 2024-03-23 00:46:40.193580
+Revision ID: dee15d1d0a7e
+Revises: 64416d0dbe78
+Create Date: 2024-04-17 18:44:19.043660
 
 """
 
 from typing import Sequence, Union
 
 from alembic import op
+import sqlalchemy as sa
+import app
 
 
 # revision identifiers, used by Alembic.
-revision: str = "537af3351549"
-down_revision: Union[str, None] = "7e1d143436d5"
+revision: str = "dee15d1d0a7e"
+down_revision: Union[str, None] = "64416d0dbe78"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
-
-
-from alembic import op
 
 
 def upgrade():

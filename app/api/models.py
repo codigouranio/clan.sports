@@ -48,6 +48,7 @@ class ProfileType(Base):
 
     code: Mapped[str] = mapped_column(String(6), primary_key=True)
     name: Mapped[str] = mapped_column(String(50))
+    schema_type: Mapped[int] = mapped_column()
 
     def to_dict(self):
         return {"code": self.code, "name": self.name}

@@ -59,3 +59,4 @@ class ProfileTypeSchema(app.ma.SQLAlchemySchema):
 
     code = app.ma.auto_field()
     name = app.ma.auto_field()
+    schema_type = app.ma.auto_field()

@@ -1,8 +1,8 @@
 """init
 
-Revision ID: 065f8aa08ae8
+Revision ID: 64416d0dbe78
 Revises: 
-Create Date: 2024-04-08 21:20:57.462015
+Create Date: 2024-04-17 18:44:10.555071
 
 """
 from typing import Sequence, Union
@@ -13,7 +13,7 @@ import app
 
 
 # revision identifiers, used by Alembic.
-revision: str = '065f8aa08ae8'
+revision: str = '64416d0dbe78'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -33,6 +33,7 @@ def upgrade() -> None:
     op.create_table('profile_type',
     sa.Column('code', sa.String(length=6), nullable=False),
     sa.Column('name', sa.String(length=50), nullable=False),
+    sa.Column('schema_type', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('code')
     )
     op.create_table('request_code',
@@ -61,7 +62,7 @@ def upgrade() -> None:
     op.create_table('profile',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('profile_type_code', sa.String(length=6), nullable=False),
+    sa.Column('unique_id', sa.String(length=64), nullable=False),
     sa.Column('bio', sa.String(length=255), nullable=False),
     sa.Column('name', sa.String(length=30), nullable=False),
     sa.Column('last_name', sa.String(length=30), nullable=False),
@@ -72,11 +73,13 @@ def upgrade() -> None:
     sa.Column('country', sa.String(length=30), nullable=False),
     sa.Column('favorite', sa.Boolean(), nullable=False),
     sa.Column('sharing_url', sa.String(length=255), nullable=False),
+    sa.Column('profile_type_code', sa.String(length=6), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('modified_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['profile_type_code'], ['profile_type.code'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user_account.id'], ),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('unique_id')
     )
     # ### end Alembic commands ###
 
