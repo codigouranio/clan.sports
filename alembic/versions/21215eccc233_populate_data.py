@@ -1,11 +1,10 @@
 """Populate data
 
-Revision ID: dee15d1d0a7e
-Revises: 64416d0dbe78
-Create Date: 2024-04-17 18:44:19.043660
+Revision ID: 21215eccc233
+Revises: 0d6fe1ffedab
+Create Date: 2024-04-19 22:08:28.086458
 
 """
-
 from typing import Sequence, Union
 
 from alembic import op
@@ -14,8 +13,8 @@ import app
 
 
 # revision identifiers, used by Alembic.
-revision: str = "dee15d1d0a7e"
-down_revision: Union[str, None] = "64416d0dbe78"
+revision: str = '21215eccc233'
+down_revision: Union[str, None] = '0d6fe1ffedab'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -72,6 +71,19 @@ def upgrade():
     op.execute(
         "INSERT INTO profile_type (code, name, schema_type) VALUES ('PARTICIPANT', 'Participant', 1);"
     )
+    op.execute(
+        "INSERT INTO user_account (id, phone_number, is_active, email_address) VALUES (1, '+19089083333', True, 'codigouranio@gmail.com')"
+    )
+    op.execute(
+        """ INSERT INTO profile (user_id, unique_id, bio, name, last_name, street_address, city, state_province, postal_code, country, favorite, sharing_url, profile_type_code) 
+            VALUES (1, '2db6fd19-227f-42c6-a4bb-456676d21dfe', 'test user for testing purposes', 'Tester', 'Quality', '10 Western St', 'San Diego', 'CA', '90090', 'USA', True, '/234234-3423-34', 'ADMIN')
+        """
+    )
+    op.execute(
+        """ INSERT INTO profile (user_id, unique_id, bio, name, last_name, street_address, city, state_province, postal_code, country, favorite, sharing_url, profile_type_code) 
+            VALUES (1, '3f59307d-a327-4ce3-ae75-0116f3271087', 'test user for testing purposes', 'Agent', 'Players', '10 Western St', 'San Diego', 'CA', '90090', 'USA', False, '/234234-3423-35', 'AGENT')
+        """
+    )
 
 
 def downgrade():
@@ -92,3 +104,5 @@ def downgrade():
     op.execute("DELETE FROM profile_type WHERE code='ADMIN';")
     op.execute("DELETE FROM profile_type WHERE code='SUPPORTER';")
     op.execute("DELETE FROM profile_type WHERE code='PARTICIPANT';")
+    op.execute("DELETE FROM user_account WHERE id=1")
+    op.execute("DELETE FROM profile WHERE user_id=1")

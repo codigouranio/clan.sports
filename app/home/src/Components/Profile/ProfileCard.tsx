@@ -39,7 +39,12 @@ export default function ProfileCard(props: any) {
         <CardActions>
           <CardActions disableSpacing>
             <IconButton aria-label="add to favorites">
-              <FavoriteIcon sx={{ color: 'red' }} />
+              {props?.profile_data?.favorite &&
+                <FavoriteIcon sx={{ color: 'red' }} />
+              }
+              {!props?.profile_data?.favorite &&
+                <FavoriteIcon />
+              }
             </IconButton>
             <IconButton aria-label="share">
               <ShareIcon />
