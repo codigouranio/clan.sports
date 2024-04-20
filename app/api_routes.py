@@ -116,7 +116,14 @@ def getCurrentUser():
 @login_required
 def get_profiles():
     all_profiles = app.db.session.query(Profile).all()
-    return jsonify({"items": {"profiles": ProfileSchema(many=True).dump(all_profiles)}})
+
+    res = []
+
+    for profile in all_profiles:
+        p = ProfileSchema().dump(profile)
+        res.append({"%s" % (profile.unique_id): p})
+
+    return jsonify({"items": {"profiles": res}})
 
 
 @api_blueprint.route("/profileTypes", methods=["GET"])
@@ -298,3 +305,23 @@ def profile_form():
     )
 
     # {"states_us": []]
+
+
+@api_blueprint.route("/profile/favorite", methods=["POST"])
+def set_profile_as_favorite():
+    try:
+        data = request.get_json(force=True)
+        print(data)
+        # print(data.profile_id)
+        return jsonify({"success": True})
+    except Exception as e:
+        return (
+            jsonify(
+                {
+                    "error": "An error occurred while adding the profile: {}".format(
+                        str(e)
+                    )
+                }
+            ),
+            500,
+        )

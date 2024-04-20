@@ -3,6 +3,7 @@ import React from 'react';
 import useDataFetching from '../../useDataFetching';
 import CardAdd from '../CardAdd';
 import ProfileCard from './ProfileCard';
+import * as _ from 'lodash';
 
 export default function ProfileList() {
 
@@ -25,7 +26,7 @@ export default function ProfileList() {
         </Grid>
         {items && items.map((item: any, index: number) => (
           <Grid item key={index}>
-            <ProfileCard profile_data={item} />
+            {_.map(item, (item2: any) => (<ProfileCard profile_data={item2} />))}
           </Grid>
         ))}
       </Grid>
