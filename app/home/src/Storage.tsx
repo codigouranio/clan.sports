@@ -1,4 +1,5 @@
 import { Dispatch, ReactNode, createContext, useContext, useReducer } from 'react';
+import * as _ from 'lodash';
 
 // Define the shape of your state
 interface StorageState {
@@ -35,7 +36,12 @@ type Action = SetDataAction | SetLoadingAction | SetErrorAction;
 function storageReducer(state: StorageState, action: Action): StorageState {
   switch (action.type) {
     case ActionType.SET_DATA:
-      return { ...state, ...{ data: { ...state.data, ...action.payload } }, ...{ loading: false } };
+      const items: Record<string, any> = {};
+      for (let key in action.payload?.items) {
+        items[key] = { ...state.data.items[key], ...action.payload.items[key] };
+      }
+      const data = { ...state?.data, ...{ items } };
+      return { ...state, ...{ data }, ...{ loading: false } };
     case ActionType.SET_LOADING:
       return { ...state, ...{ loading: action.payload || true } };
     case ActionType.SET_ERROR:

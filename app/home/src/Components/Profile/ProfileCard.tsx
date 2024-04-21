@@ -61,14 +61,14 @@ export default function ProfileCard(props: any) {
                 <FavoriteIcon
                   sx={{ color: "red" }}
                   onClick={(ev) =>
-                    setFavorite(ev, props?.profile_data?.profile_id, false)
+                    setFavorite(ev, props?.profile_data?.unique_id, false)
                   }
                 />
               )}
               {!props?.profile_data?.favorite && (
                 <FavoriteIcon
                   onClick={(ev) =>
-                    setFavorite(ev, props?.profile_data?.profile_id, true)
+                    setFavorite(ev, props?.profile_data?.unique_id, true)
                   }
                 />
               )}

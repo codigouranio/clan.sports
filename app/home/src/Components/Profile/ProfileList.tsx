@@ -24,11 +24,9 @@ export default function ProfileList() {
         <Grid item>
           <CardAdd itemType={"Profile"}></CardAdd>
         </Grid>
-        {items && items.map((item: any, index: number) => (
-          <Grid item key={index}>
-            {_.map(item, (item2: any) => (<ProfileCard profile_data={item2} />))}
-          </Grid>
-        ))}
+        {
+          _.map(items, (item: any, index: number) => <Grid item key={index}><ProfileCard profile_data={item} /></Grid>)
+        }
       </Grid>
     </React.Fragment>
   );

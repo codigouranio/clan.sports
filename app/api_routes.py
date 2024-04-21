@@ -116,13 +116,11 @@ def getCurrentUser():
 @login_required
 def get_profiles():
     all_profiles = app.db.session.query(Profile).all()
-
-    res = []
-
+    res = {}
     for profile in all_profiles:
         p = ProfileSchema().dump(profile)
-        res.append({"%s" % (profile.unique_id): p})
-
+        # res.append({"%s" % (profile.unique_id): p})
+        res[profile.unique_id] = p
     return jsonify({"items": {"profiles": res}})
 
 
@@ -311,9 +309,25 @@ def profile_form():
 def set_profile_as_favorite():
     try:
         data = request.get_json(force=True)
+        profile = (
+            app.db.session.query(Profile)
+            .filter_by(user_id=current_user.id, unique_id=data["profile_id"])
+            .first()
+        )
         print(data)
-        # print(data.profile_id)
-        return jsonify({"success": True})
+        profile.favorite = data["favorite"]
+        app.db.session.commit()
+        all_profiles = (
+            app.db.session.query(Profile)
+            .filter_by(user_id=current_user.id, unique_id=data["profile_id"])
+            .all()
+        )
+        res = {}
+        for profile in all_profiles:
+            p = ProfileSchema().dump(profile)
+            res[profile.unique_id] = p
+            # res.append({"%s" % (profile.unique_id): p})
+        return jsonify({"items": {"profiles": res}})
     except Exception as e:
         return (
             jsonify(
