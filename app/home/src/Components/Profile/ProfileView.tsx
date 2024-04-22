@@ -1,9 +1,10 @@
-import { Container, Grid, Paper, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import useDataFetching from "../../useDataFetching";
 
 export const ProfileView: React.FC<any> = () => {
+
   const [searchParams] = useSearchParams();
   console.log(searchParams);
 
@@ -37,10 +38,11 @@ export const ProfileView: React.FC<any> = () => {
     <React.Fragment>
       <Container component="main" maxWidth={"md"} fixed sx={{}}>
         <Grid container spacing={1} columnSpacing={2}>
-          <Grid item xs={12} sm={3} md={3} sx={{ border: "5px solid gray", padding: "20px", minHeight: "200px" }}>
-            <Typography variant="h5"></Typography>
+          <Grid item xs={12} sm={4} md={4} sx={{ border: "5px solid gray", padding: "2px", minHeight: "300px", paddingLeft: "0px" }}>
+            {/* <Typography variant="h5"></Typography> */}
+            <img src={`/api/profileQr/${profile?.unique_id}`} alt="" style={{ margin: "1px", width: "10em", height: "10em" }} />
           </Grid>
-          <Grid item xs={12} sm={9} md={9} alignContent={"flex-end"} sx={{ padding: '1em' }}>
+          <Grid item xs={12} sm={8} md={8} alignContent={"flex-end"} sx={{ padding: '1em' }}>
             <Grid item xs={12} sm={12} md={12} sx={{ marginLeft: '10px', paddingTop: '2em', paddingBottom: '0.2em' }}>
               <Typography variant="h2">{`${profile?.name} ${profile?.last_name}`}</Typography>
             </Grid>
