@@ -13,10 +13,10 @@ export const ProfileView: React.FC<any> = () => {
     `/api/profile/${profile_unique_id}`
   );
 
-  console.log([">>>>>", data, loading, error]);
+  console.log(data);
 
   if (data?.items && data?.items.length) {
-    const profile_data = data.items[0];
+    const profile_data = data.items.profiles[profile_unique_id];
     return (
       <React.Fragment>
         <Container component="main" maxWidth="md">
@@ -27,9 +27,11 @@ export const ProfileView: React.FC<any> = () => {
     );
   }
 
-  console.log(data?.profile && data?.profile[profile_unique_id]);
 
-  const profile = data?.profile ? data?.profile[profile_unique_id] : {};
+
+  const profile = data?.items?.profiles ? data?.items?.profiles[profile_unique_id] : {};
+
+  console.log(profile);
 
   return (
     <React.Fragment>
@@ -39,13 +41,13 @@ export const ProfileView: React.FC<any> = () => {
             <Typography variant="h5"></Typography>
           </Grid>
           <Grid item xs={12} sm={9} md={9} alignContent={"flex-end"} sx={{ padding: '1em' }}>
-            <Grid item xs={12} sm={12} md={12} sx={{ marginLeft: '10px', padding: '2em' }}>
+            <Grid item xs={12} sm={12} md={12} sx={{ marginLeft: '10px', paddingTop: '2em', paddingBottom: '0.2em' }}>
               <Typography variant="h2">{`${profile?.name} ${profile?.last_name}`}</Typography>
             </Grid>
-            <Grid item xs={12} sm={12} md={12}>
+            <Grid item xs={12} sm={12} md={12} sx={{ paddingBottom: '1em' }}>
               <Typography variant="subtitle1">{`${profile?.profile_type_name}`}</Typography>
             </Grid>
-            <Grid item xs={12} sm={6} md={12} alignContent={"center"} sx={{ minHeight: "50px", color: "gray", border: "0px solid #000", backgroundColor: "transparent" }}>
+            <Grid item xs={12} sm={12} md={12} sx={{ minHeight: "50px", color: "gray", border: "0px solid #000", backgroundColor: "transparent" }}>
               <Typography variant="h6">{`${profile?.street_address}, ${profile?.city}, ${profile?.postal_code}, ${profile?.state_province}, ${profile?.country}`}</Typography>
             </Grid>
             <Grid item xs={12} sm={12} md={12} textAlign="left" sx={{ marginTop: "1em", marginBottom: "1em", backgroundColor: "gray", color: "white", padding: "0.5em" }}>
