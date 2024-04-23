@@ -25,7 +25,7 @@ export default function ProfileList() {
           <CardAdd itemType={"Profile"}></CardAdd>
         </Grid>
         {
-          _.map(items, (item: any, index: number) =>
+          _.map(_.sortBy(items, (o) => !o.favorite), (item: any, index: number) =>
             <Grid item key={index}><ProfileCard profile_data={item} loading={loading} /></Grid>
           )
         }

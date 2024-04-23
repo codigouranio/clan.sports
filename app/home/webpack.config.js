@@ -23,6 +23,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/index.html",
       inject: true,
+      publicPath: "/app",
       chunks: ["main", "test.bundle"],
     }),
     new MiniCssExtractPlugin({

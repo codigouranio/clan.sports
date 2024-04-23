@@ -54,13 +54,13 @@ export const ProfileView: React.FC<any> = () => {
                 <Grid item xs={12} sm={12} md={12} textAlign="left" sx={{ marginTop: "1em", marginBottom: "1em", backgroundColor: "gray", color: "white", padding: "0.5em" }}>
                   <Typography variant="h5">BIO</Typography>
                 </Grid>
-                <Grid item xs={12} sm={12} md={12} textAlign="left" sx={{ borderBottom: "1px solid gray", paddingBottom: "5em" }}>
+                <Grid item xs={12} sm={12} md={12} textAlign="left" sx={{ paddingBottom: "5em" }}>
                   <Typography variant="body1">{profile?.bio}</Typography>
                 </Grid>
               </React.Fragment>
             }
           </Grid>
-          <Grid item xs={12} sm={5} md={5}>
+          <Grid item xs={12} sm={5} md={5} sx={{ borderTop: "1px dashed gray" }}>
             <Timeline position="left">
               <TimelineItem>
                 <TimelineSeparator>
@@ -84,7 +84,7 @@ export const ProfileView: React.FC<any> = () => {
               </TimelineItem>
             </Timeline>
           </Grid>
-          <Grid item alignContent={"middle"} xs={12} sm={7} md={7} sx={{ border: "0px solid gray", minHeight: "300px", paddingRight: "1em" }}>
+          <Grid item alignContent={"middle"} xs={12} sm={7} md={7} sx={{ borderTop: "1px dashed gray", minHeight: "300px", paddingRight: "1em" }}>
             <Grid container spacing={0} sx={{ m: "0px", p: "0px" }}>
               <Grid item xs={12}>
                 <Stack>
