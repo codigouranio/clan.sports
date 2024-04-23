@@ -3,12 +3,14 @@
 # https://docs.sqlalchemy.org/en/20/core/type_basics.html#sqlalchemy.types.DateTime
 # https://www.digitalocean.com/community/tutorials/how-to-add-authentication-to-your-app-with-flask-login
 
+from io import BytesIO
 import random
 from datetime import datetime, timedelta
 from http import HTTPStatus
+import uuid
 
 from dependency_injector.wiring import Provide, inject
-from flask import Blueprint, abort
+from flask import Blueprint, abort, send_file
 from flask import current_app as app
 from flask import flash, jsonify, redirect, request, session, url_for
 from flask_login import (
@@ -19,6 +21,8 @@ from flask_login import (
     logout_user,
 )
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
+from PIL import Image
+import qrcode
 
 from app.api.schemas import ProfileSchema, ProfileTypeSchema, UserSchema
 
@@ -138,6 +142,7 @@ def add_profile():
         data = request.get_json(force=True)
         new_profile = Profile(
             user_id=current_user.id,
+            unique_id=str(uuid.uuid4()),
             profile_type_code=data["profile_type_code"],
             name=data["name"],
             last_name=data["last_name"],
@@ -196,17 +201,47 @@ def get_user(user_id):
     return UserSchema().dump(item)
 
 
+@api_blueprint.route("/profileQr/<string:profile_id>", methods=["GET"])
+@login_required
+def get_profile_qr(profile_id):
+
+    origin_url = request.url_root
+    base_url = origin_url.split(request.path)[0]
+    profile_qr_url = base_url + "/profile?id=" + profile_id
+
+    qr = qrcode.make(profile_qr_url)
+
+    # Create an in-memory byte stream
+    qr_byte_array = BytesIO()
+    qr.save(qr_byte_array, format="PNG")
+    # img.save(img_byte_array, format="JPEG")  # Save the image to the byte stream
+
+    # Set the byte stream's position to the beginning
+    qr_byte_array.seek(0)
+
+    # Return the image directly from the byte stream
+    return send_file(qr_byte_array, mimetype="image/jpeg")
+
+
 @api_blueprint.route("/profile/<string:profile_id>", methods=["GET"])
 @login_required
 def get_profile(profile_id):
-    item = (
-        app.db.session.query(Profile)
-        .filter_by(user_id=current_user.id, unique_id=profile_id)
-        .first()
+
+    all_profiles = app.db.session.query(Profile).filter_by(
+        user_id=current_user.id, unique_id=profile_id
     )
-    if not item:
-        return jsonify({"message": "No item found"}), 404
-    return jsonify({"profile": {profile_id: ProfileSchema().dump(item)}})
+    res = {}
+    for profile in all_profiles:
+        p = ProfileSchema().dump(profile)
+        res[profile.unique_id] = p
+    return jsonify({"items": {"profiles": res}})
+    # items = app.db.session.query(Profile).filter_by(
+    #     user_id=current_user.id, unique_id=profile_id
+    # )
+    # if not item:
+    #     return jsonify({"message": "No item found"}), 404
+
+    # return jsonify({"items": {profile_id: ProfileSchema().dump(item)}})
 
 
 @api_blueprint.route("/profile/<int:profile_id>", methods=["DELETE"])
@@ -287,15 +322,20 @@ def profile_form():
         "WV",
         "WY",
     ]
-    profile_types = app.db.session.query(ProfileType).all()
+    profile_types = (
+        app.db.session.query(ProfileType)
+        .filter(ProfileType.schema_type != 0)
+        .order_by(ProfileType.name)
+        .all()
+    )
     profile_types_json = ProfileTypeSchema(many=True).dump(profile_types)
 
     return (
         jsonify(
             {
                 "form": {
-                    "profile-types": profile_types_json,
-                    "states-by-country": {"us": states_us},
+                    "profile_types": profile_types_json,
+                    "states_by_country": {"us": states_us},
                 }
             }
         ),

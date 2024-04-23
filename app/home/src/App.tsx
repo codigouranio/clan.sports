@@ -33,7 +33,7 @@ const permission = false;
 function App() {
 
   const { data, loading, error } = useDataFetching('/api/currentUser');
-  console.log([data, loading, error]);
+  // console.log([data, loading, error]);
 
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

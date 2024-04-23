@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 export default function ProfileList() {
 
   const { data, loading, error } = useDataFetching('/api/profiles');
-  console.log([data, loading, error]);
+  // console.log([data, loading, error]);
 
   const items: any[] = data?.items.profiles;
 
@@ -25,7 +25,9 @@ export default function ProfileList() {
           <CardAdd itemType={"Profile"}></CardAdd>
         </Grid>
         {
-          _.map(items, (item: any, index: number) => <Grid item key={index}><ProfileCard profile_data={item} /></Grid>)
+          _.map(items, (item: any, index: number) =>
+            <Grid item key={index}><ProfileCard profile_data={item} loading={loading} /></Grid>
+          )
         }
       </Grid>
     </React.Fragment>

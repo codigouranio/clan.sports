@@ -10,44 +10,45 @@ import {
   Grid, InputLabel, LinearProgress, MenuItem, Select, TextField
 } from "@mui/material";
 import { FormikHelpers, useFormik } from "formik";
-import React from "react";
+import _ from "lodash";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import * as Yup from "yup";
+import useDataFetching from "../../useDataFetching";
 import useFormPosting from "../../useDataPosting";
 import { countries } from "../countryList";
-import { Link } from "react-router-dom";
 
 export default function ProfileAdd() {
 
+  const [profileSchemaType, setProfileSchemaType] = useState(1);
+
+  const form = useDataFetching('/api/profile/form');
 
   const { state, postData } = useFormPosting("/api/profiles");
   const { data, loading, error } = state;
   const { added_profile = { success: false } } = data
 
-  // console.log([data, loading, error]);
-
   interface IFormValues {
     name: string;
-    last_name: string;
+    last_name?: string;
     profile_type_code: number;
     bio: string;
+    profile_schema_type?: number;
   }
 
   const initialValues: IFormValues = {
     profile_type_code: 10,
     name: "",
     last_name: "",
-    bio: ""
+    bio: "",
+    profile_schema_type: 1
   };
 
-  const validationSchema = Yup.object({
+  const validation_1 = {
     name: Yup.string()
       .min(3, "Name is too short!")
       .max(32, "Name is too long!")
       .required("Name is required!"),
-    last_name: Yup.string()
-      .min(3, "Last Name is too short!")
-      .max(32, "Last Name is too long!")
-      .required("Last Name is required!"),
     bio: Yup.string()
       .min(3, "Bio is too short!"),
     street_address: Yup.string()
@@ -56,7 +57,24 @@ export default function ProfileAdd() {
     city: Yup.string()
       .min(3, "City is too short")
       .max(32, "City is too long")
-  });
+  };
+
+  const validation_2 = {
+    last_name: Yup.string()
+      .min(3, "Last name is too short!")
+      .max(32, "Last name is too long!")
+      .required("Last name is required!")
+  };
+
+  let validationSchema = Yup.object();
+
+  if (profileSchemaType === 2) {
+    validationSchema.shape({ ...validation_1, ...validation_2 });
+  }
+
+  if (profileSchemaType === 1) {
+    validationSchema.shape(validation_1);
+  }
 
   const onSubmit = async (values: IFormValues, actions: FormikHelpers<IFormValues>) => {
     await postData(values);
@@ -65,7 +83,7 @@ export default function ProfileAdd() {
   const formik = useFormik<IFormValues>({
     initialValues,
     validationSchema,
-    onSubmit
+    onSubmit,
   });
 
   if (added_profile.success) {
@@ -87,7 +105,7 @@ export default function ProfileAdd() {
       <Container component="main" maxWidth="md">
         <Grid container spacing={2} columns={16}>
           <Grid item xs={4}>
-            <Timeline position="left">
+            <Timeline position="right">
               <TimelineItem>
                 <TimelineSeparator>
                   <TimelineDot />
@@ -111,6 +129,7 @@ export default function ProfileAdd() {
             </Timeline>
           </Grid>
           <Grid item xs={12} component="form" onSubmit={formik.handleSubmit}>
+            <input type="hidden" value="1" name="profile_schema_type" />
             <Box sx={{ width: "100%", height: "1em" }}>
               {loading && <LinearProgress />}
             </Box>
@@ -134,11 +153,14 @@ export default function ProfileAdd() {
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={10}>Coach</MenuItem>
-                    <MenuItem value={20}>Player</MenuItem>
-                    <MenuItem value={30}>Organization</MenuItem>
-                    <MenuItem value={40}>Club</MenuItem>
-                    <MenuItem value={50}>Academy</MenuItem>
+                    {_.map(data?.form?.profile_types, (profile_type: any) => (
+                      <MenuItem
+                        key={profile_type.code}
+                        value={profile_type.code}
+                        onClick={() => setProfileSchemaType(profile_type.schema_type)}>
+                        {profile_type.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                   {
                     formik.touched.profile_type_code &&
@@ -147,7 +169,7 @@ export default function ProfileAdd() {
                 </FormControl>
               </Grid>
               {
-                ([10, 20].indexOf(formik.values["profile_type_code"]) > -1) && (
+                (profileSchemaType === 1) && (
                   <React.Fragment>
                     <Grid item xs={8} sm={6}>
                       <FormControl fullWidth>
@@ -184,7 +206,7 @@ export default function ProfileAdd() {
                 )
               }
               {
-                ([10, 20].indexOf(formik.values["profile_type_code"]) === -1) && (
+                (profileSchemaType === 2) && (
                   <Grid item xs={8} sm={12}>
                     <FormControl fullWidth>
                       <TextField

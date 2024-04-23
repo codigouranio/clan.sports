@@ -1,12 +1,14 @@
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
+import EditIcon from '@mui/icons-material/Edit';
 import {
   Box,
   Card,
   CardActions,
   CardContent,
+  CircularProgress,
   IconButton,
-  Typography,
+  Typography
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import moment from "moment";
@@ -35,9 +37,25 @@ export default function ProfileCard(props: any) {
       to={`/profile?id=${props?.profile_data.unique_id}`}
       style={{ textDecoration: "none", color: "inherit" }}
     >
-      <Card sx={{ minWidth: 200, margin: 0 }}>
+      <Card sx={{ minWidth: 200, margin: 0, position: "relative", overflow: "hidden" }}>
+        {props?.loading && (
+          <Box sx={{
+            position: "absolute",
+            backgroundColor: "rgba(255, 255, 255, 0.5)",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
+          }}>
+            <CircularProgress sx={{}} />
+          </Box>
+        )}
         <CardContent>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom hidden>
             {`Created ${moment(props?.profile_data?.created_at).fromNow()}`}
           </Typography>
           <Typography variant="h5" component="div">
@@ -48,9 +66,9 @@ export default function ProfileCard(props: any) {
               {`Profile ${props?.profile_data?.profile_type_name}`}
             </Typography>
           )}
-          {props?.profile_data?.modified_at && (
+          {props?.profile_data?.created_at && (
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
-              {`Created ${moment(props?.profile_data?.modified_at).fromNow()}`}
+              {`Created ${moment(props?.profile_data?.created_at).fromNow()}`}
             </Typography>
           )}
         </CardContent>
@@ -76,9 +94,12 @@ export default function ProfileCard(props: any) {
             <IconButton aria-label="share">
               <ShareIcon />
             </IconButton>
+            <IconButton aria-label="edit">
+              <EditIcon />
+            </IconButton>
           </CardActions>
         </CardActions>
       </Card>
-    </Link>
+    </Link >
   );
 }

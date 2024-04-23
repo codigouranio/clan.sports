@@ -33,14 +33,37 @@ interface SetErrorAction {
 
 type Action = SetDataAction | SetLoadingAction | SetErrorAction;
 
+function deepMerge(obj1: any, obj2: any) {
+  const res: Record<string, any> = {};
+  for (let key in obj1) {
+    if (obj2[key] === undefined) {
+      res[key] = obj1[key];
+    }
+  }
+
+  for (let key in obj2) {
+    if (obj1[key] === undefined) {
+      res[key] = obj2[key];
+    } else if (_.isObject(obj2[key])) {
+      res[key] = deepMerge(obj1[key], obj2[key]);
+    } else {
+      res[key] = obj2[key];
+    }
+  }
+  return res;
+}
+
 function storageReducer(state: StorageState, action: Action): StorageState {
   switch (action.type) {
     case ActionType.SET_DATA:
-      const items: Record<string, any> = {};
-      for (let key in action.payload?.items) {
-        items[key] = { ...state.data.items[key], ...action.payload.items[key] };
-      }
-      const data = { ...state?.data, ...{ items } };
+
+      // const items: Record<string, any> = {};
+      // for (let key in action.payload?.items) {
+      //   items[key] = { ...state.data.items[key], ...action.payload.items[key] };
+      // }
+
+      const newData = deepMerge(state.data, action.payload);
+      const data = { ...state?.data, ...newData };
       return { ...state, ...{ data }, ...{ loading: false } };
     case ActionType.SET_LOADING:
       return { ...state, ...{ loading: action.payload || true } };
