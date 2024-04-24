@@ -33,7 +33,7 @@ export const ProfileView: React.FC<any> = () => {
   }
 
   const profile = data?.items?.profiles ? data?.items?.profiles[profile_unique_id] : {};
-  console.log(profile?.bio);
+
   return (
     <React.Fragment>
       <Container component="main" maxWidth={"md"} fixed sx={{}}>

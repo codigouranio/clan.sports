@@ -18,7 +18,7 @@ import {
   ThemeProvider
 } from '@mui/material/styles';
 import React, { Suspense, lazy } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import './App.scss';
 import Copyright from './Components/Copyright';
 import theme from './theme';
@@ -31,6 +31,8 @@ const Test = lazy(() => import(/* webpackChunkName: "test" */ './Test'));
 const permission = false;
 
 function App() {
+
+  const navigate = useNavigate();
 
   const { data, loading, error } = useDataFetching('/api/currentUser');
   // console.log([data, loading, error]);
@@ -52,6 +54,7 @@ function App() {
 
   const location = useLocation();
   const { hash, pathname, search } = location;
+  const pathnames = pathname.split("/");
 
   if (error === 'UNAUTHORIZED') {
     return (
@@ -143,17 +146,28 @@ function App() {
                     variant="h6"
                     component="div"
                     sx={{ flexGrow: 1, textAlign: 'left', cursor: 'pointer' }}
+                    onClick={() => navigate(-1)}
                   >
-                    <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Back</Link>
+                    Back
+                    {/* <Link to=".." style={{ textDecoration: "none", color: "inherit" }}>Back</Link> */}
                   </Typography>}
-                  {pathname !== "/" && pathname.split("/").slice(1, 3).map((path, index) => <Typography
-                    variant="h6"
-                    component="div"
-                    sx={{ flexGrow: 1, textAlign: 'left', cursor: 'pointer' }}
-                    key={index}
-                  >
-                    {_.capitalize(path.replace("/", " / "))}
-                  </Typography>)}
+
+                  {pathname !== "/" && pathnames.slice(1, 5).map((path, index) => (
+                    <Typography
+                      variant="h6"
+                      component="div"
+                      key={index}
+                      sx={{ flexGrow: 1, textAlign: 'left', cursor: 'pointer' }}
+                    >
+                      {index + 2 === pathnames.length && (_.capitalize(path.replace("/", " / ")))}
+                      {index + 2 !== pathnames.length && (
+                        <NavLink to={path} style={{ textDecoration: "none", color: "inherit" }}>
+                          {_.capitalize(path.replace("/", " / "))}
+                        </NavLink>
+                      )}
+
+                    </Typography>
+                  ))}
                   {pathname === "/" && <Typography
                     variant="h6"
                     component="div"
@@ -161,7 +175,6 @@ function App() {
                   >
                     <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>Home</Link>
                   </Typography>}
-
                 </Breadcrumbs>
                 <Typography variant="subtitle1" component="div" sx={{ flexGrow: 1, textAlign: 'right', }}>
                 </Typography>
