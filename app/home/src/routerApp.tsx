@@ -19,9 +19,18 @@ const ProfileView = lazy(() => {
     return { default: module.ProfileView };
   });
 });
+const TrophyList = lazy(() => {
+  return import(/* webpackChunkName: "trophy" */"./Components/Trophy").then(module => {
+    return { default: module.TrophyList };
+  });
+})
+const TrophyAdd = lazy(() => {
+  return import(/* webpackChunkName: "trophy" */"./Components/Trophy").then(module => {
+    return { default: module.TrophyAdd };
+  });
+})
 const PassList = lazy(() => import(/* webpackChunkName: "passList" */ './Components/PassList'));
 const BadgeList = lazy(() => import(/* webpackChunkName: "badgeList" */ './Components/BadgeList'));
-const TrophyList = lazy(() => import(/* webpackChunkName: "trophyList" */ './Components/TrophyList'));
 const PointList = lazy(() => import(/* webpackChunkName: "pointList" */ './Components/PointList'));
 const ErrorGeneric = lazy(() => import(/* webpackChunkName: "errorGeneric" */ './Components/ErrorGeneric'));
 const Error404 = lazy(() => import(/* webpackChunkName: "error404" */ './Components/Error404'));
@@ -73,6 +82,11 @@ export const routerApp = createBrowserRouter([
         path: "trophies",
         element: <TrophyList />,
         errorElement: <ErrorGeneric />,
+      },
+      {
+        path: "trophies/add",
+        element: <TrophyAdd />,
+        errorElement: <ErrorGeneric />
       },
       {
         path: "points",

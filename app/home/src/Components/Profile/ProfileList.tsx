@@ -14,7 +14,6 @@ export default function ProfileList() {
 
   return (
     <React.Fragment>
-      <p></p>
       <h1>Profile List</h1>
       <Grid container spacing={3} sx={{
         display: 'flex',
