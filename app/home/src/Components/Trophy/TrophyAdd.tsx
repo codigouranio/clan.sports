@@ -1,10 +1,12 @@
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 import {
-    Box, Container, Grid, IconButton, ImageList,
-    ImageListItem, ImageListItemBar, LinearProgress,
+    Box, Button, Container, Grid, IconButton, ImageList,
+    ImageListItem, ImageListItemBar,
     TextField
 } from "@mui/material";
-import React from "react";
-import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { FormikHelpers, useFormik } from "formik";
+import React, { useState } from "react";
 
 function srcset(image: string, width: number, height: number, rows = 1, cols = 1) {
     return {
@@ -15,6 +17,42 @@ function srcset(image: string, width: number, height: number, rows = 1, cols = 1
 }
 
 export default function TrophyAdd() {
+
+    const [imageSrc, setImageSrc] = useState('');
+
+    const handleImageUpload = async (e, words) => {
+        try {
+            const response = await fetch('/api/trophy/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(words)
+            });
+            if (response.ok) {
+                const blob = await response.blob();
+                setImageSrc(URL.createObjectURL(blob)); // Display the image
+            } else {
+                console.error('Failed to upload image');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    interface IFormValues {
+        generateTrophyWords: string;
+    }
+
+    const formik = useFormik<IFormValues>({
+        initialValues: {
+            generateTrophyWords: ''
+        },
+        onSubmit: (values: IFormValues, formikHelpers: FormikHelpers<IFormValues>) => {
+            console.log(values);
+            formikHelpers.setSubmitting(false);
+        }
+    });
+
+    console.log(formik);
 
     const itemData = [
         {
@@ -84,26 +122,38 @@ export default function TrophyAdd() {
     return (
         <React.Fragment>
             <Container component="main" maxWidth="md">
-                <Grid container spacing={2} columns={16}>
-                    <Grid item xs={16} component="form">
-                        <Box sx={{ width: "100%", height: "1em" }}>
-
-                        </Box>
+                <Grid container spacing={2} columns={16} component="form" justifyContent="center">
+                    <Grid item xs={16}>
+                        <Box sx={{ width: "100%", height: "1em" }}></Box>
                         <h2>Create a new Trophy</h2>
                     </Grid>
+                    <Grid item xs={16} container justifyContent="center" alignItems="center">
+                        <TextField
+                            id="generateTrophyWords"
+                            name="generateTrophyWords"
+                            label="add words to generate the trophy"
+                            variant="outlined" sx={{ width: '30em', marginRight: '1em' }}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                        />
+                        <Button variant="contained" startIcon={<EmojiEventsIcon />}
+                            onClick={(e) => handleImageUpload(e, { "words": formik.values?.generateTrophyWords })}
+                        >
+                            Generate
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        {imageSrc && <img src={imageSrc} alt="Uploaded" />}
+                    </Grid>
                     <Grid item
-                        direction="row"
                         justifyContent="center"
                         alignItems="center"
                         xs={16}
                         sx={{ justifyContent: "center" }}
+                        hidden
                     >
+
                         <h2>Test</h2>
-                        <TextField
-                            id="outlined-basic"
-                            label="add words to generate the trophy"
-                            variant="outlined" sx={{ width: '30em' }}
-                        />
                         <ImageList
                             sx={{
                                 width: 'auto',
@@ -150,6 +200,6 @@ export default function TrophyAdd() {
                     </Grid>
                 </Grid>
             </Container>
-        </React.Fragment>
+        </React.Fragment >
     );
 }
