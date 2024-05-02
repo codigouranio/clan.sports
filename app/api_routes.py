@@ -4,6 +4,7 @@
 # https://www.digitalocean.com/community/tutorials/how-to-add-authentication-to-your-app-with-flask-login
 
 from io import BytesIO
+from itertools import product
 import random
 from datetime import datetime, timedelta
 from http import HTTPStatus
@@ -21,7 +22,7 @@ from flask_login import (
     logout_user,
 )
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import qrcode
 
 from app.api.schemas import ProfileSchema, ProfileTypeSchema, UserSchema
@@ -199,6 +200,48 @@ def get_user(user_id):
     if not item:
         return jsonify({"message": "No item found"}), 404
     return UserSchema().dump(item)
+
+
+@api_blueprint.route("/trophy/generate", methods=["POST"])
+@login_required
+def generate_trophy():
+
+    words = request.json.get("words", "").split(",")
+
+    FONT_SIZE = 20
+    PIXEL_SIZE = 10
+    colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255)]
+
+    img_byte_array = BytesIO()
+
+    img = Image.new("RGB", (PIXEL_SIZE * 50, PIXEL_SIZE * 50), color="white")
+    draw = ImageDraw.Draw(img)
+
+    for x, y in product(range(50), range(2, 50)):
+        draw.rectangle(
+            [
+                x * PIXEL_SIZE,
+                y * PIXEL_SIZE,
+                (x + 1) * PIXEL_SIZE,
+                (y + 1) * PIXEL_SIZE,
+            ],
+            fill=random.choice(colors),
+        )
+
+    font = ImageFont.load_default()
+
+    x, y = 0, 0
+    for word in words:
+        draw.text((x, y), word.strip(), font=font, fill=random.choice(colors))
+        y += FONT_SIZE  # Move to the next line
+
+    img.save(img_byte_array, format="JPEG")
+
+    # Set the byte stream's position to the beginning
+    img_byte_array.seek(0)
+
+    # Return the image directly from the byte stream
+    return send_file(img_byte_array, mimetype="image/jpeg")
 
 
 @api_blueprint.route("/profileQr/<string:profile_id>", methods=["GET"])
