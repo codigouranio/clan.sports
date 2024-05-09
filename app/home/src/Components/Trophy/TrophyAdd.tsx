@@ -1,12 +1,16 @@
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import {
-    Box, Button, Container, Grid, IconButton, ImageList,
+    Box, Button, Container, FormControl, Grid, IconButton, ImageList,
     ImageListItem, ImageListItemBar,
     TextField
 } from "@mui/material";
 import { FormikHelpers, useFormik } from "formik";
-import React, { useState } from "react";
+import React from "react";
+import * as Yup from "yup";
+import { TrophyItem } from '.';
+import useGenerateImage from '../../useGenerateImage';
+import { LoadingButton } from '@mui/lab';
 
 function srcset(image: string, width: number, height: number, rows = 1, cols = 1) {
     return {
@@ -16,43 +20,65 @@ function srcset(image: string, width: number, height: number, rows = 1, cols = 1
     };
 }
 
+let validationSchema = Yup.object();
+
 export default function TrophyAdd() {
 
-    const [imageSrc, setImageSrc] = useState('');
+    // const [imageSrc, setImageSrc] = useState('');
+    const { state, generateImage } = useGenerateImage();
+    const { data: { items: { generatedImage } } } = state;
+    const { loading } = state;
 
     const handleImageUpload = async (e, words) => {
-        try {
-            const response = await fetch('/api/trophy/generate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(words)
-            });
-            if (response.ok) {
-                const blob = await response.blob();
-                setImageSrc(URL.createObjectURL(blob)); // Display the image
-            } else {
-                console.error('Failed to upload image');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        await generateImage(words, () => ({}));
+        // try {
+        //     const response = await fetch('/api/trophy/generate', {
+        //         method: 'POST',
+        //         headers: { 'Content-Type': 'application/json' },
+        //         body: JSON.stringify(words)
+        //     });
+        //     if (response.ok) {
+        //         const blob = await response.blob();
+        //         setImageSrc(URL.createObjectURL(blob)); // Display the image
+        //     } else {
+        //         console.error('Failed to upload image');
+        //     }
+        // } catch (error) {
+        //     console.error('Error:', error);
+        // }
     };
 
     interface IFormValues {
-        generateTrophyWords: string;
+        generateTrophyWords: '',
+        name: ''
+    }
+
+    const initialValues: IFormValues = {
+        generateTrophyWords: '',
+        name: ''
+    };
+
+    const onSubmit = async (values: IFormValues, actions: FormikHelpers<IFormValues>) => {
+        console.log(values);
     }
 
     const formik = useFormik<IFormValues>({
-        initialValues: {
-            generateTrophyWords: ''
-        },
-        onSubmit: (values: IFormValues, formikHelpers: FormikHelpers<IFormValues>) => {
-            console.log(values);
-            formikHelpers.setSubmitting(false);
-        }
+        initialValues,
+        validationSchema,
+        onSubmit,
     });
 
-    console.log(formik);
+    // const formik = useFormik<IFormValues>({
+    //     initialValues: {
+    //         generateTrophyWords: ''
+    //     },
+    //     onSubmit: (values: IFormValues, formikHelpers: FormikHelpers<IFormValues>) => {
+    //         console.log(values);
+    //         formikHelpers.setSubmitting(false);
+    //     }
+    // });
+
+    // console.log(formik);
 
     const itemData = [
         {
@@ -123,16 +149,35 @@ export default function TrophyAdd() {
         <React.Fragment>
             <Container component="main" maxWidth="md">
                 <Grid container spacing={2} columns={16} component="form" justifyContent="center">
-                    <Grid item xs={16}>
+                    <Grid item xs={16} sm={12}>
                         <Box sx={{ width: "100%", height: "1em" }}></Box>
                         <h2>Create a new Trophy</h2>
                     </Grid>
-                    <Grid item xs={16} container justifyContent="center" alignItems="center">
+                    <Grid item xs={16} sm={12}>
+                        <FormControl fullWidth>
+                            <TextField
+                                id="name"
+                                name="name"
+                                required
+                                label="Name"
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.name && Boolean(formik.errors.name)}
+                                helperText={formik.touched.name && formik.errors.name}
+                                autoComplete="given-name"
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={16} sm={12}>
+                        <Box sx={{ width: "100%", height: "1em" }}></Box>
+                        <h3>Generate a Trophy providing a list of words as description</h3>
+                    </Grid>
+                    <Grid item xs={16} sm={12} display="flex" justifyContent="center" alignItems="center">
                         <TextField
                             id="generateTrophyWords"
                             name="generateTrophyWords"
                             label="add words to generate the trophy"
-                            variant="outlined" sx={{ width: '30em', marginRight: '1em' }}
+                            variant="outlined" sx={{ width: '25em', marginRight: '1em' }}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
                         />
@@ -142,61 +187,23 @@ export default function TrophyAdd() {
                             Generate
                         </Button>
                     </Grid>
-                    <Grid item>
-                        {imageSrc && <img src={imageSrc} alt="Uploaded" />}
+                    <Grid item xs={16} sm={12} display="flex" justifyContent="center" alignItems="center">
+                        <TrophyItem
+                            src={generatedImage?.url}
+                            alt="Trophy"
+                            loading={loading}
+                        />
                     </Grid>
-                    <Grid item
-                        justifyContent="center"
-                        alignItems="center"
-                        xs={16}
-                        sx={{ justifyContent: "center" }}
-                        hidden
-                    >
-
-                        <h2>Test</h2>
-                        <ImageList
-                            sx={{
-                                width: 'auto',
-                                height: '300px',
-                                // Promote the list into its own layer in Chrome. This costs memory, but helps keeping high FPS.
-                                transform: 'translateZ(0)',
-                            }}
-                            rowHeight={200}
-                            gap={1}
+                    <Grid item xs={16} sm={12}>
+                        <LoadingButton
+                            type="submit"
+                            fullWidth
+                            loading={loading}
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
                         >
-                            {itemData.map((item) => {
-                                const cols = item.featured ? 2 : 1;
-                                const rows = item.featured ? 2 : 1;
-
-                                return (
-                                    <ImageListItem key={item.img} cols={cols} rows={rows}>
-                                        <img
-                                            {...srcset(item.img, 250, 200, rows, cols)}
-                                            alt={item.title}
-                                            loading="lazy"
-                                        />
-                                        <ImageListItemBar
-                                            sx={{
-                                                background:
-                                                    'linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, ' +
-                                                    'rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-                                            }}
-                                            title={item.title}
-                                            position="top"
-                                            actionIcon={
-                                                <IconButton
-                                                    sx={{ color: 'white' }}
-                                                    aria-label={`star ${item.title}`}
-                                                >
-                                                    <StarBorderIcon />
-                                                </IconButton>
-                                            }
-                                            actionPosition="left"
-                                        />
-                                    </ImageListItem>
-                                );
-                            })}
-                        </ImageList>
+                            Create
+                        </LoadingButton>
                     </Grid>
                 </Grid>
             </Container>

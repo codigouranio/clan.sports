@@ -66,6 +66,7 @@ function storageReducer(state: StorageState, action: Action): StorageState {
       const data = { ...state?.data, ...newData };
       return { ...state, ...{ data }, ...{ loading: false } };
     case ActionType.SET_LOADING:
+      console.log(action);
       return { ...state, ...{ loading: action.payload || true } };
     case ActionType.SET_ERROR:
       return { ...state, ...{ error: action.payload }, ...{ loading: false } };

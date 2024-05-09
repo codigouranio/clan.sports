@@ -1,7 +1,3 @@
-// body {
-//   font-size: xx-large;
-// }
-
 .App {
   text-align: center;
 }
@@ -83,5 +79,87 @@
     #{$animationElement}:nth-of-type(#{$i}) {
       animation-delay: #{($i * $delayBetweenLetters) - $totalDelayTime}s;
     }
+  }
+}
+
+.shine {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    background: linear-gradient(
+      to right,
+      fade_out(#fff, 1) 0%,
+      fade_out(#fff, 0.7) 100%
+    );
+    content: "";
+    display: block;
+    height: 100%;
+    left: -75%;
+    position: absolute;
+    top: 0;
+    transform: skewX(-25deg);
+    width: 50%;
+    z-index: 2;
+  }
+
+  &:hover,
+  &:focus {
+    &::before {
+      animation: shine 0.85s;
+    }
+  }
+
+  @keyframes shine {
+    100% {
+      left: 125%;
+    }
+  }
+}
+
+.trophy-border {
+  border: #44484f solid 12px;
+  border-radius: 12px; /* Adjust border radius */
+  padding: 0.7em;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.shine-2 {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(255, 255, 255, 0) 60%
+    );
+    animation: shine-pulse 2s infinite linear;
+  }
+
+  @keyframes shine-pulse {
+    0% {
+      transform: scale(0.8);
+      opacity: 0.8;
+    }
+    50% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(0.8);
+      opacity: 0.8;
+    }
+  }
+
+  &:hover::before,
+  &:focus::before {
+    animation-play-state: paused;
   }
 }
