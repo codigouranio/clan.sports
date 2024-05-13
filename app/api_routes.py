@@ -3,17 +3,19 @@
 # https://docs.sqlalchemy.org/en/20/core/type_basics.html#sqlalchemy.types.DateTime
 # https://www.digitalocean.com/community/tutorials/how-to-add-authentication-to-your-app-with-flask-login
 
-from io import BytesIO
-from itertools import product
 import random
+import uuid
 from datetime import datetime, timedelta
 from http import HTTPStatus
-import uuid
+from io import BytesIO
+from itertools import product
+import base64
 
+import qrcode
 from dependency_injector.wiring import Provide, inject
-from flask import Blueprint, abort, send_file
+from flask import Blueprint, abort
 from flask import current_app as app
-from flask import flash, jsonify, redirect, request, session, url_for
+from flask import flash, jsonify, redirect, request, send_file, session, url_for
 from flask_login import (
     LoginManager,
     current_user,
@@ -21,13 +23,20 @@ from flask_login import (
     login_user,
     logout_user,
 )
-from sqlalchemy.orm import Session, scoped_session, sessionmaker
 from PIL import Image, ImageDraw, ImageFont
-import qrcode
+from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
-from app.api.schemas import ProfileSchema, ProfileTypeSchema, UserSchema
+from app.api.schemas import ProfileSchema, ProfileTypeSchema, TrophySchema, UserSchema
 
-from .api.models import Base, Profile, ProfileType, RequestCode, User
+from .api.models import (
+    AssetNFT,
+    AssetType,
+    Base,
+    Profile,
+    ProfileType,
+    RequestCode,
+    User,
+)
 from .api.repo import Repo
 from .api.sessions import Sessions
 from .api.smsService import SmsService
@@ -53,7 +62,7 @@ def test():
 
 
 @api_blueprint.route("/requestCode", methods=["POST"])
-def requestCode():
+def request_code():
     # with Session(app.engine) as db:
     phoneNumber = request.get_json(force=True)["phoneNumber"]
     code = "{:06d}".format(random.randint(0, 999999))
@@ -83,7 +92,7 @@ def requestCode():
 
 
 @api_blueprint.route("/checkCode", methods=["POST"])
-def checkCode():
+def check_code():
     data = request.get_json(force=True)
     code = (
         app.db.session.query(RequestCode)
@@ -113,7 +122,7 @@ def load_user(user_id):
 
 @api_blueprint.route("/currentUser", methods=["GET"])
 @login_required
-def getCurrentUser():
+def get_current_user():
     return UserSchema().dump(current_user)
 
 
@@ -124,9 +133,19 @@ def get_profiles():
     res = {}
     for profile in all_profiles:
         p = ProfileSchema().dump(profile)
-        # res.append({"%s" % (profile.unique_id): p})
         res[profile.unique_id] = p
     return jsonify({"items": {"profiles": res}})
+
+
+@api_blueprint.route("/trophies")
+@login_required
+def get_trophies():
+    all_trophies = app.db.session.query(AssetNFT).all()
+    res = {}
+    for trophy in all_trophies:
+        p = TrophySchema().dump(trophy)
+        res[trophy.unique_id] = p
+    return jsonify({"items": {"trophies": res}})
 
 
 @api_blueprint.route("/profileTypes", methods=["GET"])
@@ -178,6 +197,53 @@ def add_profile():
             jsonify(
                 {
                     "error": "An error occurred while adding the profile: {}".format(
+                        str(e)
+                    )
+                }
+            ),
+            500,
+        )
+
+
+@api_blueprint.route("/trophies", methods=["POST"])
+@login_required
+def add_trophy():
+    try:
+        data = request.form
+
+        image = request.files.get("asset")
+        image_binary = base64.b64encode(image.read())
+
+        new_trophy = AssetNFT(
+            user_id=current_user.id,
+            unique_id=str(uuid.uuid4()),
+            asset_type=AssetType.from_string(data.get("asset_type")),
+            profile_id=data.get("profile_id"),
+            name=data.get("name"),
+            desc=data.get("description"),
+            image=image_binary,
+        )
+        app.db.session.add(new_trophy)
+        app.db.session.commit()
+        return (
+            jsonify(
+                {
+                    "added_trophy": {
+                        "success": True,
+                        "asset_nft_id": new_trophy.id,
+                        "asset_nft_unique_id": new_trophy.unique_id,
+                    }
+                }
+            ),
+            201,
+        )
+    except KeyError as e:
+        return jsonify({"error": "Missing required field: {}".format(str(e))}), 400
+    except Exception as e:
+        return (
+            jsonify(
+                {
+                    "error": "An error occurred while adding the trophy: {}".format(
                         str(e)
                     )
                 }
@@ -285,6 +351,26 @@ def get_profile(profile_id):
     #     return jsonify({"message": "No item found"}), 404
 
     # return jsonify({"items": {profile_id: ProfileSchema().dump(item)}})
+
+
+@api_blueprint.route("/trophy/<string:trophy_id>", methods=["GET"])
+@login_required
+def get_trophy(trophy_id):
+    all_trophies = app.db.session.query(AssetNFT).filter_by(unique_id=trophy_id)
+    res = {}
+    for trophy in all_trophies:
+        p = TrophySchema().dump(trophy)
+        res[trophy.unique_id] = p
+    return res
+
+
+@api_blueprint.route("/trophy/<string:trophy_id>/asset", methods=["GET"])
+@login_required
+def get_trophy_asset(trophy_id):
+    trophy = app.db.session.query(AssetNFT).filter_by(unique_id=trophy_id).first()
+    if not trophy:
+        return jsonify({"message": "No item found"}), 404
+    return send_file(BytesIO(base64.b64decode(trophy.image)), mimetype="image/jpeg")
 
 
 @api_blueprint.route("/profile/<int:profile_id>", methods=["DELETE"])

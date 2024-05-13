@@ -4,7 +4,17 @@ from datetime import datetime
 from typing import List, Optional
 
 from flask_login import UserMixin
-from sqlalchemy import Boolean, Column, DateTime, Enum, ForeignKey, PickleType, String
+from sqlalchemy import (
+    Boolean,
+    Column,
+    DateTime,
+    Enum,
+    ForeignKey,
+    LargeBinary,
+    PickleType,
+    String,
+)
+from enum import Enum as PyEnum
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 from .serializablemixin import SerializableMixin
@@ -57,9 +67,12 @@ class ProfileType(Base):
 class Profile(Base, SerializableMixin):
     __tablename__ = "profile"
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"), nullable=False)
     unique_id: Mapped[str] = mapped_column(
         String(64), unique=True, nullable=False, default=str(uuid.uuid4())
+    )
+    asset_nfts: Mapped[List["AssetNFT"]] = relationship(
+        back_populates="profile", cascade="all, delete-orphan"
     )
     user: Mapped["User"] = relationship(back_populates="profiles")
     bio: Mapped[str] = mapped_column(String(255))
@@ -107,34 +120,77 @@ class Profile(Base, SerializableMixin):
     #     return self.profile_type.name if self.profile_type else None
 
 
-class AssetType(Enum):
+class AssetType(PyEnum):
     PASS = "pass"
     TROPHY = "trophy"
     BADGE = "badge"
+
+    @classmethod
+    def from_string(cls, value: str) -> "AssetType":
+        try:
+            return cls(value.lower())
+        except ValueError:
+            raise ValueError(f"Invalid AssetType value: {value}")
+
+    def __str__(self) -> str:
+        return self.value
 
 
 class AssetNFT(Base, SerializableMixin):
     __tablename__ = "asset_nft"
     id: Mapped[int] = mapped_column(primary_key=True)
-    nft_id: Mapped[str] = mapped_column(
-        String(64), unique=True, nullable=False
-    )  # 256-bit NFT ID in hexadecimal format
-    asset_type: Mapped[str] = mapped_column(AssetType, nullable=False)
-    # asset_type: Mapped[str] = mapped_column(Enum(AssetType), nullable=False)
-    name: Mapped[str] = mapped_column(nullable=False)
+    name: Mapped[str] = mapped_column(String(30))
     desc: Mapped[str] = mapped_column(nullable=False)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user_account.id"), nullable=False)
+    profile_id: Mapped[int] = mapped_column(ForeignKey("profile.id"), nullable=False)
+    profile: Mapped["Profile"] = relationship(back_populates="asset_nfts")
+    unique_id: Mapped[str] = mapped_column(
+        String(64), unique=True, nullable=False, default=str(uuid.uuid4())
+    )
+    asset_type: Mapped[str] = Column(Enum(AssetType, length=10), nullable=False)
+    image: Mapped[bytes] = mapped_column(LargeBinary)
+    created_at = Column(DateTime, default=datetime.now)
+    modified_at = Column(DateTime, onupdate=datetime.now)
 
-    @staticmethod
-    def generate_nft_id():
-        # Generate UUID version 4
-        uuid_bytes = uuid.uuid4().bytes
+    def to_dict(self, full=False):
+        if full:
+            return {}
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
 
-        # Hash the UUID using SHA-256
-        hash_object = hashlib.sha256(uuid_bytes)
-        hash_bytes = hash_object.digest()
+    def to_dict(self, full=False):
+        if full:
+            return {}
+        return {
+            "id": self.id,
+            "name": self.name,
+        }
 
-        # Return the first 256 bits (32 bytes) of the hash in hexadecimal format
-        return hash_bytes.hex()
+
+# class AssetNFT(Base, SerializableMixin):
+#     __tablename__ = "asset_nft"
+#     id: Mapped[int] = mapped_column(primary_key=True)
+#     nft_id: Mapped[str] = mapped_column(
+#         String(64), unique=True, nullable=False
+#     )  # 256-bit NFT ID in hexadecimal format
+#     asset_type: Mapped[str] = mapped_column(AssetType, nullable=False)
+#     # asset_type: Mapped[str] = mapped_column(Enum(AssetType), nullable=False)
+#     name: Mapped[str] = mapped_column(nullable=False)
+#     desc: Mapped[str] = mapped_column(nullable=False)
+
+#     @staticmethod
+#     def generate_nft_id():
+#         # Generate UUID version 4
+#         uuid_bytes = uuid.uuid4().bytes
+
+#         # Hash the UUID using SHA-256
+#         hash_object = hashlib.sha256(uuid_bytes)
+#         hash_bytes = hash_object.digest()
+
+#         # Return the first 256 bits (32 bytes) of the hash in hexadecimal format
+#         return hash_bytes.hex()
 
 
 class SessionModel(Base):

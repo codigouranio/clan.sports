@@ -1,6 +1,6 @@
 from flask import current_app as app
 
-from app.api.models import Profile, ProfileType, User
+from app.api.models import AssetNFT, Profile, ProfileType, User
 from marshmallow import Schema, fields, post_load, post_dump
 
 
@@ -35,6 +35,33 @@ class ProfileSchema(app.ma.SQLAlchemySchema):
         {
             "self": app.ma.URLFor("api.get_profile", values=dict(profile_id="<id>")),
             "collection": app.ma.URLFor("api.get_profiles"),
+        }
+    )
+
+
+class TrophySchema(app.ma.SQLAlchemySchema):
+    class Meta:
+        model = AssetNFT
+        include_relationships = True
+        load_instance = True
+
+    __model__ = AssetNFT
+
+    id = app.ma.auto_field()
+    unique_id = app.ma.auto_field()
+    name = app.ma.auto_field()
+    asset_type = fields.Function(
+        lambda obj: str(obj.asset_type).upper() if obj.asset_type else ""
+    )
+    _links = app.ma.Hyperlinks(
+        {
+            "self": app.ma.URLFor(
+                "api.get_trophy", values=dict(trophy_id="<unique_id>")
+            ),
+            "asset": app.ma.URLFor(
+                "api.get_trophy_asset", values=dict(trophy_id="<unique_id>")
+            ),
+            "collection": app.ma.URLFor("api.get_trophies"),
         }
     )
 

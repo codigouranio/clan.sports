@@ -9,12 +9,11 @@ from flask import Flask, json, session
 from flask_assets import Environment
 from flask_cors import CORS
 from flask_login import LoginManager
+from flask_marshmallow import Marshmallow
+from flask_session import Session
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-
-from flask_session import Session
 
 from . import heartbeat_routes, home_routes
 from .api.models import Base
@@ -27,6 +26,7 @@ def create_app():
     app.config.from_pyfile(
         path.join("..", "config.{}.py".format(environ.get("ENVIRONMENT", "dev")))
     )
+    app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000
 
     app.logger.setLevel(app.config.get("LOGGER_LEVEL"))
 

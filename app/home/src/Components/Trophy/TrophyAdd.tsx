@@ -31,21 +31,6 @@ export default function TrophyAdd() {
 
     const handleImageUpload = async (e, words) => {
         await generateImage(words, () => ({}));
-        // try {
-        //     const response = await fetch('/api/trophy/generate', {
-        //         method: 'POST',
-        //         headers: { 'Content-Type': 'application/json' },
-        //         body: JSON.stringify(words)
-        //     });
-        //     if (response.ok) {
-        //         const blob = await response.blob();
-        //         setImageSrc(URL.createObjectURL(blob)); // Display the image
-        //     } else {
-        //         console.error('Failed to upload image');
-        //     }
-        // } catch (error) {
-        //     console.error('Error:', error);
-        // }
     };
 
     interface IFormValues {

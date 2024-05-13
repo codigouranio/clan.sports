@@ -1,10 +1,11 @@
 """Populate data
 
-Revision ID: 21215eccc233
-Revises: 0d6fe1ffedab
-Create Date: 2024-04-19 22:08:28.086458
+Revision ID: 33c8a1e0c076
+Revises: a9aed83df4d0
+Create Date: 2024-05-11 23:19:46.708944
 
 """
+
 from typing import Sequence, Union
 
 from alembic import op
@@ -13,8 +14,8 @@ import app
 
 
 # revision identifiers, used by Alembic.
-revision: str = '21215eccc233'
-down_revision: Union[str, None] = '0d6fe1ffedab'
+revision: str = "33c8a1e0c076"
+down_revision: Union[str, None] = "a9aed83df4d0"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
