@@ -24,7 +24,11 @@ export default function ProfileAdd() {
 
   const form = useDataFetching('/api/profile/form');
 
-  const { state, postData } = useFormPosting("/api/profiles");
+  const { state, postData } = useFormPosting("/api/profiles", {
+    timeout: 500,
+    method: "POST",
+    headers: { "Content-Type": "application/json" }
+  });
   const { data, loading, error } = state;
   const { added_profile = { success: false } } = data
 
@@ -77,7 +81,7 @@ export default function ProfileAdd() {
   }
 
   const onSubmit = async (values: IFormValues, actions: FormikHelpers<IFormValues>) => {
-    await postData(values);
+    await postData(JSON.stringify(values));
   }
 
   const formik = useFormik<IFormValues>({

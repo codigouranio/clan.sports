@@ -1,7 +1,13 @@
 import { Grid } from "@mui/material";
 import CardAdd from "../CardAdd";
+import { TrophyCard } from ".";
+import useDataFetching from "../../useDataFetching";
 
 export default function TrophyList() {
+
+  const { data, loading, error } = useDataFetching('/api/trophies');
+  const items: any[] = data?.items.trophies;
+
   return (
     <div>
       <h1>Trophy List</h1>
@@ -13,6 +19,11 @@ export default function TrophyList() {
         <Grid item>
           <CardAdd itemType={"Trophy"}></CardAdd>
         </Grid>
+        {
+          _.map(items, (item: any, index: number) =>
+            <Grid item key={index}><TrophyCard trophy_data={item} loading={loading} /></Grid>
+          )
+        }
       </Grid>
     </div>
   );

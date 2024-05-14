@@ -2,7 +2,13 @@ import { useContext } from 'react';
 import { ActionType, Storage } from './Storage';
 
 // Custom hook for posting data from a form
-function useFormPosting(url: string, params: any = { timeout: 500 }) {
+function useFormPosting(
+  url: string,
+  params: any = {
+    timeout: 500,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  }) {
 
   const { storageState, dispatch } = useContext(Storage);
 
@@ -10,13 +16,11 @@ function useFormPosting(url: string, params: any = { timeout: 500 }) {
 
   const postData = async (formData: any) => {
     try {
-      // console.log(formData);
-
       const options: RequestInit = {
         credentials: 'include',
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        method: params.method,
+        headers: params.headers,
+        body: formData
       };
 
       const response = await fetch(url, options);

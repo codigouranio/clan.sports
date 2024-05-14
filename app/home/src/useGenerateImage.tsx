@@ -18,29 +18,34 @@ function useGenerateImage(
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-      const blob = await response.blob();
+      const res = await response.blob();
       dispatch({
         type: ActionType.SET_DATA, payload: {
           items: {
             generatedImage: {
-              url: URL.createObjectURL(blob)
+              url: URL.createObjectURL(res)
             }
           }
         }
       });
+      return res;
     } catch (error: any) {
       dispatch({ type: ActionType.SET_ERROR, payload: error.message });
+      return undefined;
     }
   };
 
-  const preGenerate = async (payload: any) => {
+  const preGenerate = async (payload: any) => new Promise((resolve, reject) => {
     clearTimeout(timeout);
     dispatch({
       type: ActionType.SET_LOADING,
       payload: true
     });
-    timeout = setTimeout(() => postGenerate(payload), params.timeout);
-  };
+    timeout = setTimeout(async () => {
+      const res = await postGenerate(payload);
+      resolve(res);
+    }, params.timeout);
+  });
 
   return {
     state: storageState,

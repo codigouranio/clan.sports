@@ -56,17 +56,10 @@ function deepMerge(obj1: any, obj2: any) {
 function storageReducer(state: StorageState, action: Action): StorageState {
   switch (action.type) {
     case ActionType.SET_DATA:
-
-      // const items: Record<string, any> = {};
-      // for (let key in action.payload?.items) {
-      //   items[key] = { ...state.data.items[key], ...action.payload.items[key] };
-      // }
-
       const newData = deepMerge(state.data, action.payload);
       const data = { ...state?.data, ...newData };
       return { ...state, ...{ data }, ...{ loading: false } };
     case ActionType.SET_LOADING:
-      console.log(action);
       return { ...state, ...{ loading: action.payload || true } };
     case ActionType.SET_ERROR:
       return { ...state, ...{ error: action.payload }, ...{ loading: false } };
