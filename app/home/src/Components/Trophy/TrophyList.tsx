@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import CardAdd from "../CardAdd";
 import { TrophyCard } from ".";
 import useDataFetching from "../../useDataFetching";
@@ -9,8 +9,9 @@ export default function TrophyList() {
   const items: any[] = data?.items.trophies;
 
   return (
-    <div>
+    <Container>
       <h1>Trophy List</h1>
+
       <Grid container spacing={3} sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -25,6 +26,6 @@ export default function TrophyList() {
           )
         }
       </Grid>
-    </div>
+    </Container>
   );
 }

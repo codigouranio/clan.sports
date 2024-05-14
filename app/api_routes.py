@@ -232,6 +232,7 @@ def add_trophy():
                         "success": True,
                         "asset_nft_id": new_trophy.id,
                         "asset_nft_unique_id": new_trophy.unique_id,
+                        "asset_nft_name": new_trophy.name,
                     }
                 }
             ),
