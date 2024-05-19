@@ -58,6 +58,7 @@ marshmallow-sqlalchemy = "^1.0.0"
 qrcode = "^7.4.2"
 pip = "^24.0"
 pillow = "^10.3.0"
+flask-caching = "^2.3.0"
 
 
 [build-system]

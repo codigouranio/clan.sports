@@ -61,6 +61,9 @@ class TrophySchema(app.ma.SQLAlchemySchema):
             "asset": app.ma.URLFor(
                 "api.get_trophy_asset", values=dict(trophy_id="<unique_id>")
             ),
+            "thumbnail": app.ma.URLFor(
+                "api.get_trophy_asset_thumbnail", values=dict(trophy_id="<unique_id>")
+            ),
             "collection": app.ma.URLFor("api.get_trophies"),
         }
     )

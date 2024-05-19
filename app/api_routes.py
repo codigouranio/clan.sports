@@ -362,7 +362,7 @@ def get_trophy(trophy_id):
     for trophy in all_trophies:
         p = TrophySchema().dump(trophy)
         res[trophy.unique_id] = p
-    return res
+    return jsonify({"items": {"trophies": res}})
 
 
 @api_blueprint.route("/trophy/<string:trophy_id>/asset", methods=["GET"])
@@ -372,6 +372,51 @@ def get_trophy_asset(trophy_id):
     if not trophy:
         return jsonify({"message": "No item found"}), 404
     return send_file(BytesIO(base64.b64decode(trophy.image)), mimetype="image/jpeg")
+
+
+@app.cache.cached(timeout=60, query_string=True)
+@api_blueprint.route("/trophy/<string:trophy_id>/asset/thumbnail", methods=["GET"])
+@login_required
+def get_trophy_asset_thumbnail(trophy_id):
+    trophy = app.db.session.query(AssetNFT).filter_by(unique_id=trophy_id).first()
+    if not trophy:
+        return jsonify({"message": "No item found"}), 404
+
+        # Decode the base64 image
+    image_data = base64.b64decode(trophy.image)
+
+    # Open the image with Pillow
+    image = Image.open(BytesIO(image_data))
+
+    # Resize the image to 300x300
+    resized_image = image.resize((150, 150))
+
+    # Save the resized image to a BytesIO object
+    img_io = BytesIO()
+    resized_image.save(img_io, "JPEG")
+    img_io.seek(0)
+
+    last_modified = trophy.created_at
+
+    if request.headers.get("If-Modified-Since"):
+        try:
+            if_modified_since = datetime.strptime(
+                request.headers["If-Modified-Since"], "%a, %d %b %Y %H:%M:%S GMT"
+            )
+            if last_modified <= if_modified_since:
+                return "", 304
+        except ValueError:
+            pass
+
+    if request.headers.get("If-None-Match") == trophy.unique_id:
+        return "", 304
+
+    response = send_file(img_io, mimetype="image/jpeg")
+    response.headers["Last-Modified"] = last_modified.strftime(
+        "%a, %d %b %Y %H:%M:%S GMT"
+    )
+    response.headers["ETag"] = trophy.unique_id
+    return response
 
 
 @api_blueprint.route("/profile/<int:profile_id>", methods=["DELETE"])

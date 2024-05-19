@@ -1,6 +1,7 @@
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
+import { TrophyView } from './Components/Trophy';
 
 const Home = lazy(() => import(/* webpackChunkName: "home" */ './Components/Home'));
 const ClanList = lazy(() => import(/* webpackChunkName: "clanList" */ './Components/ClanList'));
@@ -76,6 +77,11 @@ export const routerApp = createBrowserRouter([
       {
         path: "badges",
         element: <BadgeList />,
+        errorElement: <ErrorGeneric />,
+      },
+      {
+        path: "trophy",
+        element: <TrophyView />,
         errorElement: <ErrorGeneric />,
       },
       {

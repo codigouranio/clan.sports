@@ -7,6 +7,7 @@ from os import environ, path
 from dependency_injector.wiring import Provide, inject
 from flask import Flask, json, session
 from flask_assets import Environment
+from flask_caching import Cache
 from flask_cors import CORS
 from flask_login import LoginManager
 from flask_marshmallow import Marshmallow
@@ -44,6 +45,8 @@ def create_app():
     app.db.init_app(app)
 
     app.ma = Marshmallow(app)
+
+    app.cache = Cache(app)
 
     with app.app_context():
         app.config["SESSION_SQLALCHEMY"] = app.db
