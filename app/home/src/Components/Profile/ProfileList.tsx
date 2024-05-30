@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Fade, Grid } from '@mui/material';
 import React from 'react';
 import useDataFetching from '../../useDataFetching';
 import CardAdd from '../CardAdd';
@@ -14,21 +14,23 @@ export default function ProfileList() {
 
   return (
     <React.Fragment>
-      <h1>Profile List</h1>
-      <Grid container spacing={3} sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        <Grid item>
-          <CardAdd itemType={"Profile"}></CardAdd>
+      <h1>Profile List</h1>q3
+      <Fade in={true} timeout={1000}>
+        <Grid container spacing={3} sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <Grid item>
+            <CardAdd itemType={"Profile"}></CardAdd>
+          </Grid>
+          {
+            _.map(_.sortBy(items, (o) => !o.favorite), (item: any, index: number) =>
+              <Grid item key={index}><ProfileCard profile_data={item} loading={loading} /></Grid>
+            )
+          }
         </Grid>
-        {
-          _.map(_.sortBy(items, (o) => !o.favorite), (item: any, index: number) =>
-            <Grid item key={index}><ProfileCard profile_data={item} loading={loading} /></Grid>
-          )
-        }
-      </Grid>
+      </Fade>
     </React.Fragment>
   );
 }

@@ -80,7 +80,7 @@ export const ProfileView: React.FC<any> = () => {
                 <TimelineSeparator>
                   <TimelineDot variant="outlined" />
                 </TimelineSeparator>
-                <TimelineContent>Approve</TimelineContent>
+                <TimelineContent>Approved</TimelineContent>
               </TimelineItem>
             </Timeline>
           </Grid>

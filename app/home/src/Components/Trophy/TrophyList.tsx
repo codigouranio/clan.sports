@@ -1,4 +1,4 @@
-import { Container, Grid } from "@mui/material";
+import { Container, Fade, Grid, Grow } from "@mui/material";
 import CardAdd from "../CardAdd";
 import { TrophyCard } from ".";
 import useDataFetching from "../../useDataFetching";
@@ -11,21 +11,25 @@ export default function TrophyList() {
   return (
     <Container>
       <h1>Trophy List</h1>
-
-      <Grid container spacing={3} sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        <Grid item>
-          <CardAdd itemType={"Trophy"}></CardAdd>
+      {/* {JSON.stringify(data)} */}
+      <Fade in={true} timeout={1000}>
+        <Grid container spacing={3} sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <Grid item>
+            <CardAdd itemType={"Trophy"}></CardAdd>
+          </Grid>
+          {
+            _.map(items, (item: any, index: number) =>
+              <Grid item key={index}>
+                <TrophyCard trophy_data={item} loading={loading} />
+              </Grid>
+            )
+          }
         </Grid>
-        {
-          _.map(items, (item: any, index: number) =>
-            <Grid item key={index}><TrophyCard trophy_data={item} loading={loading} /></Grid>
-          )
-        }
-      </Grid>
-    </Container>
+      </Fade>
+    </Container >
   );
 }
