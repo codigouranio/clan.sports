@@ -1,7 +1,7 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import useDataFetching from "../../useDataFetching";
-import { Box, Container, Grid, LinearProgress, Paper, Zoom } from "@mui/material";
+import { Box, Container, Grid, LinearProgress, Paper, Rating, Zoom } from "@mui/material";
 
 const TrophyView: React.FC<any> = ({ children }) => {
 
@@ -20,7 +20,7 @@ const TrophyView: React.FC<any> = ({ children }) => {
   return (
     <React.Fragment>
       <Container maxWidth="sm">
-        <h1>{trophy?.name}</h1>
+        <h1>{trophy?.name ?? "Unknown"}</h1>
       </Container>
       {/* {JSON.stringify(trophy)} */}
       <Box
@@ -51,6 +51,17 @@ const TrophyView: React.FC<any> = ({ children }) => {
           </Box>
         </Container>
       </Box>
+      <Grid container spacing={3} sx={{ marginTop: "1em" }}>
+        <Grid item xs={12}>
+          <Rating name="size-large" defaultValue={2} size="large" />
+          {/* <Paper elevation={3} sx={{ padding: '10px' }}>
+                <h2>{trophy?.name}</h2>
+                <p>{trophy?.description}</p>
+              </Paper> */}
+        </Grid>
+        <Grid item xs={12}>
+        </Grid>
+      </Grid>
       {children}
     </React.Fragment>
   );

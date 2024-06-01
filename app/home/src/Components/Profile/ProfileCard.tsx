@@ -72,32 +72,30 @@ export default function ProfileCard(props: any) {
             </Typography>
           )}
         </CardContent>
-        <CardActions>
-          <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
-              {props?.profile_data?.favorite && (
-                <FavoriteIcon
-                  sx={{ color: "red" }}
-                  onClick={(ev) =>
-                    setFavorite(ev, props?.profile_data?.unique_id, false)
-                  }
-                />
-              )}
-              {!props?.profile_data?.favorite && (
-                <FavoriteIcon
-                  onClick={(ev) =>
-                    setFavorite(ev, props?.profile_data?.unique_id, true)
-                  }
-                />
-              )}
-            </IconButton>
-            <IconButton aria-label="share">
-              <ShareIcon />
-            </IconButton>
-            <IconButton aria-label="edit">
-              <EditIcon />
-            </IconButton>
-          </CardActions>
+        <CardActions disableSpacing>
+          <IconButton aria-label="add to favorites">
+            {props?.profile_data?.favorite && (
+              <FavoriteIcon
+                sx={{ color: "red" }}
+                onClick={(ev) =>
+                  setFavorite(ev, props?.profile_data?.unique_id, false)
+                }
+              />
+            )}
+            {!props?.profile_data?.favorite && (
+              <FavoriteIcon
+                onClick={(ev) =>
+                  setFavorite(ev, props?.profile_data?.unique_id, true)
+                }
+              />
+            )}
+          </IconButton>
+          <IconButton aria-label="share">
+            <ShareIcon />
+          </IconButton>
+          <IconButton aria-label="edit">
+            <EditIcon />
+          </IconButton>
         </CardActions>
       </Card>
     </Link >

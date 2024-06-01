@@ -142,9 +142,13 @@ def get_profiles():
 def get_trophies():
     all_trophies = app.db.session.query(AssetNFT).all()
     res = {}
+    res["stats"] = {
+        "count": len(all_trophies),
+    }
     for trophy in all_trophies:
         p = TrophySchema().dump(trophy)
         res[trophy.unique_id] = p
+
     return jsonify({"items": {"trophies": res}})
 
 
