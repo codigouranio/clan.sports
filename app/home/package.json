@@ -7,6 +7,7 @@
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@fontsource/bangers": "^5.0.19",
+    "@fontsource/fira-sans-extra-condensed": "^5.0.13",
     "@fontsource/libre-barcode-39-text": "^5.0.18",
     "@fontsource/material-icons": "^5.0.14",
     "@fontsource/roboto": "^5.0.12",

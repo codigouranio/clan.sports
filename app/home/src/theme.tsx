@@ -1,8 +1,9 @@
 import { createTheme, responsiveFontSizes } from "@mui/material";
+import '@fontsource/fira-sans-extra-condensed';
 
 const defaultTheme = createTheme({
   typography: {
-    "fontFamily": `"Bangers", "Helvetica", "Arial", sans-serif`,
+    "fontFamily": `"Fira Sans Extra Condensed", "Helvetica", "Arial", sans-serif`,
     "fontWeightLight": 300,
     "fontWeightRegular": 400,
     "fontWeightMedium": 500

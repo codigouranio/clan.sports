@@ -7,26 +7,6 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from .models import Base, User
 
-# engine = create_engine("sqlite:///database.db", echo=True)
-# Base.metadata.create_all(engine)
-# # Session = sessionmaker(bind=engine)
-
-# with Session(engine) as db:
-
-#     db.query(User).delete()
-#     db.query(Address).delete()
-
-#     admin = User(
-#         name="admin",
-#         fullname="ADMIN",
-#         phoneNumber="1234567890",
-#         addresses=[Address(email_address="admin@paskot.com")]
-#     )
-
-#     db.add_all([admin])
-
-#     db.commit()
-
 
 class Repo:
     def getAllUsers(self):
@@ -53,7 +33,3 @@ class Repo:
         app.db.add(user)
         app.db.commit()
         return user
-
-
-#   def createSession(self):
-#     return ""

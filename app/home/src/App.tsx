@@ -1,5 +1,4 @@
 
-import '@fontsource/bangers';
 import '@fontsource/train-one';
 import { AccountCircle } from '@mui/icons-material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';

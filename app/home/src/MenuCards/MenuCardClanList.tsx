@@ -1,6 +1,7 @@
 import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
 import {
   Card,
+  CardActionArea,
   CardActions,
   CardContent,
   Typography
@@ -13,21 +14,23 @@ const MenuCardClanList = ({ card }) =>
     backgroundColor: 'transparent',
     color: 'black'
   }} variant="outlined">
-    <Link to="clans" style={{ textDecoration: "none", color: "inherit" }}>
-      <CardContent sx={{ cursor: "pointer" }}>
-        <Typography sx={{}}>
-          <AllInclusiveIcon sx={{ fontSize: "8em" }} />
-        </Typography>
-        <Typography variant="h3" component="div">
-          {card?.description}
-        </Typography>
-        <Typography variant="h5" color="text.secondary">
-          Member of
-          <br />
-          <span>{`${card.total}`}</span> clans
-        </Typography>
-      </CardContent>
-    </Link>
+    <CardActionArea>
+      <Link to="clans" style={{ textDecoration: "none", color: "inherit" }}>
+        <CardContent sx={{ cursor: "pointer" }}>
+          <Typography sx={{}}>
+            <AllInclusiveIcon sx={{ fontSize: "8em" }} />
+          </Typography>
+          <Typography variant="h3" component="div">
+            {card?.description}
+          </Typography>
+          <Typography variant="h5" color="text.secondary">
+            Member of
+            <br />
+            <span>{`${card.total}`}</span> clans
+          </Typography>
+        </CardContent>
+      </Link>
+    </CardActionArea>
     <CardActions>
     </CardActions>
   </MenuCardStyled>

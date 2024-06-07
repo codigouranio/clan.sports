@@ -26,6 +26,7 @@ from flask_login import (
 from PIL import Image, ImageDraw, ImageFont
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
+from app.api.blockchain import BlockchainAPI
 from app.api.schemas import ProfileSchema, ProfileTypeSchema, TrophySchema, UserSchema
 
 from .api.models import (
@@ -105,9 +106,23 @@ def check_code():
     user = app.db.session.query(User).filter_by(phone_number=code.phoneNumber).first()
     if not user:
         print("adding user to db")
-        user = User(phone_number=code.phoneNumber, email_address="")
+        api = BlockchainAPI(app.db.session)
+        crypto_data = api.generate_seed_phrase()
+        user = User(
+            phone_number=code.phoneNumber,
+            email_address="",
+            private_key=crypto_data.private_key,
+            public_key=crypto_data.public_key,
+            salt=crypto_data.salt,
+            seed_phrase=crypto_data.seed_phrase,
+        )
         app.db.session.add(user)
         app.db.session.commit()
+        login_user(
+            user, remember=True, duration=timedelta(days=60), force=True, fresh=True
+        )
+        flash("Logged in successfully.")
+        return jsonify({"success": True, "seed_phrase": crypto_data.seed_phrase})
 
     login_user(user, remember=True, duration=timedelta(days=60), force=True, fresh=True)
     flash("Logged in successfully.")
@@ -140,11 +155,15 @@ def get_profiles():
 @api_blueprint.route("/trophies")
 @login_required
 def get_trophies():
+
+    # Get the 'sortedBy' argument with a default value of 'rating'
+    sorted_by = request.args.get("sortedBy", "rating")
+
+    print(f"sorted_by: {sorted_by}")
+
     all_trophies = app.db.session.query(AssetNFT).all()
     res = {}
-    res["stats"] = {
-        "count": len(all_trophies),
-    }
+    res["x"] = {"count": len(all_trophies), "sortedBy": ""}
     for trophy in all_trophies:
         p = TrophySchema().dump(trophy)
         res[trophy.unique_id] = p
@@ -522,6 +541,37 @@ def profile_form():
     )
 
     # {"states_us": []]
+
+
+@api_blueprint.route("/crypto/seed_phrase", methods=["GET"])
+@login_required
+def get_seed_phrase():
+
+    api = BlockchainAPI(app.db.session)
+
+    crypto_data = api.generate_seed_phrase()
+
+    print(app.config.get("SECRET_KEY"))
+
+    # encrypted_private_key,
+    # encrypted_public_key,
+    # salt,
+
+    return jsonify(
+        {
+            "private_key": crypto_data.private_key,
+            "public_key": crypto_data.public_key,
+            "seed_phrase": crypto_data.seed_phrase,
+            "salt": crypto_data.salt,
+            # "salt_str": salt_str,
+            # "private_key_str": private_key_str,
+            # "public_key_str": public_key_str,
+            # "private_key_wif": private_key_wif,
+            # "public_key_wif": public_key_wif,
+            # "encrypted_private_key_str": encrypted_private_key_str,
+            # "encrypted_public_key_str": encrypted_public_key_str,
+        }
+    )
 
 
 @api_blueprint.route("/profile/favorite", methods=["POST"])

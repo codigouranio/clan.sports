@@ -1,8 +1,8 @@
 """Populate data
 
-Revision ID: 33c8a1e0c076
-Revises: a9aed83df4d0
-Create Date: 2024-05-11 23:19:46.708944
+Revision ID: 74855b7f2607
+Revises: afa809a3c12d
+Create Date: 2024-06-06 18:30:38.707638
 
 """
 
@@ -14,8 +14,8 @@ import app
 
 
 # revision identifiers, used by Alembic.
-revision: str = "33c8a1e0c076"
-down_revision: Union[str, None] = "a9aed83df4d0"
+revision: str = "74855b7f2607"
+down_revision: Union[str, None] = "afa809a3c12d"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

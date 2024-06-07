@@ -2,6 +2,7 @@ import hashlib
 import uuid
 from datetime import datetime
 from typing import List, Optional
+from datetime import datetime, timedelta
 
 from flask_login import UserMixin
 from sqlalchemy import (
@@ -33,6 +34,12 @@ class User(Base, UserMixin, SerializableMixin):
     profiles: Mapped[List["Profile"]] = relationship(
         back_populates="user", cascade="all, delete-orphan"
     )
+    public_key = Column(String(254), nullable=True)
+    private_key = Column(String(254), nullable=True)
+    seed_phrase = Column(String(254), nullable=True)
+    salt = Column(String(254), nullable=True)
+    created_at = Column(DateTime, default=datetime.now)
+    modified_at = Column(DateTime, onupdate=datetime.now)
 
     def __repr__(self) -> str:
         return f"User(id={self.id!r}, phone_number={self.phone_number}, email_address={self.email_address}, is_active={self.is_active})"
@@ -124,6 +131,7 @@ class AssetType(PyEnum):
     PASS = "pass"
     TROPHY = "trophy"
     BADGE = "badge"
+    POINT = "point"
 
     @classmethod
     def from_string(cls, value: str) -> "AssetType":
@@ -134,6 +142,17 @@ class AssetType(PyEnum):
 
     def __str__(self) -> str:
         return self.value
+
+
+class NFTTransaction(Base):
+    __tablename__ = "nft_transaction"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    nft_id: Mapped[int] = mapped_column(ForeignKey("asset_nft.id"), nullable=False)
+    sender_id: Mapped[int] = mapped_column(nullable=False)
+    receiver_id: Mapped[int] = mapped_column(nullable=True)
+    action: Mapped[str] = mapped_column(String(50), nullable=False)
+    timestamp: Mapped[datetime] = mapped_column(DateTime, default=datetime.now)
 
 
 class AssetNFT(Base, SerializableMixin):
@@ -151,6 +170,52 @@ class AssetNFT(Base, SerializableMixin):
     image: Mapped[bytes] = mapped_column(LargeBinary)
     created_at = Column(DateTime, default=datetime.now)
     modified_at = Column(DateTime, onupdate=datetime.now)
+    expiration_date: Mapped[datetime] = mapped_column(DateTime, nullable=True)
+
+    # Add relationship to NFTTransaction
+    # transactions: Mapped[list[NFTTransaction]] = relationship(
+    #     "NFTTransaction", back_populates="nft"
+    # )
+
+    def is_expired(self):
+        if self.expiration_date:
+            return datetime.now() > self.expiration_date
+        return False
+
+    def can_be_renewed_by(self, user_id: int) -> bool:
+        return self.user_id == user_id
+
+    def renew(self, user_id: int, additional_time: timedelta):
+        if self.can_be_renewed_by(user_id):
+            self.expiration_date = datetime.now() + additional_time
+        else:
+            raise PermissionError("You do not have permission to renew this NFT.")
+
+    def can_be_destroyed_by(self, user_id: int) -> bool:
+        return self.user_id == user_id
+
+    def destroy(self, user_id: int, session):
+        if self.can_be_destroyed_by(user_id):
+            transaction = NFTTransaction(
+                nft_id=self.id, sender_id=self.user_id, action="destroy"
+            )
+            session.add(transaction)
+            session.delete(self)
+        else:
+            raise PermissionError("You do not have permission to destroy this NFT.")
+
+    def transfer(self, current_user_id: int, new_user_id: int, session):
+        if self.user_id == current_user_id:
+            transaction = NFTTransaction(
+                nft_id=self.id,
+                sender_id=current_user_id,
+                receiver_id=new_user_id,
+                action="transfer",
+            )
+            self.user_id = new_user_id
+            session.add(transaction)
+        else:
+            raise PermissionError("You do not have permission to transfer this NFT.")
 
     def to_dict(self, full=False):
         if full:
@@ -167,30 +232,6 @@ class AssetNFT(Base, SerializableMixin):
             "id": self.id,
             "name": self.name,
         }
-
-
-# class AssetNFT(Base, SerializableMixin):
-#     __tablename__ = "asset_nft"
-#     id: Mapped[int] = mapped_column(primary_key=True)
-#     nft_id: Mapped[str] = mapped_column(
-#         String(64), unique=True, nullable=False
-#     )  # 256-bit NFT ID in hexadecimal format
-#     asset_type: Mapped[str] = mapped_column(AssetType, nullable=False)
-#     # asset_type: Mapped[str] = mapped_column(Enum(AssetType), nullable=False)
-#     name: Mapped[str] = mapped_column(nullable=False)
-#     desc: Mapped[str] = mapped_column(nullable=False)
-
-#     @staticmethod
-#     def generate_nft_id():
-#         # Generate UUID version 4
-#         uuid_bytes = uuid.uuid4().bytes
-
-#         # Hash the UUID using SHA-256
-#         hash_object = hashlib.sha256(uuid_bytes)
-#         hash_bytes = hash_object.digest()
-
-#         # Return the first 256 bits (32 bytes) of the hash in hexadecimal format
-#         return hash_bytes.hex()
 
 
 class SessionModel(Base):
