@@ -2,14 +2,14 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import ShareIcon from '@mui/icons-material/Share';
 import { Button, CardActionArea, CardActions, CardContent, IconButton, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
-import { MenuCardStyled } from './MenuCardStyled';
+import { CardActionAreaStyled, MenuCardStyled } from './MenuCardStyled';
 
 const MenuCardTrophyList = ({ card }) =>
   <MenuCardStyled elevation={0} sx={{
     backgroundColor: 'transparent',
     color: '#DAA520'
   }} variant="outlined">
-    <CardActionArea>
+    <CardActionAreaStyled>
       <Link to="trophies" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
           <Typography sx={{}}>
@@ -26,14 +26,18 @@ const MenuCardTrophyList = ({ card }) =>
           </Typography>
         </CardContent>
       </Link>
-    </CardActionArea>
+    </CardActionAreaStyled>
     <CardActions>
-      <Button size="small">Craft</Button>
+      <Button size="small">
+        <Link to="trophies/add" style={{ textDecoration: "none", color: "inherit" }}>
+          Craft
+        </Link>
+      </Button>
       <Button size="small">Award</Button>
-      <IconButton aria-label="share">
+      <IconButton aria-label="share" LinkComponent={Link}>
         <ShareIcon />
       </IconButton>
     </CardActions>
-  </MenuCardStyled>
+  </MenuCardStyled >
 
 export default MenuCardTrophyList;

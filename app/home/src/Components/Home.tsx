@@ -2,7 +2,14 @@ import { Box, Container, Grid, Paper } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
 import * as React from 'react';
-import { MenuCardBadgeList, MenuCardClanList, MenuCardPassList, MenuCardPoints, MenuCardProfileList, MenuCardTrophyList } from '../MenuCards';
+import {
+  MenuCardBadgeList,
+  MenuCardClanList,
+  MenuCardPassList,
+  MenuCardPoints,
+  MenuCardProfileList,
+  MenuCardTrophyList
+} from '../MenuCards';
 
 const menuId = 'primary-search-account-menu';
 const settings = ['My Account', 'Settings', 'FAQ'];
@@ -65,19 +72,31 @@ export default function Home() {
 
   const cards = [
     {
-      ord: 1,
+      ord: 99,
       title: 'My Clans',
       type: 'clan_list',
       description: 'My Clans',
       total: 5,
-      icon: 'icon'
+      icon: 'icon',
+      visible: false,
     }, {
-      ord: 2,
+      ord: 1,
       title: 'My Profiles',
       type: 'profile_list',
       description: 'My Profiles',
       total: 1,
-      icon: 'icon'
+      icon: 'icon',
+      visible: true,
+    }, {
+      ord: 2,
+      title: 'My Trophies',
+      type: 'trophy_list',
+      description: 'My Trophies',
+      received: 0,
+      sent: 0,
+      lastReceived: '2021-10-01',
+      icon: 'icon',
+      visible: true,
     }, {
       ord: 3,
       title: 'My Passes',
@@ -86,54 +105,49 @@ export default function Home() {
       current: 1,
       expired: 5,
       upcoming: 1,
-      icon: 'icon'
+      icon: 'icon',
+      visible: false,
     }, {
-      ord: 4,
+      ord: 99,
       title: 'My Badges',
       type: 'badge_list',
       description: 'My Badges',
       received: 0,
       sent: 0,
-      icon: 'icon'
+      icon: 'icon',
+      visible: false,
     }, {
-      ord: 5,
-      title: 'My Trophies',
-      type: 'trophy_list',
-      description: 'My Trophies',
-      received: 0,
-      sent: 0,
-      lastReceived: '2021-10-01',
-      icon: 'icon'
-    }, {
-      ord: 6,
+      ord: 99,
       title: 'My Ongoing Goals',
       type: 'ongoing_goals',
       description: 'My Rewards',
       received: 0,
       sent: 0,
       lastReceived: '2021-10-01',
-      icon: 'icon'
+      icon: 'icon',
+      visible: false,
     }, {
-      ord: 7,
+      ord: 99,
       title: 'My Points',
       type: 'points',
       description: 'My Points',
       currentBalance: 3100,
-      icon: 'icon'
+      icon: 'icon',
+      visible: false,
     }];
 
   return (
     <Container maxWidth="md">
       <Box sx={{ flexGrow: 1, p: 2 }}>
         <Grid container rowSpacing={1} justifyContent="center">
-          {cards.map((card, index) => (
+          {cards.filter(a => a.visible).sort((a: any, b: any) => a.sort - b.sort).map((card, index) => (
             <Grid item sm="auto" key={index} sx={{
             }}>
               {card.type === "clan_list" && <MenuCardClanList card={card} />}
               {card.type === "profile_list" && <MenuCardProfileList card={card} />}
               {card.type === "trophy_list" && <MenuCardTrophyList card={card} />}
-              {card.type === "badge_list" && <MenuCardBadgeList card={card} />}
               {card.type === "pass_list" && <MenuCardPassList card={card} />}
+              {card.type === "badge_list" && <MenuCardBadgeList card={card} />}
               {card.type === "points" && <MenuCardPoints card={card} />}
             </Grid>
           ))}

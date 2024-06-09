@@ -89,7 +89,7 @@ export default function TrophyAdd() {
         return (
             <React.Fragment>
                 <Container component="main" maxWidth="md">
-                    <Link to="/trophies" style={{ textDecoration: "none", color: "inherit" }}>
+                    <Link to="/trophies" style={{ textDecoration: "none", color: "inherit" }} replace>
                         <h1>Congratulations! Trophy Successfully Created!</h1>
                         <h2>View the details of your new {added_trophy.asset_nft_name || "trophy"}</h2>
                         <h2>Go back</h2>

@@ -94,7 +94,7 @@ export default function ProfileAdd() {
     return (
       <React.Fragment>
         <Container component="main" maxWidth="md">
-          <Link to="/profiles" style={{ textDecoration: "none", color: "inherit" }}>
+          <Link to="/profiles" style={{ textDecoration: "none", color: "inherit" }} replace>
             <h1>Congratulations! Profile Successfully Created!</h1>
             <h2>View the details of your new {added_profile.profile_type_name || "profile"}</h2>
             <h2>Go back</h2>

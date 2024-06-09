@@ -1,14 +1,14 @@
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import { Button, Card, CardActionArea, CardActions, CardContent, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
-import { MenuCardStyled } from './MenuCardStyled';
+import { CardActionAreaStyled, MenuCardStyled } from './MenuCardStyled';
 
 const MenuCardPassList = ({ card }) =>
   <MenuCardStyled elevation={0} sx={{
     backgroundColor: 'transparent',
     color: 'darkgray'
   }} variant="outlined">
-    <CardActionArea>
+    <CardActionAreaStyled>
       <Link to="passes" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
           <Typography sx={{}}>
@@ -25,7 +25,7 @@ const MenuCardPassList = ({ card }) =>
           </Typography>
         </CardContent>
       </Link>
-    </CardActionArea>
+    </CardActionAreaStyled>
     <CardActions>
       <Button size="small">Activate</Button>
     </CardActions>

@@ -1,14 +1,14 @@
 import MoneyIcon from '@mui/icons-material/Money';
 import { Button, Card, CardActionArea, CardActions, CardContent, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
-import { MenuCardStyled } from './MenuCardStyled';
+import { CardActionAreaStyled, MenuCardStyled } from './MenuCardStyled';
 
 const MenuCardPoints = ({ card }) =>
   <MenuCardStyled elevation={0} sx={{
     backgroundColor: 'transparent',
     color: 'green'
   }} variant="outlined">
-    <CardActionArea>
+    <CardActionAreaStyled>
       <Link to="points" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
           <Typography sx={{}}>
@@ -24,7 +24,7 @@ const MenuCardPoints = ({ card }) =>
           </Typography>
         </CardContent>
       </Link>
-    </CardActionArea>
+    </CardActionAreaStyled>
     <CardActions>
       <Button size="small">Buy</Button>
       <Button size="small">Shop</Button>

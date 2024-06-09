@@ -1,4 +1,4 @@
-import { Card } from "@mui/material";
+import { Card, CardActionArea } from "@mui/material";
 import { styled } from '@mui/material/styles';
 
 export const MenuCardStyled = styled(Card)(({ theme }) => ({
@@ -6,17 +6,23 @@ export const MenuCardStyled = styled(Card)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
-  fontSize: '70px',
+  fontSize: '5em',
   marginLeft: '0.2em',
   marginRight: '0.2em',
   marginBlock: 'auto',
   marginTop: '0.2em',
   marginBottom: '0.2em',
   boxShadow: theme.shadows[3],
-  maxHeight: 'auto',
-  minHeight: '350px',
-  minWidth: '220px',
-  maxWidth: 'auto',
+  height: 'auto',
+  width: 'auto',
+  // maxHeight: '300px',
+  // minHeight: '350px',
+  // minWidth: '220px',
+  // maxWidth: '300px',
   // border: '0px solid #919491',
   color: theme.palette.text.secondary,
+}));
+
+export const CardActionAreaStyled = styled(CardActionArea)(({ theme }) => ({
+  width: '300px'
 }));

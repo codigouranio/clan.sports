@@ -2,14 +2,14 @@ import ShareIcon from '@mui/icons-material/Share';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import { Button, CardActionArea, CardActions, CardContent, IconButton, Typography } from "@mui/material";
 import { Link } from 'react-router-dom';
-import { MenuCardStyled } from './MenuCardStyled';
+import { CardActionAreaStyled, MenuCardStyled } from './MenuCardStyled';
 
 const MenuCardBadgeList = ({ card }) =>
   <MenuCardStyled elevation={0} sx={{
     backgroundColor: 'transparent',
     color: 'blue'
   }} variant="outlined">
-    <CardActionArea>
+    <CardActionAreaStyled>
       <Link to="badges" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: 'pointer' }}>
           <Typography sx={{}}>
@@ -26,7 +26,7 @@ const MenuCardBadgeList = ({ card }) =>
           </Typography>
         </CardContent>
       </Link>
-    </CardActionArea>
+    </CardActionAreaStyled>
     <CardActions>
       <Button size="small">Create</Button>
       <Button size="small">Issue</Button>

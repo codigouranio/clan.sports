@@ -1,20 +1,23 @@
 import AllInclusiveIcon from "@mui/icons-material/AllInclusive";
 import {
+  Button,
   Card,
   CardActionArea,
   CardActions,
   CardContent,
+  IconButton,
   Typography
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { MenuCardStyled } from "./MenuCardStyled";
+import { CardActionAreaStyled, MenuCardStyled } from "./MenuCardStyled";
+import ShareIcon from '@mui/icons-material/Share';
 
 const MenuCardClanList = ({ card }) =>
   <MenuCardStyled elevation={0} sx={{
     backgroundColor: 'transparent',
     color: 'black'
   }} variant="outlined">
-    <CardActionArea>
+    <CardActionAreaStyled>
       <Link to="clans" style={{ textDecoration: "none", color: "inherit" }}>
         <CardContent sx={{ cursor: "pointer" }}>
           <Typography sx={{}}>
@@ -30,8 +33,11 @@ const MenuCardClanList = ({ card }) =>
           </Typography>
         </CardContent>
       </Link>
-    </CardActionArea>
+    </CardActionAreaStyled>
     <CardActions>
+      <IconButton aria-label="share">
+        <ShareIcon />
+      </IconButton>
     </CardActions>
   </MenuCardStyled>
 
