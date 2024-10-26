@@ -29,7 +29,11 @@ class Component {
   init() {
     for (const child of this.children) {
       if (child instanceof Component) {
-        child.init();
+        try {
+          child.init();
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
   }

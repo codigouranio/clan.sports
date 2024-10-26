@@ -20,8 +20,10 @@ function useFormPosting(
         credentials: 'include',
         method: params.method,
         headers: params.headers,
-        body: formData
+        body: JSON.stringify(formData)
       };
+
+      console.log(options);
 
       const response = await fetch(url, options);
       const data = await response.json();

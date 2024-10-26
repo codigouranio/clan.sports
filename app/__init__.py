@@ -1,11 +1,13 @@
 """Initialize Flask app."""
 
+import base64
 import logging
+import os
 from datetime import timedelta
 from os import environ, path
 
 from dependency_injector.wiring import Provide, inject
-from flask import Flask, json, session
+from flask import Flask, g, json, session
 from flask_assets import Environment
 from flask_caching import Cache
 from flask_cors import CORS
@@ -13,17 +15,49 @@ from flask_login import LoginManager
 from flask_marshmallow import Marshmallow
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
+from flask_talisman import Talisman
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
+
+from app.api.databaseJupyter import DatabaseJupyter
 
 from . import heartbeat_routes, home_routes
 from .api.models import Base
 from .container import Container
 
+"""Create Flask application."""
+app = Flask(__name__, instance_relative_config=False)
+
+
+def generate_nonce():
+    return base64.b64encode(os.urandom(16)).decode("utf-8")
+
+
+@app.before_request
+def set_nonce():
+    g.nonce = generate_nonce()  # Store nonce in `g` for the request
+
+
+@app.after_request
+def set_csp(response):
+    response.headers["Content-Security-Policy"] = (
+        f"default-src 'self'; "
+        f"style-src 'self' 'unsafe-inline'; "
+        f"connect-src 'self' https://nominatim.openstreetmap.org;"
+        f"img-src 'self' data:;"
+    )
+    return response
+
 
 def create_app():
-    """Create Flask application."""
-    app = Flask(__name__, instance_relative_config=False)
+
+    allowed_origins = ["http://localhost:5000", "https://clansports.club"]
+
+    # Configure CORS to only allow requests from specified origins
+    CORS(app, resources={r"/*": {"origins": allowed_origins}})
+
+    Talisman(app, content_security_policy={"default-src": ["'self'"]})
+
     app.config.from_pyfile(
         path.join("..", "config.{}.py".format(environ.get("ENVIRONMENT", "dev")))
     )
@@ -47,6 +81,9 @@ def create_app():
     app.ma = Marshmallow(app)
 
     app.cache = Cache(app)
+
+    # load data from git repo
+    app.database_jupyter = DatabaseJupyter(app)
 
     with app.app_context():
         app.config["SESSION_SQLALCHEMY"] = app.db

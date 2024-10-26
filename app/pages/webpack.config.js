@@ -1,11 +1,11 @@
-const webpack = require("webpack");
-const path = require("path");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const fs = require("fs");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
-const { WebpackManifestPlugin } = require("webpack-manifest-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const path = require("path");
+const webpack = require("webpack");
 
 const pageFiles = fs.readdirSync("./src/assets/").filter(function (file) {
   return file.match(/.*\.html$/);
@@ -25,6 +25,7 @@ module.exports = {
   resolve: {
     modules: [path.resolve(__dirname, "./src"), "node_modules"],
   },
+  devtool: "source-map",
   module: {
     rules: [
       {
@@ -39,8 +40,8 @@ module.exports = {
         test: /\.(sc|sa|c)ss/,
         use: [
           MiniCssExtractPlugin.loader,
+          "style-loader",
           "css-loader",
-          "postcss-loader",
           "sass-loader",
         ],
         include: [path.resolve(__dirname, "src")],
@@ -70,7 +71,9 @@ module.exports = {
         { from: "./src/assets/vendor", to: "vendor", noErrorOnMissing: true },
       ],
     }),
-    new WebpackManifestPlugin(),
+    new WebpackManifestPlugin({
+      writeToFileEmit: true,
+    }),
     new CleanWebpackPlugin(),
   ],
 };

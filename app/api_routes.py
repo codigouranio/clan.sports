@@ -3,19 +3,22 @@
 # https://docs.sqlalchemy.org/en/20/core/type_basics.html#sqlalchemy.types.DateTime
 # https://www.digitalocean.com/community/tutorials/how-to-add-authentication-to-your-app-with-flask-login
 
+import base64
 import random
 import uuid
 from datetime import datetime, timedelta
 from http import HTTPStatus
 from io import BytesIO
 from itertools import product
-import base64
 
 import qrcode
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, abort
 from flask import current_app as app
 from flask import flash, jsonify, redirect, request, send_file, session, url_for
+
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_login import (
     LoginManager,
     current_user,
@@ -23,11 +26,19 @@ from flask_login import (
     login_user,
     logout_user,
 )
+
 from PIL import Image, ImageDraw, ImageFont
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
 from app.api.blockchain import BlockchainAPI
-from app.api.schemas import ProfileSchema, ProfileTypeSchema, TrophySchema, UserSchema
+from app.api.schemas import (
+    ProfileSchema,
+    ProfileSimpleSchema,
+    ProfileTypeSchema,
+    TrophySchema,
+    UserSchema,
+)
+from app.require_api_key import require_api_key
 
 from .api.models import (
     AssetNFT,
@@ -44,6 +55,14 @@ from .api.smsService import SmsService
 from .api.utils import generate_session_id, generate_sha256_hash
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
+
+limiter = Limiter(
+    key_func=get_remote_address,  # Utiliza la dirección IP del cliente
+    app=app,
+    default_limits=["200 per day", "50 per hour"],  # Límites por defecto
+)
+
+
 # smsService: SmsService = app.container.smsService()
 # ssmClient = app.container.ssmClient()
 
@@ -144,7 +163,10 @@ def get_current_user():
 @api_blueprint.route("/profiles")
 @login_required
 def get_profiles():
-    all_profiles = app.db.session.query(Profile).all()
+    all_profiles = (
+        app.db.session.query(Profile).filter_by(user_id=current_user.id).all()
+    )
+    # filter_by(user_id=current_user.id).all()
     res = {}
     for profile in all_profiles:
         p = ProfileSchema().dump(profile)
@@ -543,6 +565,20 @@ def profile_form():
     # {"states_us": []]
 
 
+@api_blueprint.route("/trophy/form", methods=["GET"])
+@login_required
+def trophy_form():
+
+    all_profiles = app.db.session.query(Profile).all()
+    res = []
+    for profile in all_profiles:
+        p = ProfileSimpleSchema().dump(profile)
+        res.append(p)
+
+    asset_types = [asset_type.name for asset_type in AssetType]
+    return jsonify({"form": {"asset_types": asset_types, "profiles": res}})
+
+
 @api_blueprint.route("/crypto/seed_phrase", methods=["GET"])
 @login_required
 def get_seed_phrase():
@@ -578,12 +614,18 @@ def get_seed_phrase():
 def set_profile_as_favorite():
     try:
         data = request.get_json(force=True)
+
+        print(data["profile_id"], current_user.id)
+
         profile = (
             app.db.session.query(Profile)
             .filter_by(user_id=current_user.id, unique_id=data["profile_id"])
             .first()
         )
-        print(data)
+
+        if not profile:
+            return jsonify({"error": "Profile not found"}), 404
+
         profile.favorite = data["favorite"]
         app.db.session.commit()
         all_profiles = (
@@ -608,3 +650,16 @@ def set_profile_as_favorite():
             ),
             500,
         )
+
+
+@api_blueprint.route("/getClubFilterTerms", methods=["GET"])
+@limiter.limit("10 per minute")
+def getClubFilterTerms():
+    return jsonify(
+        {
+            "states": app.database_jupyter.getState(),
+            "years": app.database_jupyter.getYears(),
+            "genders": app.database_jupyter.getGenders(),
+            "success": True,
+        }
+    )

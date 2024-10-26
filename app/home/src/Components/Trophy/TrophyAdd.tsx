@@ -4,6 +4,8 @@ import {
     Box, Button, Container, FormControl, Grid,
     InputLabel,
     LinearProgress,
+    MenuItem,
+    Select,
     TextField
 } from "@mui/material";
 import { FormikHelpers, useFormik } from "formik";
@@ -14,6 +16,7 @@ import useGenerateImage from '../../useGenerateImage';
 import useFormPosting from '../../useDataPosting';
 import { Storage } from '../../Storage';
 import { Link } from 'react-router-dom';
+import useDataFetching from '../../useDataFetching';
 
 function srcset(image: string, width: number, height: number, rows = 1, cols = 1) {
     return {
@@ -27,6 +30,8 @@ let validationSchema = Yup.object();
 
 export default function TrophyAdd() {
 
+    useDataFetching('/api/trophy/form');
+
     const { storageState } = useContext(Storage);
     const { generateImage } = useGenerateImage();
     const {
@@ -36,6 +41,10 @@ export default function TrophyAdd() {
         },
         loading = false
     } = storageState;
+
+    const { data } = storageState;
+
+    console.log(data);
 
     interface IFormValues {
         generateTrophyWords: '',
@@ -145,6 +154,34 @@ export default function TrophyAdd() {
                     </Grid>
                     <Grid item xs={16} sm={12}>
                         <FormControl fullWidth>
+                            <TextField
+                                id="amount"
+                                name="amount"
+                                required
+                                label="Amount"
+                                type="number"
+                                defaultValue={0}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                error={formik.touched.name && Boolean(formik.errors.name)}
+                                helperText={formik.touched.name && formik.errors.name}
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={16} sm={12}>
+                        <FormControl fullWidth>
+                            <InputLabel id="profile-select-label">Profile</InputLabel>
+                            <Select
+                                labelId="profile-select-label"
+                                id="profile-select"
+                                value={1}
+                                label="Profile"
+                                required
+                            >
+                                <MenuItem value={10}>Ten</MenuItem>
+                                <MenuItem value={20}>Twenty</MenuItem>
+                                <MenuItem value={30}>Thirty</MenuItem>
+                            </Select>
                             <TextField
                                 id="profile_id"
                                 name="profile_id"

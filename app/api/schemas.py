@@ -37,7 +37,18 @@ class ProfileSchema(app.ma.SQLAlchemySchema):
             "collection": app.ma.URLFor("api.get_profiles"),
         }
     )
+    
+class ProfileSimpleSchema(app.ma.SQLAlchemySchema):
+    class Meta:
+        model = Profile
+        include_relationships = True
+        load_instance = True
 
+    __model__ = Profile
+    
+    id = app.ma.auto_field()
+    unique_id = app.ma.auto_field()
+    name = app.ma.auto_field()
 
 class TrophySchema(app.ma.SQLAlchemySchema):
     class Meta:

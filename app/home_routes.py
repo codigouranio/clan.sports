@@ -5,9 +5,13 @@
 
 """General page routes."""
 
+import base64
+import os
+
 from flask import Blueprint, Flask
 from flask import current_app as app
 from flask import (
+    g,
     jsonify,
     redirect,
     render_template,
@@ -41,33 +45,6 @@ def not_found(e):
     return home_blueprint.send_static_file("index.html")
 
 
-# @home_blueprint.route("/profile/<string:id>")
-# def catch_all_more_level(id=None):
-#     return home_blueprint.send_static_file("index.html")
-
-
-# @home_blueprint.route("/profile/main.js")
-# def catch_all_more_level():
-#     return home_blueprint.send_static_file("main.js")
-
-
-# @home_blueprint.route("/<string:path_1>/<string:path_2>")
-# def catch_all_more_level(path=None, path_2=None):
-#     return redirect(url_for("home_blueprint.catch_all"))
-
-
-# @home_blueprint.route("/<string:path_1>/<string:path_2>/<string:path_3>")
-# def catch_all_beyond_level(path_1=None, path_2=None, path_3=None):
-#     return "hola"
-
-
-# @home_blueprint.route("/static/<string:path_1>/<string:path_2>")
-# def catch_static_1_level(path_1, path_2):
-#     return home_blueprint.send_static_file(safe_join("./static/", path_1, path_2))
-
-
-# @home_blueprint.route("/static/<string:path_1>/<string:path_2>/<string:path_3>")
-# def catch_static_2_level(path_1, path_2, path_3):
-#     return home_blueprint.send_static_file(
-#         safe_join("./static/", path_1, path_2, path_3)
-#     )
+@home_blueprint.route("/error")
+def trigger_error():
+    raise Exception("This is a test error!")
