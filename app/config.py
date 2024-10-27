@@ -9,6 +9,8 @@ class Config:
     # General Config
     ENVIRONMENT = environ.get("ENVIRONMENT") or "dev"
 
+    GITHUB_TOKEN = environ.get("GITHUB_TOKEN")
+
     # Static Assets
     STATIC_FOLDER = "static"
     TEMPLATES_FOLDER = "templates"

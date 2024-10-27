@@ -1,13 +1,14 @@
 import json
 import os
 import shutil
+
+import git
 from flask import Flask
 from git import Repo
-import git
 
 
 class DatabaseJupyter:
-    REPO_URL = "git@github.com:codigouranio/mark_investment_engine.git"
+    REPO_URL = "https://<TOKEN>@github.com/codigouranio/mark_investment_engine.git"
     REPO_FOLDER = "./mark_investment_engine"
     REPO_SUB_FOLDER = "clan-sports"
     STATES_FILE = "states.json"
@@ -16,12 +17,16 @@ class DatabaseJupyter:
 
     def __init__(self, app: Flask) -> None:
         self.app = app
+        self.repoUrl = DatabaseJupyter.REPO_URL.replace(
+            "<TOKEN>", app.config.get("GITHUB_TOKEN")
+        )
         self.loadDataToMemory()
-        pass
 
     def loadDataToMemory(self):
-        if not os.path.exists(DatabaseJupyter.REPO_FOLDER):
-            Repo.clone_from(DatabaseJupyter.REPO_URL, DatabaseJupyter.REPO_FOLDER)
+        repoFolder = os.path.join(DatabaseJupyter.REPO_FOLDER)
+        if not os.path.exists(repoFolder):
+            print("Cloning database repository...")
+            Repo.clone_from(self.repoUrl, DatabaseJupyter.REPO_FOLDER)
 
         repo = Repo(DatabaseJupyter.REPO_FOLDER)
 

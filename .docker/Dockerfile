@@ -47,7 +47,7 @@ WORKDIR /home/flask/app
 ENV AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
   AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
   AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} \
-  KEY_PRIV_GIT_REPOS=${KEY_PRIV_GIT_REPOS}
+  GITHUB_TOKEN=${GITHUB_TOKEN}
 
 ENV REPO_DATABASE_URL=${REPO_DATABASE_URL}
 
@@ -79,16 +79,15 @@ RUN alembic upgrade head
 
 COPY .docker/docker-entrypoint.sh .
 
-RUN mkdir -p ~/.ssh
-RUN echo $KEY_PRIV_GIT_REPOS > ~/.ssh/id_rsa
-RUN chmod 600 ~/.ssh/id_rsa
-RUN echo "StrictHostKeyChecking no" > ~/.ssh/config
-RUN ssh-keyscan github.com >> ~/.ssh/known_hosts
+RUN mkdir -p /root/.ssh
+# RUN chmod 600 /root/.ssh
+# RUN echo $KEY_PRIV_GIT_REPOS > ~/.ssh/id_rsa
 
-# RUN echo "Host *.github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-# RUN ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-# RUN echo $KEY_PRIV_GIT_REPOS > ~/.ssh/clansports_git_keys 
-# RUN chmod 600 ~/.ssh/clansports_git_keys
+COPY id_dsa /root/.ssh
+RUN chmod 600 /root/.ssh/id_dsa
+
+# RUN echo "StrictHostKeyChecking=no" > /root/.ssh/config
+RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
 RUN mv .docker/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
