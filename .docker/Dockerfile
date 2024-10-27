@@ -46,7 +46,8 @@ WORKDIR /home/flask/app
 
 ENV AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
   AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
-  AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
+  AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION} \
+  KEY_PRIV_GIT_REPOS=${KEY_PRIV_GIT_REPOS}
 
 ENV REPO_DATABASE_URL=${REPO_DATABASE_URL}
 
@@ -58,10 +59,8 @@ ENV GIT_PYTHON_GIT_EXECUTABLE /usr/bin/git
 ENV ENVIRONMENT=dev
 
 RUN apk update && \
-  apk add --no-cache build-base \
-  musl-dev linux-headers && \
-  apk add uwsgi-python3 && \
-  apk add --no-cache git
+  apk add --no-cache build-base musl-dev linux-headers && \
+  apk add --no-cache uwsgi-python3 git openssh
 
 RUN pip install --upgrade pip
 RUN pip install flask
@@ -80,6 +79,12 @@ RUN alembic upgrade head
 
 COPY .docker/docker-entrypoint.sh .
 
+RUN mkdir -p ~/.ssh && \
+  eval "$(ssh-agent -s)" && \
+  echo $KEY_PRIV_GIT_REPOS > ~/.ssh/clansports_git_keys && \
+  chmod 600 ~/.ssh/clansports_git_keys && \
+  ssh-add ~/.ssh/clansports_git_keys && \
+  ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 RUN mv .docker/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT [ "docker-entrypoint.sh" ]
