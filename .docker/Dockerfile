@@ -83,9 +83,6 @@ RUN mkdir -p /root/.ssh
 # RUN chmod 600 /root/.ssh
 # RUN echo $KEY_PRIV_GIT_REPOS > ~/.ssh/id_rsa
 
-COPY id_dsa /root/.ssh
-RUN chmod 600 /root/.ssh/id_dsa
-
 # RUN echo "StrictHostKeyChecking=no" > /root/.ssh/config
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
