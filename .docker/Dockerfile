@@ -79,14 +79,16 @@ RUN alembic upgrade head
 
 COPY .docker/docker-entrypoint.sh .
 
-RUN mkdir -p ~/.ssh 
-RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
-RUN systemctl restart sshd
-RUN ssh-keyscan -H github.com >> ~/.ssh/known_hosts
-RUN eval "$(ssh-agent -s)"
-RUN echo $KEY_PRIV_GIT_REPOS > ~/.ssh/clansports_git_keys 
-RUN chmod 600 ~/.ssh/clansports_git_keys
-RUN ssh-add ~/.ssh/clansports_git_keys
+RUN mkdir -p ~/.ssh
+RUN /bin/bash -c cat "${KEY_PRIV_GIT_REPOS}" >> ~/.ssh/id_rsa
+RUN chmod 600 ~/.ssh/id_rsa
+RUN echo "StrictHostKeyChecking no" > ~/.ssh/config
+RUN ssh-keyscan github.com >> ~/.ssh/.ssh/known_hosts
+
+# RUN echo "Host *.github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+# RUN ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+# RUN echo $KEY_PRIV_GIT_REPOS > ~/.ssh/clansports_git_keys 
+# RUN chmod 600 ~/.ssh/clansports_git_keys
 
 RUN mv .docker/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
