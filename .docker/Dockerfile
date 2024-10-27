@@ -80,6 +80,8 @@ RUN alembic upgrade head
 COPY .docker/docker-entrypoint.sh .
 
 RUN mkdir -p ~/.ssh 
+RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+RUN systemctl restart sshd
 RUN ssh-keyscan -H github.com >> ~/.ssh/known_hosts
 RUN eval "$(ssh-agent -s)"
 RUN echo $KEY_PRIV_GIT_REPOS > ~/.ssh/clansports_git_keys 
