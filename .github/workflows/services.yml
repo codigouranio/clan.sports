@@ -56,6 +56,7 @@ jobs:
             AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
             AWS_DEFAULT_REGION=${{ vars.AWS_DEFAULT_REGION }}
             REPO_DATABASE_URL=${{ secrets.REPO_DATABASE_URL }}
+            BUILDKIT_INLINE_CACHE=1
       - name: Create deploy file
         env:
           CONTAINER_IMAGE_NAME: ${{ env.DOCKER_USERNAME }}/${{ env.SERVICE_NAME }}:latest
