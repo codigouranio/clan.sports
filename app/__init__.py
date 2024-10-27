@@ -62,6 +62,7 @@ def create_app():
         path.join("..", "config.{}.py".format(environ.get("ENVIRONMENT", "dev")))
     )
     app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000
+
     app.config["GITHUB_TOKEN"] = environ.get("GITHUB_TOKEN")
 
     app.logger.setLevel(app.config.get("LOGGER_LEVEL"))
