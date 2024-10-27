@@ -1,6 +1,5 @@
 import json
 import os
-import shutil
 
 import git
 from flask import Flask
