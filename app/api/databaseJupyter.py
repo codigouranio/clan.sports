@@ -18,7 +18,7 @@ class DatabaseJupyter:
     def __init__(self, app: Flask) -> None:
         self.app = app
         self.repoUrl = DatabaseJupyter.REPO_URL.replace(
-            "<TOKEN>", app.config.get("GITHUB_TOKEN")
+            "<TOKEN>", app.config.get("SEC_REPO_TOKEN")
         )
         self.loadDataToMemory()
 

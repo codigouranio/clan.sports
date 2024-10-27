@@ -63,10 +63,10 @@ def create_app():
     )
     app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000
 
-    app.config["GITHUB_TOKEN"] = environ.get("GITHUB_TOKEN")
+    app.config["SEC_REPO_TOKEN"] = environ.get("SEC_REPO_TOKEN")
 
-    if not app.config["GITHUB_TOKEN"]:
-        print("Please set GITHUB_TOKEN environment variable")
+    if not app.config["SEC_REPO_TOKEN"]:
+        print("Please set SEC_REPO_TOKEN environment variable")
 
     app.logger.setLevel(app.config.get("LOGGER_LEVEL"))
 
