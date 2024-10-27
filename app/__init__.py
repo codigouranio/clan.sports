@@ -65,6 +65,9 @@ def create_app():
 
     app.config["GITHUB_TOKEN"] = environ.get("GITHUB_TOKEN")
 
+    if not app.config["GITHUB_TOKEN"]:
+        print("Please set GITHUB_TOKEN environment variable")
+
     app.logger.setLevel(app.config.get("LOGGER_LEVEL"))
 
     app.container = Container()
