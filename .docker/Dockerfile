@@ -79,12 +79,13 @@ RUN alembic upgrade head
 
 COPY .docker/docker-entrypoint.sh .
 
-RUN mkdir -p ~/.ssh && \
-  eval "$(ssh-agent -s)" && \
-  echo $KEY_PRIV_GIT_REPOS > ~/.ssh/clansports_git_keys && \
-  chmod 600 ~/.ssh/clansports_git_keys && \
-  ssh-add ~/.ssh/clansports_git_keys && \
-  ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+RUN mkdir -p ~/.ssh 
+RUN ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+RUN eval "$(ssh-agent -s)"
+RUN echo $KEY_PRIV_GIT_REPOS > ~/.ssh/clansports_git_keys 
+RUN chmod 600 ~/.ssh/clansports_git_keys
+RUN ssh-add ~/.ssh/clansports_git_keys
+
 RUN mv .docker/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT [ "docker-entrypoint.sh" ]
