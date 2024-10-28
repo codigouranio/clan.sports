@@ -1,4 +1,3 @@
-import "@picocss/pico";
 import "./app.scss";
 
 import Component from "./loveVanilla/component";
@@ -10,7 +9,8 @@ import { getClubFilterTerms } from "./fetchApi";
 
 class App extends Component {
   constructor() {
-    super();
+    super("body");
+
     // this.createChild(new LoadingBackdrop("#loading-backdrop"));
     // this.createChild(new RequestCode("#request-code"));
     // this.createChild(new CheckCode("#check-code"));
@@ -81,14 +81,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const app = new App();
   app.init();
 
-  // const page = new Page();
-  // let app = undefined;
-  // try {
-  //
-  //   app.init();
-  // } catch (error) {
-  //   console.error("Error initializing app: ", error);
-  // }
   console.log("GETTING LOCATION");
   await app.getCurrentState();
+
+  setTimeout(() => {
+    document.body.classList.add("show-up");
+  }, 100);
+
+  setTimeout(() => {
+    document.body.classList.add("fade-in");
+  }, 520);
 });

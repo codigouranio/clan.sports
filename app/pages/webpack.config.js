@@ -38,12 +38,8 @@ module.exports = {
       },
       {
         test: /\.(sc|sa|c)ss/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          "style-loader",
-          "css-loader",
-          "sass-loader",
-        ],
+        // use: ["style-loader", "css-loader", "sass-loader"],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
         include: [path.resolve(__dirname, "src")],
       },
       {
@@ -65,7 +61,12 @@ module.exports = {
   },
   plugins: [
     ...pageEntries,
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: "main.css",
+      chunkFilename: "[name].css",
+    }),
     new CopyWebpackPlugin({
       patterns: [
         { from: "./src/assets/vendor", to: "vendor", noErrorOnMissing: true },

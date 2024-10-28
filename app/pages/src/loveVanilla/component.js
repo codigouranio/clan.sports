@@ -54,10 +54,14 @@ class Component {
 
   show(delay = 0) {
     asyncDebounce(() => {
-      if (!this.isVisible()) {
-        this.obj.classList.remove("hidden");
-        this.handleChangedVisibility(true);
-      }
+      // if (this.obj.classList.contains("love-vanilla-body")) {
+      //   this.obj.classList.add("fade-in visible");
+      // }
+      // if (!this.isVisible()) {
+      //   this.obj.classList.remove("hidden");
+      //   this.obj.removeAttribute("hidden");
+      //   this.handleChangedVisibility(true);
+      // }
     }, delay)();
   }
 
@@ -74,7 +78,9 @@ class Component {
       // throw new Error(`Element with id ${this.id} not found`);
       return false;
     }
-    return !this.obj.classList.contains("hidden");
+    return (
+      !this.obj.classList.contains("hidden") && !this.obj.hasAttribute("hidden")
+    );
   }
 
   handleChangedVisibility(visible) {
