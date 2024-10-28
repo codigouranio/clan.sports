@@ -16,9 +16,6 @@ from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, abort
 from flask import current_app as app
 from flask import flash, jsonify, redirect, request, send_file, session, url_for
-
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 from flask_login import (
     LoginManager,
     current_user,
@@ -26,7 +23,6 @@ from flask_login import (
     login_user,
     logout_user,
 )
-
 from PIL import Image, ImageDraw, ImageFont
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
@@ -55,12 +51,6 @@ from .api.smsService import SmsService
 from .api.utils import generate_session_id, generate_sha256_hash
 
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
-
-limiter = Limiter(
-    key_func=get_remote_address,  # Utiliza la dirección IP del cliente
-    app=app,
-    default_limits=["200 per day", "50 per hour"],  # Límites por defecto
-)
 
 
 # smsService: SmsService = app.container.smsService()
@@ -653,7 +643,7 @@ def set_profile_as_favorite():
 
 
 @api_blueprint.route("/getClubFilterTerms", methods=["GET"])
-@limiter.limit("10 per minute")
+# @limiter.limit("10 per minute")
 def getClubFilterTerms():
     return jsonify(
         {

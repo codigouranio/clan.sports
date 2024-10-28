@@ -11,6 +11,8 @@ from flask import Flask, g, json, session
 from flask_assets import Environment
 from flask_caching import Cache
 from flask_cors import CORS
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_login import LoginManager
 from flask_marshmallow import Marshmallow
 from flask_session import Session
@@ -58,11 +60,17 @@ def create_app():
 
     Talisman(app, content_security_policy={"default-src": ["'self'"]})
 
+    limiter = Limiter(
+        get_remote_address,  # Utiliza la dirección IP del cliente
+        app=app,
+        # default_limits=["1 per day", "1 per hour"],  # Límites por defecto
+        default_limits=["200 per day", "50 per hour"],  # Límites por defecto
+    )
+
     app.config.from_pyfile(
         path.join("..", "config.{}.py".format(environ.get("ENVIRONMENT", "dev")))
     )
     app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000
-
     app.config["SEC_REPO_TOKEN"] = environ.get("SEC_REPO_TOKEN")
 
     if not app.config["SEC_REPO_TOKEN"]:
@@ -105,6 +113,9 @@ def create_app():
         app.register_blueprint(api_routes.api_blueprint)
         app.register_blueprint(home_routes.home_blueprint)
         app.register_blueprint(heartbeat_routes.heartbeat_blueprint)
+
+        limiter.exempt(pages_routes.pages_blueprint)
+        limiter.exempt(heartbeat_routes.heartbeat_blueprint)
 
         return app
 
