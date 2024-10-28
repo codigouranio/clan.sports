@@ -80,10 +80,6 @@ RUN alembic upgrade head
 COPY .docker/docker-entrypoint.sh .
 
 RUN mkdir -p /root/.ssh
-# RUN chmod 600 /root/.ssh
-# RUN echo $KEY_PRIV_GIT_REPOS > ~/.ssh/id_rsa
-
-# RUN echo "StrictHostKeyChecking=no" > /root/.ssh/config
 RUN ssh-keyscan github.com >> /root/.ssh/known_hosts
 
 RUN mv .docker/docker-entrypoint.sh /usr/local/bin/

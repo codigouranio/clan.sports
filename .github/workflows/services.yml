@@ -61,7 +61,7 @@ jobs:
         env:
           CONTAINER_IMAGE_NAME: ${{ env.DOCKER_USERNAME }}/${{ env.SERVICE_NAME }}:latest
         run: |
-          zip -rj deploy.zip docker-compose.yml
+          zip -rj deploy.zip Dockerrun.aws.json
       - uses: actions/upload-artifact@v4
         with:
           name: deploy.zip
