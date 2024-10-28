@@ -23,7 +23,7 @@ class DatabaseJupyter:
         else:
             self.repoUrl = DatabaseJupyter.REPO_URL.replace("<TOKEN>", "")
 
-        # self.loadDataToMemory()
+        self.loadDataToMemory()
 
     def loadDataToMemory(self):
         repoFolder = os.path.join(DatabaseJupyter.REPO_FOLDER)
