@@ -6,6 +6,7 @@ import YearList from "./yearList";
 import GenderList from "./genderList";
 import { setData } from "./loveVanilla/data";
 import { getClubFilterTerms } from "./fetchApi";
+import AppInfo from "./appInfo";
 
 class App extends Component {
   constructor() {
@@ -17,6 +18,7 @@ class App extends Component {
     this.createChild(new StateList("#state-list"));
     this.createChild(new YearList("#year-list"));
     this.createChild(new GenderList("#gender-list"));
+    this.createChild(new AppInfo("#app-info"));
   }
 
   async init() {

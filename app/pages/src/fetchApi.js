@@ -16,3 +16,13 @@ export async function getClubFilterTerms() {
     throw error;
   }
 }
+
+export async function getAppInfo() {
+  try {
+    const response = await api.get(`getAppInfo`);
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error.message);
+    throw error;
+  }
+}

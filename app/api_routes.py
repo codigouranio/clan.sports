@@ -653,3 +653,15 @@ def getClubFilterTerms():
             "success": True,
         }
     )
+
+
+@api_blueprint.route("/getAppInfo", methods=["GET"])
+def getAppInfo():
+    return jsonify(
+        {
+            "app_name": app.info.app_name,
+            "app_version": app.info.app_version,
+            "app_version_date": app.info.app_version_date,
+            "success": True,
+        }
+    )

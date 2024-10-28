@@ -9,6 +9,7 @@ from os import environ, path
 from dependency_injector.wiring import Provide, inject
 from flask import Flask, g, json, session
 from flask_assets import Environment
+from app.appInfo import AppInfo
 from flask_caching import Cache
 from flask_cors import CORS
 from flask_limiter import Limiter
@@ -66,6 +67,8 @@ def create_app():
         # default_limits=["1 per day", "1 per hour"],  # Límites por defecto
         default_limits=["200 per day", "50 per hour"],  # Límites por defecto
     )
+
+    app.info = AppInfo()
 
     app.config.from_pyfile(
         path.join("..", "config.{}.py".format(environ.get("ENVIRONMENT", "dev")))
