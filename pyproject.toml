@@ -71,6 +71,7 @@ webassets = "^2.0"
 werkzeug = "^3.0.1"
 polars = { version = "^1.12.0", extras = ["numpy", "pandas", "fsspec"], markers = "platform_system != 'Darwin'" }
 polars-lts-cpu = { version = "^1.12.0", markers = "platform_system == 'Darwin'" }
+pyarrow = "18.0.0"
 
 [build-system]
 requires = ["poetry-core"]
