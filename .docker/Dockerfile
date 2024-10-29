@@ -60,8 +60,8 @@ ENV ENVIRONMENT=dev
 
 RUN apk update && \
   apk add --no-cache build-base musl-dev linux-headers && \
-  apk add --no-cache uwsgi-python3 git openssh
-# apk add --no-cache build-base cargo
+  apk add --no-cache uwsgi-python3 git openssh \
+  apk add --no-cache cargo
 
 RUN pip install --upgrade pip
 RUN pip install flask
