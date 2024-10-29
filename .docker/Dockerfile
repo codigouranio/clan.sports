@@ -40,6 +40,9 @@ RUN curl https://sh.rustup.rs -sSf | sh -s -- -y && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*  
 
+# Set up environment variables for Rust
+ENV PATH="/root/.cargo/bin:${PATH}"  
+
 COPY ./pyproject.toml .  
 RUN poetry export -f requirements.txt --output requirements.txt
 
@@ -67,11 +70,6 @@ ENV FLASK_RUN_HOST=0.0.0.0 \
 ENV GIT_PYTHON_GIT_EXECUTABLE /usr/bin/git
 
 ENV ENVIRONMENT=dev
-
-
-
-# Set up environment variables for Rust
-ENV PATH="/root/.cargo/bin:${PATH}  
 
 RUN pip install --upgrade pip
 RUN pip install flask
