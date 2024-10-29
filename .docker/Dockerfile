@@ -74,7 +74,7 @@ RUN pip install --upgrade pip
 RUN pip install flask
 
 COPY --from=builder /home/flask/app/requirements.txt ./
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt --no-cache-dir
 
 COPY --from=build_pages /home/node/app/build ./app/pages/build
 COPY --from=build_home /home/node/app/build ./app/home/build
