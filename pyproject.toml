@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clan-sports"
-version = "0.3.5"
+version = "0.3.6"
 description = ""
 authors = ["codigouranio"]
 license = "GPL-3.0"
@@ -69,7 +69,7 @@ typing-extensions = "^4.9.0"
 uwsgi = { version = "^2.0.24", markers = "python_version >= '3.11' and sys_platform == 'linux'" }
 webassets = "^2.0"
 werkzeug = "^3.0.1"
-polars = { version = "^1.12.0", markers = "platform_system != 'Darwin'" }
+polars = { version = "^1.12.0", extras = ["numpy", "pandas", "fsspec"], markers = "platform_system != 'Darwin'" }
 polars-lts-cpu = { version = "^1.12.0", markers = "platform_system == 'Darwin'" }
 
 [build-system]
