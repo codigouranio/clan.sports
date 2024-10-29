@@ -60,8 +60,13 @@ ENV ENVIRONMENT=dev
 
 RUN apk update && \
   apk add --no-cache build-base musl-dev linux-headers && \
-  apk add --no-cache uwsgi-python3 git openssh \
-  apk add --no-cache cargo
+  apk add --no-cache uwsgi-python3 git openssh curl
+
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly && \
+  source $HOME/.cargo/env
+
+# Set environment path for Rust
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN pip install --upgrade pip
 RUN pip install flask
