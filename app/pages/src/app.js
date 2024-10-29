@@ -1,12 +1,13 @@
 import "./app.scss";
 
-import Component from "./loveVanilla/component";
-import StateList from "./stateList";
-import YearList from "./yearList";
-import GenderList from "./genderList";
-import { setData } from "./loveVanilla/data";
-import { getClubFilterTerms } from "./fetchApi";
 import AppInfo from "./appInfo";
+import { getClubFilterTerms } from "./fetchApi";
+import GenderList from "./genderList";
+import Component from "./loveVanilla/component";
+import { setData } from "./loveVanilla/data";
+import StateList from "./stateList";
+import TeamList from "./teamList";
+import YearList from "./yearList";
 
 class App extends Component {
   constructor() {
@@ -15,10 +16,14 @@ class App extends Component {
     // this.createChild(new LoadingBackdrop("#loading-backdrop"));
     // this.createChild(new RequestCode("#request-code"));
     // this.createChild(new CheckCode("#check-code"));
+
     this.createChild(new StateList("#state-list"));
     this.createChild(new YearList("#year-list"));
     this.createChild(new GenderList("#gender-list"));
     this.createChild(new AppInfo("#app-info"));
+
+    this.teamList = new TeamList("#team-list");
+    this.createChild(this.teamList);
   }
 
   async init() {
@@ -29,6 +34,8 @@ class App extends Component {
     setData({
       filterTerms,
     });
+
+    await this.teamList.search("nebraska", "boys", 2007);
 
     // this.loadingBackdrop.show();
     // this.requestCode.show();

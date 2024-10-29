@@ -4,6 +4,7 @@
 
 @use "sass:map";
 @use "@picocss/pico";
+@use "./node_modules/flexboxgrid/css/flexboxgrid.css";
 
 // @use "@picocss/pico/scss/pico" as * with (
 //   $theme-color: "indigo",
@@ -13,6 +14,13 @@
 // );
 
 // @use "node_modules/@picocss/pico/scss/pico";
+
+#team-list {
+  .club-logo {
+    max-width: 5em;
+    max-height: 5em;
+  }
+}
 
 .love-vanilla-body {
   opacity: 0;

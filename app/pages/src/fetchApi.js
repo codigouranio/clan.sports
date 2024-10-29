@@ -26,3 +26,13 @@ export async function getAppInfo() {
     throw error;
   }
 }
+
+export async function searchClubs(state, gender, year) {
+  try {
+    const response = await api.get(`searchClubs/${state}/${gender}/${year}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error.message);
+    throw error;
+  }
+}

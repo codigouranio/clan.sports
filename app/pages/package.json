@@ -9,10 +9,11 @@
   "dependencies": {
     "@picocss/pico": "^2.0.6",
     "axios": "^1.7.7",
+    "flexboxgrid": "^6.3.1",
     "intl-tel-input": "^19.4.0",
     "jquery": "^3.7.1",
     "lodash": "^4.17.21",
-    "sanitize-html": "^2.12.1",
+    "sanitize-html": "^2.13.1",
     "ts-loader": "^9.5.1",
     "webpack-rimraf-plugin": "^0.0.1-security"
   },
