@@ -60,7 +60,9 @@ ENV ENVIRONMENT=dev
 
 RUN apk update && \
   apk add --no-cache build-base musl-dev linux-headers && \
-  apk add --no-cache uwsgi-python3 git openssh curl cmake gcc g++ make
+  apk add --no-cache uwsgi-python3 git openssh curl cmake
+
+# gcc g++ make
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly && \
   source $HOME/.cargo/env
