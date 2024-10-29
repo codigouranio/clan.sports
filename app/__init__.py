@@ -61,11 +61,11 @@ def create_app():
 
     Talisman(app, content_security_policy={"default-src": ["'self'"]})
 
-    limiter = Limiter(
+    app.limiter = Limiter(
         get_remote_address,  # Utiliza la dirección IP del cliente
         app=app,
         # default_limits=["1 per day", "1 per hour"],  # Límites por defecto
-        default_limits=["200 per day", "50 per hour"],  # Límites por defecto
+        default_limits=["2000 per day", "200 per hour"],  # Límites por defecto
     )
 
     app.info = AppInfo()
@@ -117,8 +117,8 @@ def create_app():
         app.register_blueprint(home_routes.home_blueprint)
         app.register_blueprint(heartbeat_routes.heartbeat_blueprint)
 
-        limiter.exempt(pages_routes.pages_blueprint)
-        limiter.exempt(heartbeat_routes.heartbeat_blueprint)
+        app.limiter.exempt(pages_routes.pages_blueprint)
+        app.limiter.exempt(heartbeat_routes.heartbeat_blueprint)
 
         return app
 

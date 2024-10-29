@@ -1,13 +1,10 @@
 import "./app.scss";
 
 import AppInfo from "./appInfo";
-import { getClubFilterTerms } from "./fetchApi";
-import GenderList from "./genderList";
 import Component from "./loveVanilla/component";
 import { setData } from "./loveVanilla/data";
-import StateList from "./stateList";
+import { SearchForm } from "./searchForm";
 import TeamList from "./teamList";
-import YearList from "./yearList";
 
 class App extends Component {
   constructor() {
@@ -17,10 +14,12 @@ class App extends Component {
     // this.createChild(new RequestCode("#request-code"));
     // this.createChild(new CheckCode("#check-code"));
 
-    this.createChild(new StateList("#state-list"));
-    this.createChild(new YearList("#year-list"));
-    this.createChild(new GenderList("#gender-list"));
+    // this.createChild(new StateList("#state-list"));
+    // this.createChild(new YearList("#year-list"));
+    // this.createChild(new GenderList("#gender-list"));
+    // this.createChild(new SearchForm("#search-form"));
     this.createChild(new AppInfo("#app-info"));
+    this.createChild(new SearchForm("#search-form"));
 
     this.teamList = new TeamList("#team-list");
     this.createChild(this.teamList);
@@ -29,13 +28,13 @@ class App extends Component {
   async init() {
     super.init();
 
-    const filterTerms = await getClubFilterTerms();
+    // const filterTerms = await getClubFilterTerms();
 
-    setData({
-      filterTerms,
-    });
+    // setData({
+    //   filterTerms,
+    // });
 
-    await this.teamList.search("nebraska", "boys", 2007);
+    // await this.teamList.search("nebraska", "boys", 2007);
 
     // this.loadingBackdrop.show();
     // this.requestCode.show();

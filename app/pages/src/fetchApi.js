@@ -27,9 +27,11 @@ export async function getAppInfo() {
   }
 }
 
-export async function searchClubs(state, gender, year) {
+export async function searchClubsBySearchTerm(searchTerm) {
   try {
-    const response = await api.get(`searchClubs/${state}/${gender}/${year}`);
+    const response = await api.get(
+      `searchClubsBySearchTerm?query=${encodeURIComponent(searchTerm)}`
+    );
     return response.data;
   } catch (error) {
     console.error("Error:", error.message);

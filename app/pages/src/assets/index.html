@@ -21,36 +21,14 @@
 
   <main class="container">
     <section id="preview">
-      <form>
-        <div class="grid">
-          <input type="search" id="search" name="search" placeholder="Search a club by name">
-          <button type="submit">Search</button><button type="submit">Search Around Me</button>
-        </div>
-      </form>
-    </section>
-    <section id="preview">
-      <p>Search</p>
       <div class="grid">
-        <select id="state-list" name="state-select" aria-label="Select state..." required>
-          <option selected disabled value="">
-            Select State
-          </option>
-        </select>
-        <select id="year-list" name="year-select" aria-label="Select year..." required>
-          <option selected disabled value="">
-            Select Year
-          </option>
-        </select>
-        <select id="gender-list" name="gender-select" aria-label="Select gender..." required>
-          <option selected disabled value="">
-            Select Gender
-          </option>
-        </select>
-        <button type="submit">Go</button>
+        <form role="search" id="search-form">
+          <input id="search-box" name="search" type="search" placeholder="Search" />
+          <input id="search-button" type="button" value="Search" />
+        </form>
       </div>
     </section>
     <section id="team-list">
-      <p>Results</p>
       <div id="result-list"></div>
     </section>
   </main>

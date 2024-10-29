@@ -6,15 +6,6 @@
 @use "@picocss/pico";
 @use "./node_modules/flexboxgrid/css/flexboxgrid.css";
 
-// @use "@picocss/pico/scss/pico" as * with (
-//   $theme-color: "indigo",
-//   $semantic-root-element: "#root",
-//   $enable-semantic-container: true,
-//   $enable-classes: true
-// );
-
-// @use "node_modules/@picocss/pico/scss/pico";
-
 #team-list {
   .club-logo {
     max-width: 5em;

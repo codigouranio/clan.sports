@@ -643,7 +643,6 @@ def set_profile_as_favorite():
 
 
 @api_blueprint.route("/getClubFilterTerms", methods=["GET"])
-# @limiter.limit("10 per minute")
 def getClubFilterTerms():
     return jsonify(
         {
@@ -665,3 +664,26 @@ def getAppInfo():
             "success": True,
         }
     )
+
+
+@api_blueprint.route(
+    "/searchClubs/<string:state>/<string:gender>/<int:year>", methods=["GET"]
+)
+def searchClubs(state: str, gender: str, year: int):
+    return app.database_jupyter.searchClubs(state, gender, year)
+
+
+@api_blueprint.route("/searchClubsBySearchTerm", methods=["GET"])
+def searchClubsBySearchTerm():
+    search_term = request.args.get("query")
+    print(search_term)
+    results = app.database_jupyter.searchClubsBySearchTerm(search_term)
+    return jsonify(results)
+
+
+@api_blueprint.route("/getClubLogo/<path:logoPath>", methods=["GET"])
+@app.limiter.limit(None)
+def getClubLogo(logoPath: str):
+    if request.headers.get("If-Modified-Since"):
+        return "", 304
+    return app.database_jupyter.getClubLogo(logoPath)
