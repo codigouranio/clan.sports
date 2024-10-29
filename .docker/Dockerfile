@@ -27,8 +27,18 @@ FROM python:3.11 AS builder
 WORKDIR /home/flask/app
 
 RUN apt-get update && \
-  apt-get install -y && \
+  apt-get install -y curl build-essential && \
   pip3 install poetry
+
+RUN apk update && \
+  apk add --no-cache build-base musl-dev linux-headers && \
+  apk add --no-cache uwsgi-python3 git openssh  
+
+# Update and install dependencies
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y && \
+  export PATH="$HOME/.cargo/bin:$PATH" && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*  
 
 COPY ./pyproject.toml .  
 RUN poetry export -f requirements.txt --output requirements.txt
@@ -58,9 +68,10 @@ ENV GIT_PYTHON_GIT_EXECUTABLE /usr/bin/git
 
 ENV ENVIRONMENT=dev
 
-RUN apk update && \
-  apk add --no-cache build-base musl-dev linux-headers && \
-  apk add --no-cache uwsgi-python3 git openssh
+
+
+# Set up environment variables for Rust
+ENV PATH="/root/.cargo/bin:${PATH}  
 
 RUN pip install --upgrade pip
 RUN pip install flask
