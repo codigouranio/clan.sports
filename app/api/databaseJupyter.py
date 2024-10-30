@@ -34,41 +34,6 @@ class DatabaseJupyter:
         self.loadDataToMemory()
 
     def loadDataToMemory(self):
-
-        db_path_file = os.path.join(
-            DatabaseJupyter.REPO_FOLDER,
-            DatabaseJupyter.REPO_SUB_FOLDER,
-            DatabaseJupyter.TEAM_LIST_FILE,
-        )
-
-        print(db_path_file)
-
-        temp_df = pl.read_json(db_path_file)
-
-        # Melt the DataFrame to convert columns to rows
-        # Specify the id_vars as the index you want to keep (e.g., club names)
-        melted_df = temp_df.melt(id_vars=None)  # None means no fixed identifier
-
-        # exploded_df = melted_df.explode("value")
-
-        # Now, if 'value' is a struct, extract fields
-        self.df = melted_df.select(
-            [
-                pl.col("variable").alias("club_name"),
-                pl.col("value").struct.field("state").alias("state"),
-                pl.col("value").struct.field("logo_url").alias("logo_url"),
-                pl.col("value").struct.field("info").alias("info"),
-            ]
-        )
-
-        # # Print the melted DataFrame
-        # print("\nMelted DataFrame:")
-        # print(self.df)
-
-        # Count total rows
-        total_rows = self.df.shape[0]
-        print(f"Total rows: {total_rows}")
-
         repoFolder = os.path.join(DatabaseJupyter.REPO_FOLDER)
         if not os.path.exists(repoFolder):
             print("Cloning database repository...")
@@ -96,6 +61,8 @@ class DatabaseJupyter:
 
         origin = repo.remotes.origin
         origin.pull()
+
+        self.loadTeamListToMemory()
 
         with open(
             os.path.join(
@@ -150,6 +117,41 @@ class DatabaseJupyter:
         # Load data from the database to memory
         print("loading data from database")
         pass
+
+    def loadTeamListToMemory(self):
+        db_path_file = os.path.join(
+            DatabaseJupyter.REPO_FOLDER,
+            DatabaseJupyter.REPO_SUB_FOLDER,
+            DatabaseJupyter.TEAM_LIST_FILE,
+        )
+
+        print(db_path_file)
+
+        temp_df = pl.read_json(db_path_file)
+
+        # Melt the DataFrame to convert columns to rows
+        # Specify the id_vars as the index you want to keep (e.g., club names)
+        melted_df = temp_df.melt(id_vars=None)  # None means no fixed identifier
+
+        # exploded_df = melted_df.explode("value")
+
+        # Now, if 'value' is a struct, extract fields
+        self.df = melted_df.select(
+            [
+                pl.col("variable").alias("club_name"),
+                pl.col("value").struct.field("state").alias("state"),
+                pl.col("value").struct.field("logo_url").alias("logo_url"),
+                pl.col("value").struct.field("info").alias("info"),
+            ]
+        )
+
+        # # Print the melted DataFrame
+        # print("\nMelted DataFrame:")
+        # print(self.df)
+
+        # Count total rows
+        total_rows = self.df.shape[0]
+        print(f"Total rows: {total_rows}")
 
     def getState(self):
         return self.states
