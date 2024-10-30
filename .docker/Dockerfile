@@ -33,7 +33,8 @@ RUN apt-get update && \
 COPY ./pyproject.toml .  
 RUN poetry export -f requirements.txt --output requirements.txt
 
-FROM python:3.11-slim-buster as release
+# FROM python:3.11-alpine as release
+FROM python:3.11-slim as release
 
 ARG AWS_ACCESS_KEY_ID
 ARG AWS_SECRET_ACCESS_KEY
@@ -44,8 +45,29 @@ EXPOSE 80
 
 WORKDIR /home/flask/app
 
-RUN apt-get update && \
-  apt-get install -y gcc g++ cmake make git 
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends build-essential \
+  openssh-client \
+  musl-dev \
+  libffi-dev \
+  libssl-dev \
+  libopenblas-dev \
+  openssl \
+  cmake \
+  git
+
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#   build-essential \
+#   linux-headers-$(uname -r) \
+#   musl-dev \
+#   curl \
+#   ssh \
+#   git 
+
+RUN apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN pip install --upgrade pip
 
 ENV AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
   AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
@@ -61,9 +83,6 @@ ENV GIT_PYTHON_GIT_EXECUTABLE /usr/bin/git
 
 ENV ENVIRONMENT=dev
 
-RUN pip install --upgrade pip
-RUN pip install flask
-
 COPY --from=builder /home/flask/app/requirements.txt ./
 RUN pip install -r requirements.txt --no-cache-dir
 
@@ -72,7 +91,6 @@ COPY --from=build_home /home/node/app/build ./app/home/build
 
 COPY . ./
 
-# RUN pip install alembic
 RUN mkdir -p instance/
 RUN alembic upgrade head
 

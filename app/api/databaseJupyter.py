@@ -7,7 +7,7 @@ import git
 import markdown
 from flask import Flask, jsonify, send_file
 from git import Repo
-import polars as pl
+import pandas as pd
 
 
 class DatabaseJupyter:
@@ -119,33 +119,45 @@ class DatabaseJupyter:
         pass
 
     def loadTeamListToMemory(self):
+        # Define the path to the JSON file
         db_path_file = os.path.join(
             DatabaseJupyter.REPO_FOLDER,
             DatabaseJupyter.REPO_SUB_FOLDER,
             DatabaseJupyter.TEAM_LIST_FILE,
         )
 
-        print(db_path_file)
+        temp_df = pd.read_json(db_path_file, orient="index").reset_index()
+        self.df = temp_df.rename(columns={"index": "club_name"})
 
-        temp_df = pl.read_json(db_path_file)
+        # Count total rows
+        total_rows = self.df.shape[0]
+        print(f"Total rows: {total_rows}")
+
+        return
 
         # Melt the DataFrame to convert columns to rows
         # Specify the id_vars as the index you want to keep (e.g., club names)
         melted_df = temp_df.melt(id_vars=None)  # None means no fixed identifier
 
-        # exploded_df = melted_df.explode("value")
+        print(melted_df.columns)
 
-        # Now, if 'value' is a struct, extract fields
-        self.df = melted_df.select(
-            [
-                pl.col("variable").alias("club_name"),
-                pl.col("value").struct.field("state").alias("state"),
-                pl.col("value").struct.field("logo_url").alias("logo_url"),
-                pl.col("value").struct.field("info").alias("info"),
-            ]
+        # If 'value' is a column containing dictionaries, expand it into separate columns
+        exploded_df = pd.json_normalize(melted_df["value"]).join(melted_df["variable"])
+
+        # Rename columns to match the desired structure
+        exploded_df = exploded_df.rename(
+            columns={
+                "variable": "club_name",
+                "state": "state",
+                "logo_url": "logo_url",
+                "info": "info",
+            }
         )
 
-        # # Print the melted DataFrame
+        # Assign the resulting DataFrame to self.df
+        self.df = exploded_df
+
+        # Print the melted DataFrame if needed
         # print("\nMelted DataFrame:")
         # print(self.df)
 
@@ -206,41 +218,70 @@ class DatabaseJupyter:
         return jsonify(transformed_clubs)
 
     def searchClubsBySearchTerm(self, search_term):
+        # Convert the search term to lowercase
         search_term_lower = search_term.lower()
+        print("Filtering by search term:", search_term_lower)
 
+        # Build conditions to filter by search term in each string column
         conditions = [
-            self.df[col].str.to_lowercase().str.contains(search_term_lower)
-            for col in self.df.columns
-            if self.df.schema[col] == pl.Utf8  # Apply to string columns only
+            self.df[col].str.lower().str.contains(search_term_lower, na=False)
+            for col in self.df.select_dtypes(
+                include="object"
+            ).columns  # Apply only to string columns
         ]
 
+        # Combine conditions with OR logic if there are any conditions
         if conditions:
             combined_condition = conditions[0]
             for condition in conditions[1:]:
                 combined_condition |= condition
-            results = self.df.filter(combined_condition)
+            results = self.df[combined_condition]
         else:
             results = self.df.head(0)
 
-        print("Searching", search_term, self.df.columns)
+        # print("Results", results)
+        # print("Searching", search_term, self.df.columns)
 
+        # Set pagination parameters
         page = 0
         page_size = 30
+        start = page * page_size
 
-        # Calculate start and end indices for pagination
-        start = (page - 1) * page_size
+        print("Slicing data", page, page_size, start)
 
         # Slice the DataFrame for pagination
-        paginated_results = results.slice(start, page_size)
+        paginated_results = results.iloc[start : start + page_size]
 
+        # Transform results into the desired output structure
+        res = [
+            {
+                "club_name": _["club_name"],
+                "info": markdown.markdown(_["info"]),
+                "state": _["state"],
+                "logo_url": _["logo_url"],
+            }
+            for _ in paginated_results.to_dict(orient="records")
+        ]
+
+        # Create a response object
+        response_object = {
+            "status": "success",
+            "items": res,
+        }
+
+        return response_object
+
+        # Transform results into the desired output structure
         transformed_clubs = [
             {
                 "club_name": club["club_name"],
                 "state": club["state"],
                 "info": markdown.markdown(club["info"]),
             }
-            for club in paginated_results.to_dicts()
+            for _, club in paginated_results.iterrows()
         ]
+
+        print("Transformed results", transformed_clubs)
 
         return transformed_clubs
 

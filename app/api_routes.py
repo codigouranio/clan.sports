@@ -13,7 +13,7 @@ from itertools import product
 
 import qrcode
 from dependency_injector.wiring import Provide, inject
-from flask import Blueprint, abort
+from flask import Blueprint, Response, abort
 from flask import current_app as app
 from flask import flash, jsonify, redirect, request, send_file, session, url_for
 from flask_login import (
@@ -675,10 +675,12 @@ def searchClubs(state: str, gender: str, year: int):
 
 @api_blueprint.route("/searchClubsBySearchTerm", methods=["GET"])
 def searchClubsBySearchTerm():
-    search_term = request.args.get("query")
-    print(search_term)
-    results = app.database_jupyter.searchClubsBySearchTerm(search_term)
-    return jsonify(results)
+    try:
+        search_term = request.args.get("query")
+        results = app.database_jupyter.searchClubsBySearchTerm(search_term)
+        return jsonify(results)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @api_blueprint.route("/getClubLogo/<path:logoPath>", methods=["GET"])

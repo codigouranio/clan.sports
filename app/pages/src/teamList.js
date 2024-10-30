@@ -5,6 +5,7 @@ import { getData } from "./loveVanilla/data";
 class TeamList extends Component {
   render() {
     const { searchResults } = getData();
+    const t = getData();
 
     if (!searchResults) {
       return;
@@ -13,7 +14,7 @@ class TeamList extends Component {
     const results = this.obj.querySelector("#result-list");
     results.innerHTML = "";
 
-    if (searchResults && searchResults.length == 0) {
+    if (searchResults && searchResults.items.length == 0) {
       const noResults = document.createElement("p");
       noResults.innerText = "No results found";
       results.appendChild(noResults);
@@ -24,7 +25,7 @@ class TeamList extends Component {
     resultsLabel.innerText = "Results";
     results.appendChild(resultsLabel);
 
-    for (const item of searchResults) {
+    for (const item of searchResults?.items) {
       const hr = document.createElement("hr");
       const details = document.createElement("details");
       const clubTitle = document.createElement("p");
