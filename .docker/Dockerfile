@@ -33,7 +33,6 @@ RUN apt-get update && \
 COPY ./pyproject.toml .  
 RUN poetry export -f requirements.txt --output requirements.txt
 
-# FROM python:3.11-alpine as release
 FROM python:3.11-slim-buster as release
 
 ARG AWS_ACCESS_KEY_ID
