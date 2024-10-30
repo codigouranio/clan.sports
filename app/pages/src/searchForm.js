@@ -7,17 +7,15 @@ export class SearchForm extends Component {
     super(id);
 
     this.searchBox = new SearchBox("#search-box");
-    this.searchButton = new SearchButton("#search-button");
-    this.searchButton.searchBox = this.searchBox;
-
-    super.createChild(this.searchBox);
-    super.createChild(this.searchButton);
   }
 
   init() {
     this.searchBox = new SearchBox("#search-box");
     this.searchButton = new SearchButton("#search-button");
     this.searchButton.searchBox = this.searchBox;
+
+    this.createChild(this.searchBox);
+    this.createChild(this.searchButton);
 
     this.obj.addEventListener("onsubmit", this.handleSubmit.bind(this));
 
@@ -37,20 +35,14 @@ export class SearchBox extends Component {
   init() {
     this.obj.addEventListener("input", this.handleInput.bind(this));
     this.obj.addEventListener("keydown", this.handleKey.bind(this));
-    this.obj.addEventListener("click", this.handleClick.bind(this));
+    // this.obj.addEventListener("click", this.handleClick.bind(this));
     // this.obj.addEventListener("keypress", this.handleKey.bind(this));
     // this.obj.addEventListener("keyup", this.handleKey.bind(this));
   }
 
-  handleInput(event) {
-    // console.log(event);
-    // this.obj.value = this.obj.value.replace(/[^a-zA-Z0-9]/g, "");
-  }
+  handleInput(event) {}
 
-  handleClick(event) {
-    // console.log(event);
-    // this.obj.value = this.obj.value.replace(/[^a-zA-Z0-9]/g, "");
-  }
+  handleClick(event) {}
 
   async handleKey(event) {
     if (event.key == "Enter") {
@@ -72,6 +64,7 @@ export class SearchBox extends Component {
 export class SearchButton extends Component {
   constructor(selector) {
     super(selector);
+
     this.obj.addEventListener("click", this.handleClick.bind(this));
   }
 
