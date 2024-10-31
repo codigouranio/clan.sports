@@ -53,16 +53,11 @@ RUN apt-get install -y --no-install-recommends build-essential \
   libssl-dev \
   libopenblas-dev \
   openssl \
+  uwsgi-plugin-python3 \
+  libpcre3 \
+  libpcre3-dev \
   cmake \
   git
-
-# RUN apt-get update && apt-get install -y --no-install-recommends \
-#   build-essential \
-#   linux-headers-$(uname -r) \
-#   musl-dev \
-#   curl \
-#   ssh \
-#   git 
 
 RUN apt-get clean && \
   rm -rf /var/lib/apt/lists/*

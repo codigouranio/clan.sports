@@ -70,6 +70,7 @@ uwsgi = { version = "^2.0.24", markers = "python_version >= '3.11' and sys_platf
 webassets = "^2.0"
 werkzeug = "^3.0.1"
 pandas = "^2.2.3"
+ijson = "^3.3.0"
 
 [build-system]
 requires = ["poetry-core"]

@@ -322,15 +322,16 @@ class DatabaseJupyter:
         with open(filename, "r") as file:
             # Use ijson to parse the JSON array item by item
             for key, values in ijson.kvitems(file, ""):
-                cur += 1
-
-                if page * page_size > cur:
-                    continue
-
-                if cur >= (page + 1) * page_size:
-                    break
-
                 if any(term in str(values[innerKey]).lower() for innerKey in values):
+                    cur += 1
+
+                    if page * page_size > cur:
+                        continue
+
+                    if cur >= (page + 1) * page_size:
+                        break
+
+                    cur += 1
                     yield {
                         "club_name": key,
                         "state": values["state"],
