@@ -1,4 +1,5 @@
 import json
+import ijson
 import os
 from io import BytesIO
 from pathlib import Path
@@ -61,6 +62,8 @@ class DatabaseJupyter:
 
         origin = repo.remotes.origin
         origin.pull()
+
+        return
 
         self.loadTeamListToMemory()
 
@@ -217,73 +220,122 @@ class DatabaseJupyter:
 
         return jsonify(transformed_clubs)
 
-    def searchClubsBySearchTerm(self, search_term):
-        # Convert the search term to lowercase
-        search_term_lower = search_term.lower()
-        print("Filtering by search term:", search_term_lower)
+    def searchClubsBySearchTerm(self, search_term, page=0, page_size=30):
+        # Define the path to the JSON file
+        db_path_file = os.path.join(
+            DatabaseJupyter.REPO_FOLDER,
+            DatabaseJupyter.REPO_SUB_FOLDER,
+            DatabaseJupyter.TEAM_LIST_FILE,
+        )
 
-        # Build conditions to filter by search term in each string column
-        conditions = [
-            self.df[col].str.lower().str.contains(search_term_lower, na=False)
-            for col in self.df.select_dtypes(
-                include="object"
-            ).columns  # Apply only to string columns
-        ]
+        items = []
 
-        # Combine conditions with OR logic if there are any conditions
-        if conditions:
-            combined_condition = conditions[0]
-            for condition in conditions[1:]:
-                combined_condition |= condition
-            results = self.df[combined_condition]
-        else:
-            results = self.df.head(0)
+        print("Filtering by search term:", search_term, db_path_file)
 
-        # print("Results", results)
-        # print("Searching", search_term, self.df.columns)
-
-        # Set pagination parameters
-        page = 0
-        page_size = 30
-        start = page * page_size
-
-        print("Slicing data", page, page_size, start)
-
-        # Slice the DataFrame for pagination
-        paginated_results = results.iloc[start : start + page_size]
-
-        # Transform results into the desired output structure
-        res = [
-            {
-                "club_name": _["club_name"],
-                "info": markdown.markdown(_["info"]),
-                "state": _["state"],
-                "logo_url": _["logo_url"],
-            }
-            for _ in paginated_results.to_dict(orient="records")
-        ]
+        for filtered_item in self.filter_clubs(
+            db_path_file, search_term, page, page_size
+        ):
+            items.append(filtered_item)
 
         # Create a response object
         response_object = {
             "status": "success",
-            "items": res,
+            "items": items,
+            "total": len(items),
+            "page": page,
+            "page_size": page_size,
         }
 
         return response_object
 
-        # Transform results into the desired output structure
-        transformed_clubs = [
-            {
-                "club_name": club["club_name"],
-                "state": club["state"],
-                "info": markdown.markdown(club["info"]),
-            }
-            for _, club in paginated_results.iterrows()
-        ]
+        # # Convert the search term to lowercase
+        # search_term_lower = search_term.lower()
+        # print("Filtering by search term:", search_term_lower)
 
-        print("Transformed results", transformed_clubs)
+        # # Build conditions to filter by search term in each string column
+        # conditions = [
+        #     self.df[col].str.lower().str.contains(search_term_lower, na=False)
+        #     for col in self.df.select_dtypes(
+        #         include="object"
+        #     ).columns  # Apply only to string columns
+        # ]
 
-        return transformed_clubs
+        # # Combine conditions with OR logic if there are any conditions
+        # if conditions:
+        #     combined_condition = conditions[0]
+        #     for condition in conditions[1:]:
+        #         combined_condition |= condition
+        #     results = self.df[combined_condition]
+        # else:
+        #     results = self.df.head(0)
+
+        # # print("Results", results)
+        # # print("Searching", search_term, self.df.columns)
+
+        # # Set pagination parameters
+        # page = 0
+        # page_size = 30
+        # start = page * page_size
+
+        # print("Slicing data", page, page_size, start)
+
+        # # Slice the DataFrame for pagination
+        # paginated_results = results.iloc[start : start + page_size]
+
+        # # Transform results into the desired output structure
+        # res = [
+        #     {
+        #         "club_name": _["club_name"],
+        #         "info": markdown.markdown(_["info"]),
+        #         "state": _["state"],
+        #         "logo_url": _["logo_url"],
+        #     }
+        #     for _ in paginated_results.to_dict(orient="records")
+        # ]
+
+        # # Create a response object
+        # response_object = {
+        #     "status": "success",
+        #     "items": res,
+        # }
+
+        # return response_object
+
+        # # Transform results into the desired output structure
+        # transformed_clubs = [
+        #     {
+        #         "club_name": club["club_name"],
+        #         "state": club["state"],
+        #         "info": markdown.markdown(club["info"]),
+        #     }
+        #     for _, club in paginated_results.iterrows()
+        # ]
+
+        # print("Transformed results", transformed_clubs)
+
+        # return transformed_clubs
+
+    def filter_clubs(self, filename, term, page=0, page_size=30):
+
+        term = term.lower()
+        cur = -1
+        with open(filename, "r") as file:
+            # Use ijson to parse the JSON array item by item
+            for key, values in ijson.kvitems(file, ""):
+                cur += 1
+
+                if page * page_size > cur:
+                    continue
+
+                if cur >= (page + 1) * page_size:
+                    break
+
+                if any(term in str(values[innerKey]).lower() for innerKey in values):
+                    yield {
+                        "club_name": key,
+                        "state": values["state"],
+                        "info": markdown.markdown(values["info"]),
+                    }
 
     def getClubLogo(self, logoPath: str):
         res = None
