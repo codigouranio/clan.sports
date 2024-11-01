@@ -690,13 +690,4 @@ def searchClubsBySearchTerm():
 @api_blueprint.route("/getClubLogo/<path:logoPath>", methods=["GET"])
 @app.limiter.limit(None)
 def getClubLogo(logoPath: str):
-    if request.headers.get("If-Modified-Since"):
-        return "", 304
-    # response
-    response = Response()
-    response.headers["Cache-Control"] = "public, max-age=31536000"
-    response.status = 200
-
-    response.response = app.database_jupyter.getClubLogo(logoPath)
-    
-    return response
+    return app.database_jupyter.getClubLogo(logoPath)

@@ -1,3 +1,4 @@
+import hashlib
 import json
 import ijson
 import os
@@ -253,17 +254,46 @@ class DatabaseJupyter:
                     }
 
     def getClubLogo(self, logoPath: str):
-        res = None
-        path_file = os.path.join(
-            DatabaseJupyter.REPO_FOLDER,
+        file_path = os.path.join(
+            os.path.abspath(DatabaseJupyter.REPO_FOLDER),
             DatabaseJupyter.REPO_SUB_FOLDER,
             "logos",
             logoPath,
         )
 
-        if not os.path.exists(path_file):
-            return res, 404
+        if not os.path.exists(file_path):
+            return "Image not found", 404
 
-        path_file = Path(__file__).resolve().parent.parent.parent / path_file
-        res = send_file(path_file, mimetype="image/jpeg")
-        return res, 200
+        # Get last modified time
+        last_modified_time = os.path.getmtime(file_path)
+
+        # Create ETag using file content
+        with open(file_path, "rb") as f:
+            file_content = f.read()
+            etag = hashlib.md5(file_content).hexdigest()
+
+        # Send the file using send_file
+        return send_file(
+            path_or_file=file_path,
+            mimetype="image/jpeg",  # Change this based on the actual image type
+            as_attachment=False,  # Set to True if you want the browser to download the file
+            conditional=True,  # Enable conditional requests (e.g., if-modified-since)
+            etag=etag,  # Set ETag based on the file content
+            last_modified=last_modified_time,  # Set Last-Modified header
+            max_age=31536000,  # Cache for one year (in seconds)
+        )
+
+        # res = None
+        # path_file = os.path.join(
+        #     DatabaseJupyter.REPO_FOLDER,
+        #     DatabaseJupyter.REPO_SUB_FOLDER,
+        #     "logos",
+        #     logoPath,
+        # )
+
+        # if not os.path.exists(path_file):
+        #     return res, 404
+
+        # path_file = Path(__file__).resolve().parent.parent.parent / path_file
+        # res = send_file(path_file, mimetype="image/jpeg")
+        # return res, 200
