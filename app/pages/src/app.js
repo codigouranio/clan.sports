@@ -4,7 +4,7 @@ import AppInfo from "./appInfo";
 import Component from "./loveVanilla/component";
 import { setData } from "./loveVanilla/data";
 import { SearchForm } from "./searchForm";
-import TeamList from "./teamList";
+import ClubList from "./clubList";
 
 class App extends Component {
   constructor() {
@@ -21,8 +21,8 @@ class App extends Component {
     this.createChild(new AppInfo("#app-info"));
     this.createChild(new SearchForm("#search-form"));
 
-    this.teamList = new TeamList("#team-list");
-    this.createChild(this.teamList);
+    this.clubList = new ClubList("#club-list");
+    this.createChild(this.clubList);
   }
 
   async init() {

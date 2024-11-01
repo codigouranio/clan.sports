@@ -9,8 +9,8 @@ from os import environ, path
 from dependency_injector.wiring import Provide, inject
 from flask import Flask, g, json, session
 from flask_assets import Environment
-from app.appInfo import AppInfo
 from flask_caching import Cache
+from flask_compress import Compress
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -23,6 +23,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.api.databaseJupyter import DatabaseJupyter
+from app.appInfo import AppInfo
 
 from . import heartbeat_routes, home_routes
 from .api.models import Base
@@ -61,10 +62,11 @@ def create_app():
 
     Talisman(app, content_security_policy={"default-src": ["'self'"]})
 
+    Compress(app)
+
     app.limiter = Limiter(
         get_remote_address,  # Utiliza la dirección IP del cliente
         app=app,
-        # default_limits=["1 per day", "1 per hour"],  # Límites por defecto
         default_limits=["2000 per day", "200 per hour"],  # Límites por defecto
     )
 

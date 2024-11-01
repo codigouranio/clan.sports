@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clan-sports"
-version = "0.3.8"
+version = "0.3.9"
 description = ""
 authors = ["codigouranio"]
 license = "GPL-3.0"
@@ -71,6 +71,7 @@ webassets = "^2.0"
 werkzeug = "^3.0.1"
 pandas = "^2.2.3"
 ijson = "^3.3.0"
+flask-compress = "^1.17"
 
 [build-system]
 requires = ["poetry-core"]

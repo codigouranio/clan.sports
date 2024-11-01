@@ -677,7 +677,11 @@ def searchClubs(state: str, gender: str, year: int):
 def searchClubsBySearchTerm():
     try:
         search_term = request.args.get("query")
-        results = app.database_jupyter.searchClubsBySearchTerm(search_term)
+        page = int(request.args.get("page", 0))
+        page_size = int(request.args.get("page_size", 30))
+        results = app.database_jupyter.searchClubsBySearchTerm(
+            search_term, page, page_size
+        )
         return jsonify(results)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -688,4 +692,11 @@ def searchClubsBySearchTerm():
 def getClubLogo(logoPath: str):
     if request.headers.get("If-Modified-Since"):
         return "", 304
-    return app.database_jupyter.getClubLogo(logoPath)
+    # response
+    response = Response()
+    response.headers["Cache-Control"] = "public, max-age=31536000"
+    response.status = 200
+
+    response.response = app.database_jupyter.getClubLogo(logoPath)
+    
+    return response

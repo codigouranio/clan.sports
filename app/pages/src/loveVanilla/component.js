@@ -6,9 +6,11 @@ class Component {
   parent = null;
   children = [];
 
-  constructor(id, parent) {
+  constructor(id, parent, props = {}) {
     this.id = id;
     this.obj = document.querySelector(id);
+    this.props = props;
+
     if (this.obj) {
       console.log(`Found ${this.id}`);
       window.addEventListener("__popstate__", () => this.render());
@@ -26,7 +28,9 @@ class Component {
     return this.parent;
   }
 
-  init() {
+  init(props = {}) {
+    this.props = props;
+
     for (const child of this.children) {
       if (child instanceof Component) {
         try {
@@ -114,7 +118,25 @@ class Component {
     return this.parent;
   }
 
+  getObject() {
+    return this.obj;
+  }
+
+  remove() {
+    if (this.obj) {
+      this.obj.remove();
+    }
+  }
+
   render() {}
+
+  setProps(props) {
+    this.props = props;
+  }
+
+  getProps() {
+    return this.props;
+  }
 }
 
 export default Component;

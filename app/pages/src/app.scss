@@ -3,10 +3,54 @@
 // @tailwind utilities;
 
 @use "sass:map";
-@use "@picocss/pico";
-@use "./node_modules/flexboxgrid/css/flexboxgrid.css";
+@use "node_modules/@picocss/pico/scss/pico";
 
-#team-list {
+@import "node_modules/@picocss/pico/scss/pico.colors.scss";
+
+header {
+  display: flex;
+  justify-content: space-between; /* This will push items to the sides */
+  align-items: center; /* Center items vertically */
+  --pico-font-weight: 400;
+}
+
+footer {
+  font-size: small;
+  font-style: italic;
+  // --pico-font-family: Pacifico, cursive;
+  // --pico-font-weight: 400;
+  // --pico-typography-spacing-vertical: 0.5rem;
+}
+
+.club-logo {
+  margin-right: 10px; /* Space between the logo and the title */
+}
+
+h1 {
+  margin: 0; /* Remove default margin */
+}
+
+:root {
+  --pico-border-radius: 1rem;
+  --pico-typography-spacing-vertical: 1.5rem;
+  --pico-form-element-spacing-vertical: 1rem;
+  --pico-form-element-spacing-horizontal: 1.25rem;
+}
+
+h2 {
+  // --pico-font-family: Pacifico, cursive;
+  --pico-font-weight: 400;
+  --pico-typography-spacing-vertical: 0.5rem;
+}
+
+button {
+  --pico-font-weight: 700;
+}
+
+// @import "node_modules/@picocss/pico/scss/variables";
+// @import "node_modules/@picocss/pico/scss/colors";
+
+#club-list {
   .club-logo {
     max-width: 5em;
     max-height: 5em;

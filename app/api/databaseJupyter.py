@@ -18,7 +18,7 @@ class DatabaseJupyter:
     STATES_FILE = "states.json"
     YEARS_FILE = "years.json"
     GENDERS_FILE = "genders.json"
-    TEAM_LIST_FILE = "teams.json"
+    CLUBS_AND_TEAMS_FILE = "clubs_and_teams.json"
     TEAMS_FOLDER = "data/states"
     TEAMS_SUB_FOLDER = "teams"
     TEAMS_FILE = "teams_data_enriched.json"
@@ -63,10 +63,6 @@ class DatabaseJupyter:
         origin = repo.remotes.origin
         origin.pull()
 
-        return
-
-        self.loadTeamListToMemory()
-
         with open(
             os.path.join(
                 DatabaseJupyter.REPO_FOLDER,
@@ -107,34 +103,15 @@ class DatabaseJupyter:
         ) as file:
             self.genders = json.load(file)
 
-        with open(
-            os.path.join(
-                DatabaseJupyter.REPO_FOLDER,
-                DatabaseJupyter.REPO_SUB_FOLDER,
-                DatabaseJupyter.TEAM_LIST_FILE,
-            ),
-            "r",
-        ) as file:
-            self.teams = json.load(file)
-
-        # Load data from the database to memory
-        print("loading data from database")
-        pass
-
-    def loadTeamListToMemory(self):
-        # Define the path to the JSON file
-        db_path_file = os.path.join(
-            DatabaseJupyter.REPO_FOLDER,
-            DatabaseJupyter.REPO_SUB_FOLDER,
-            DatabaseJupyter.TEAM_LIST_FILE,
-        )
-
-        temp_df = pd.read_json(db_path_file, orient="index").reset_index()
-        self.df = temp_df.rename(columns={"index": "club_name"})
-
-        # Count total rows
-        total_rows = self.df.shape[0]
-        print(f"Total rows: {total_rows}")
+        # with open(
+        #     os.path.join(
+        #         DatabaseJupyter.REPO_FOLDER,
+        #         DatabaseJupyter.REPO_SUB_FOLDER,
+        #         DatabaseJupyter.CLUBS_AND_TEAMS_FILE,
+        #     ),
+        #     "r",
+        # ) as file:
+        #     self.teams_and_clubs = json.load(file)
 
         return
 
@@ -216,16 +193,15 @@ class DatabaseJupyter:
             for club in res
         ]
 
-        # print([{**club, "html_info": markdown.markdown(club.info)} for club in res])
-
         return jsonify(transformed_clubs)
 
     def searchClubsBySearchTerm(self, search_term, page=0, page_size=30):
+
         # Define the path to the JSON file
         db_path_file = os.path.join(
             DatabaseJupyter.REPO_FOLDER,
             DatabaseJupyter.REPO_SUB_FOLDER,
-            DatabaseJupyter.TEAM_LIST_FILE,
+            DatabaseJupyter.CLUBS_AND_TEAMS_FILE,
         )
 
         items = []
@@ -244,76 +220,10 @@ class DatabaseJupyter:
             "total": len(items),
             "page": page,
             "page_size": page_size,
+            "search_term": search_term,
         }
 
         return response_object
-
-        # # Convert the search term to lowercase
-        # search_term_lower = search_term.lower()
-        # print("Filtering by search term:", search_term_lower)
-
-        # # Build conditions to filter by search term in each string column
-        # conditions = [
-        #     self.df[col].str.lower().str.contains(search_term_lower, na=False)
-        #     for col in self.df.select_dtypes(
-        #         include="object"
-        #     ).columns  # Apply only to string columns
-        # ]
-
-        # # Combine conditions with OR logic if there are any conditions
-        # if conditions:
-        #     combined_condition = conditions[0]
-        #     for condition in conditions[1:]:
-        #         combined_condition |= condition
-        #     results = self.df[combined_condition]
-        # else:
-        #     results = self.df.head(0)
-
-        # # print("Results", results)
-        # # print("Searching", search_term, self.df.columns)
-
-        # # Set pagination parameters
-        # page = 0
-        # page_size = 30
-        # start = page * page_size
-
-        # print("Slicing data", page, page_size, start)
-
-        # # Slice the DataFrame for pagination
-        # paginated_results = results.iloc[start : start + page_size]
-
-        # # Transform results into the desired output structure
-        # res = [
-        #     {
-        #         "club_name": _["club_name"],
-        #         "info": markdown.markdown(_["info"]),
-        #         "state": _["state"],
-        #         "logo_url": _["logo_url"],
-        #     }
-        #     for _ in paginated_results.to_dict(orient="records")
-        # ]
-
-        # # Create a response object
-        # response_object = {
-        #     "status": "success",
-        #     "items": res,
-        # }
-
-        # return response_object
-
-        # # Transform results into the desired output structure
-        # transformed_clubs = [
-        #     {
-        #         "club_name": club["club_name"],
-        #         "state": club["state"],
-        #         "info": markdown.markdown(club["info"]),
-        #     }
-        #     for _, club in paginated_results.iterrows()
-        # ]
-
-        # print("Transformed results", transformed_clubs)
-
-        # return transformed_clubs
 
     def filter_clubs(self, filename, term, page=0, page_size=30):
 
@@ -336,6 +246,10 @@ class DatabaseJupyter:
                         "club_name": key,
                         "state": values["state"],
                         "info": markdown.markdown(values["info"]),
+                        "image_file": values["image_file"],
+                        "rank": values["rank_num"],
+                        "last_update": values["last_update"],
+                        "teams": [team for team in values["teams"].values()],
                     }
 
     def getClubLogo(self, logoPath: str):
@@ -343,7 +257,7 @@ class DatabaseJupyter:
         path_file = os.path.join(
             DatabaseJupyter.REPO_FOLDER,
             DatabaseJupyter.REPO_SUB_FOLDER,
-            DatabaseJupyter.TEAMS_FOLDER,
+            "logos",
             logoPath,
         )
 

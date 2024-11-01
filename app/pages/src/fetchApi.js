@@ -27,11 +27,20 @@ export async function getAppInfo() {
   }
 }
 
-export async function searchClubsBySearchTerm(searchTerm) {
+export async function searchClubsBySearchTerm(
+  searchTerm,
+  page = 0,
+  pageSize = 30
+) {
   try {
-    const response = await api.get(
-      `searchClubsBySearchTerm?query=${encodeURIComponent(searchTerm)}`
-    );
+    const params = new URLSearchParams({
+      query: searchTerm,
+      page: page,
+      page_size: pageSize,
+    });
+    console.log(params.toString());
+    const urlWithParams = `searchClubsBySearchTerm?${params.toString()}`;
+    const response = await api.get(urlWithParams);
     return response.data;
   } catch (error) {
     console.error("Error:", error.message);
