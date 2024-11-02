@@ -1,40 +1,19 @@
 import "./app.scss";
 
-import AppInfo from "./appInfo";
-import Component from "./loveVanilla/component";
+import BaseApp from "./loveVanilla/baseApp";
 import { setData } from "./loveVanilla/data";
-import { SearchForm } from "./searchForm";
-import ClubList from "./clubList";
+import PageHome from "./pageHome";
 
-class App extends Component {
+class App extends BaseApp {
   constructor() {
     super("body");
-
-    // this.createChild(new LoadingBackdrop("#loading-backdrop"));
-    // this.createChild(new RequestCode("#request-code"));
-    // this.createChild(new CheckCode("#check-code"));
-
-    // this.createChild(new StateList("#state-list"));
-    // this.createChild(new YearList("#year-list"));
-    // this.createChild(new GenderList("#gender-list"));
-    // this.createChild(new SearchForm("#search-form"));
-    this.createChild(new AppInfo("#app-info"));
-    this.createChild(new SearchForm("#search-form"));
-
-    this.clubList = new ClubList("#club-list");
-    this.createChild(this.clubList);
   }
 
   async init() {
     super.init();
 
-    // const filterTerms = await getClubFilterTerms();
-
-    // setData({
-    //   filterTerms,
-    // });
-
-    // await this.teamList.search("nebraska", "boys", 2007);
+    console.log("GETTING LOCATION");
+    await this.getCurrentState();
 
     // this.loadingBackdrop.show();
     // this.requestCode.show();
@@ -76,27 +55,7 @@ class App extends Component {
   }
 }
 
-// document.onreadystatechange = function () {
-//   if (document.readyState === "complete") {
-//     if (document.querySelectorAll("head script").length === 0) {
-//       window.dispatchEvent(new Event("DOMContentLoaded"));
-//     }
-//   }
-// };
-
-document.addEventListener("DOMContentLoaded", async () => {
-  console.log("INITIALIZING APP");
-  const app = new App();
-  app.init();
-
-  console.log("GETTING LOCATION");
-  await app.getCurrentState();
-
-  setTimeout(() => {
-    document.body.classList.add("show-up");
-  }, 100);
-
-  setTimeout(() => {
-    document.body.classList.add("fade-in");
-  }, 520);
-});
+console.log("INITIALIZING APP");
+const app = new App();
+app.addPage(new PageHome(app, "/"));
+app.init();

@@ -1,26 +1,30 @@
-import { asyncDebounce } from "./utils";
 import sanitizeHtml from "sanitize-html";
+import { murmurhash3_32_gc } from "./crypto";
+import { getData, setData } from "./data";
+import Page from "./page";
+import { asyncDebounce } from "./utils";
 
 class Component {
   changedVisibility = async (visible) => {};
   parent = null;
   children = [];
+  $object = null;
+  keys = [];
 
-  constructor(id, parent, props = {}) {
+  constructor(id, props) {
     this.id = id;
-    this.obj = document.querySelector(id);
     this.props = props;
 
-    if (this.obj) {
-      console.log(`Found ${this.id}`);
-      window.addEventListener("__popstate__", () => this.render());
-    } else {
-      console.log(`No found ${this.id}`);
-    }
+    this.keys = [...[this.id], ...(this.props?.keys || [])];
 
-    if (this.parent) {
-      this.parent = parent;
-      window.addEventListener("__init_state__", () => this.init());
+    // console.log(this.id, this.keys);
+
+    // window.addEventListener("__popstate__", () => this.render());
+    // window.addEventListener("__pop_off_state__", () => this.destroy());
+    // window.addEventListener("__init_state__", () => this.init());
+
+    if (props?.parent) {
+      this.parent = props.parent;
     }
   }
 
@@ -119,23 +123,60 @@ class Component {
   }
 
   getObject() {
-    return this.obj;
+    if (this.$object) {
+      return this.$object;
+    }
+    return document.querySelector(this.id);
+  }
+
+  setHtml(html) {
+    if (this.getObject() && this.getObject().innerHTML !== html) {
+      this.getObject().innerHTML = html;
+    }
   }
 
   remove() {
-    if (this.obj) {
-      this.obj.remove();
-    }
+    this.getObject()?.remove();
+  }
+
+  getKeys() {
+    return this.keys;
+  }
+
+  getHashCode() {
+    return murmurhash3_32_gc(JSON.stringify(this.keys.join("")));
   }
 
   render() {}
 
-  setProps(props) {
-    this.props = props;
+  getObjectPath() {
+    let obj = this;
+    let path = [];
+    while (obj) {
+      if (obj instanceof Component) {
+        path.push(obj.id);
+        obj = obj.getParent();
+      } else if (obj instanceof Page) {
+        path.push(obj.getUrl());
+        break;
+      } else {
+        break;
+      }
+    }
+    return path.reverse().join("|");
   }
 
-  getProps() {
-    return this.props;
+  setState(state) {
+    setData({
+      [`${this.getObjectPath()}-${this.getHashCode()}`]: {
+        ...getData()?.[this.getHashCode()],
+        ...state,
+      },
+    });
+  }
+
+  getState() {
+    return getData()?.[`${this.getObjectPath()}-${this.getHashCode()}`];
   }
 }
 

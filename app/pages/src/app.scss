@@ -7,6 +7,16 @@
 
 @import "node_modules/@picocss/pico/scss/pico.colors.scss";
 
+@import "./loveVanilla/style.scss";
+
+:root {
+  // --pico-font-family: Pacifico, cursive;
+  --pico-border-radius: 0.5rem;
+  --pico-typography-spacing-vertical: 1.5rem;
+  --pico-form-element-spacing-vertical: 1rem;
+  --pico-form-element-spacing-horizontal: 1.25rem;
+}
+
 header {
   display: flex;
   justify-content: space-between; /* This will push items to the sides */
@@ -27,48 +37,52 @@ footer {
 }
 
 h1 {
+  --pico-font-weight: 400;
+  --pico-typography-spacing-vertical: 0.5rem;
   margin: 0; /* Remove default margin */
 }
 
-:root {
-  --pico-border-radius: 1rem;
-  --pico-typography-spacing-vertical: 1.5rem;
-  --pico-form-element-spacing-vertical: 1rem;
-  --pico-form-element-spacing-horizontal: 1.25rem;
+h2 {
+  --pico-font-weight: 700;
+  --pico-typography-spacing-vertical: 0.5rem;
 }
 
-h2 {
-  // --pico-font-family: Pacifico, cursive;
-  --pico-font-weight: 400;
+article h2.rank {
+  font-size: 1.5rem;
+  --pico-font-weight: 700;
   --pico-typography-spacing-vertical: 0.5rem;
+}
+
+article h1 {
+  font-size: medium;
+  --pico-font-weight: 700;
+  --pico-typography-spacing-vertical: 0.5rem;
+}
+
+article h2 {
+  font-size: medium;
+  --pico-font-weight: 700;
+  --pico-typography-spacing-vertical: 0.5rem;
+}
+
+summary.club-result {
+  --pico-font-family: var(--pico-font-family-monospace);
+  --pico-font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 1cap;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
 }
 
 button {
   --pico-font-weight: 700;
 }
 
-// @import "node_modules/@picocss/pico/scss/variables";
-// @import "node_modules/@picocss/pico/scss/colors";
-
 #club-list {
   .club-logo {
     max-width: 5em;
     max-height: 5em;
   }
-}
-
-.love-vanilla-body {
-  opacity: 0;
-  display: none; /* Ensure it doesn’t appear at all */
-}
-
-.love-vanilla-body.show-up {
-  display: block;
-}
-
-.love-vanilla-body.fade-in {
-  opacity: 1;
-  transition: opacity 1s ease; /* Fade-in duration */
 }
 
 #code-inputs {

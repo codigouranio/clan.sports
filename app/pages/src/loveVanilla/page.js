@@ -1,16 +1,51 @@
+import Component from "./component";
+
 class Page {
-  constructor(page) {
-    this.page = page;
-    this.obj = document.querySelector(page);
-    if (this.obj) {
-      console.log(`Found ${this.page}`);
-      window.addEventListener("__popstate__", () => this.render());
-    } else {
-      console.log(`No found ${this.page}`);
+  children = [];
+
+  constructor(app, url) {
+    this.app = app;
+    this.url = url;
+  }
+
+  getUrl() {
+    return this.url;
+  }
+
+  init(props) {
+    this.props = props;
+
+    for (const child of this.children) {
+      if (child instanceof Component) {
+        try {
+          child.init();
+        } catch (e) {
+          console.error(e);
+        }
+      }
     }
   }
+
+  getApp() {
+    return this.app;
+  }
+
   render() {
-    console.log("Rendering page");
+    for (const child of this.children) {
+      if (child instanceof Component) {
+        try {
+          child.render();
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }
+
+  createChild(child) {
+    child.setParent(this);
+    this.children.push(child);
+    return child;
   }
 }
 

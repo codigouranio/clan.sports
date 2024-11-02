@@ -1,0 +1,13 @@
+.love-vanilla-body {
+  opacity: 0;
+  display: none; /* Ensure it doesn’t appear at all */
+}
+
+.love-vanilla-body.show-up {
+  display: block;
+}
+
+.love-vanilla-body.fade-in {
+  opacity: 1;
+  transition: opacity 1s ease; /* Fade-in duration */
+}

@@ -10,14 +10,8 @@ class ClubList extends Component {
       return;
     }
 
-    const results = this.obj.querySelector("#result-list");
-
-    if (searchResults?.page == 0) {
-      results.innerHTML = "";
-    } else if (this.moreResults) {
-      this.moreResults.remove();
-      this.moreResults = null;
-    }
+    const results = this.getObject();
+    results.innerHTML = "";
 
     if (searchResults && searchResults.items.length == 0) {
       const noResults = document.createElement("p");
@@ -26,111 +20,94 @@ class ClubList extends Component {
       return;
     }
 
-    if (searchResults?.page == 0) {
-      const resultsLabel = document.createElement("p");
-      resultsLabel.innerText = "Results";
-      results.appendChild(resultsLabel);
-    }
+    const resultsLabel = document.createElement("p");
+    resultsLabel.innerText = "Results";
+    results.appendChild(resultsLabel);
 
     let counter = 0;
     for (const item of searchResults?.items) {
-      const hr = document.createElement("hr");
-
-      const clubItem = new ClubItem(`club_${counter}`, results, item);
-      // results.appendChild(clubItem.getObject());
-      // clubItem.render();
-
-      // const details = document.createElement("details");
-      // const clubTitle = document.createElement("p");
-      // clubTitle.innerText = item.club_name;
-
-      // const clubLogo = document.createElement("img");
-      // clubLogo.className = "club-logo";
-      // clubLogo.src = `/api/getClubLogo/${item.image_file}`;
-      // col1.appendChild(clubLogo);
-
-      // const summary = document.createElement("summary");
-      // summary.appendChild(document.createTextNode(item.club_name));
-      // summary.setAttribute("role", "button");
-      // summary.className = "outline contrast";
-      // details.appendChild(summary);
-
-      // const clubElement = document.createElement("div");
-      // clubElement.innerHTML = sanitizeHtml(item.info);
-      // details.appendChild(clubElement);
-
+      const clubItem = new ClubItem(`club_${counter}`, {
+        ...{ keys: [item?.club_name] },
+        ...{ parent: this },
+        ...item,
+      });
+      this.createChild(clubItem);
       results.appendChild(clubItem.getObject());
-      results.appendChild(hr);
-
-      counter += 1;
+      counter++;
     }
 
-    this.moreResults = new MoreResults("more-results", this.obj);
-    results.appendChild(this.moreResults.getObject());
+    const hr = document.createElement("hr");
+    results.appendChild(hr);
 
-    this.obj.appendChild(results);
+    if (searchResults.more_results) {
+      this.moreResults = new MoreResults("more-results");
+      results.appendChild(this.moreResults.getObject());
+    }
   }
 }
 
 class ClubItem extends Component {
-  constructor(id, parent, props) {
-    super(id, parent, props);
+  constructor(id, props) {
+    super(id, props);
 
-    this.obj = document.createElement("details");
-    this.obj.id = id;
+    this.$object = document.createElement("details");
+    this.$object.id = this.id;
 
-    // const clubTitle = document.createElement("p");
-    // clubTitle.innerText = props.club_name;
+    // console.log(this.getState(), this.getKeys());
+
+    const curProps = this.getState();
+    curProps?.open && this.$object.setAttribute("open", "");
 
     const summary = document.createElement("summary");
-    summary.appendChild(document.createTextNode(props.club_name));
-    summary.setAttribute("role", "button");
-    summary.className = "outline contrast";
-    this.obj.appendChild(summary);
+    summary.appendChild(document.createTextNode(`${this.props.club_name}`));
+    summary.className = `contrast club-result`;
+    summary.addEventListener("click", () => {
+      this.setState({
+        open: !curProps?.open,
+      });
+    });
+
+    this.$object.appendChild(summary);
 
     const article = document.createElement("article");
-
     const header = document.createElement("header");
 
     const rank = document.createElement("h2");
-    rank.innerText = `Ranked ${props.rank}`;
+    rank.className = "rank";
+    rank.innerText = `Ranked ${this.props.rank}`;
     header.appendChild(rank);
 
     const clubLogo = document.createElement("img");
     clubLogo.className = "club-logo";
-    clubLogo.title = props.club_name;
-    clubLogo.src = `/api/getClubLogo/${props.image_file}`;
+    clubLogo.title = this.props.club_name;
+    clubLogo.src = `/api/getClubLogo/${this.props.image_file}`;
     header.appendChild(clubLogo);
 
     article.appendChild(header);
 
     const clubElement = document.createElement("div");
-    clubElement.innerHTML = sanitizeHtml(props.info);
+    clubElement.innerHTML = sanitizeHtml(this.props.info);
 
     article.appendChild(clubElement);
 
     const footer = document.createElement("footer");
-    footer.innerText = `Last updated: ${props.last_update}`;
+    footer.innerText = `Last updated: ${this.props.last_update}`;
     article.appendChild(footer);
 
-    this.obj.appendChild(article);
-  }
-
-  render() {
-    console.log(this.props);
+    this.$object.appendChild(article);
   }
 }
 
 class MoreResults extends Component {
-  constructor(id, parent) {
-    super(id, parent);
+  constructor(id, props) {
+    super(id, props);
 
-    this.obj = document.createElement("a");
-    this.obj.id = id;
-    this.obj.href = "#";
-    this.obj.className = "contrast";
-    this.obj.appendChild(document.createTextNode("More results"));
-    this.obj.addEventListener("click", async (event) => {
+    this.$object = document.createElement("a");
+    this.$object.id = id;
+    this.$object.href = "#";
+    this.$object.className = "contrast";
+    this.$object.appendChild(document.createTextNode("More results"));
+    this.$object.addEventListener("click", async (event) => {
       event.preventDefault();
 
       const {
@@ -145,15 +122,18 @@ class MoreResults extends Component {
         page + 1,
         page_size
       );
+
       setData({
-        searchResults: data,
-        page: page + 1,
+        searchResults: {
+          items: [...getData().searchResults.items, ...data.items],
+          page: data.page,
+          page_size: data.page_size,
+          search_term: data.search_term,
+          total: data.total,
+          more_results: data.more_results,
+        },
       });
     });
-  }
-
-  render() {
-    this.parent.appendChild(this.obj);
   }
 }
 

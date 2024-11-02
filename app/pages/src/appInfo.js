@@ -3,10 +3,6 @@ import { getAppInfo } from "./fetchApi";
 import { getData, setData } from "./loveVanilla/data";
 
 class AppInfo extends Component {
-  constructor(id) {
-    super(id);
-  }
-
   async init() {
     super.init();
 
@@ -16,7 +12,10 @@ class AppInfo extends Component {
 
   render() {
     const { appInfo } = getData();
-    this.obj.innerHTML = `v${appInfo.app_version} • ${appInfo.app_version_date}`;
+    if (!appInfo) {
+      return;
+    }
+    this.setHtml(`v${appInfo.app_version} • ${appInfo.app_version_date}`);
   }
 }
 

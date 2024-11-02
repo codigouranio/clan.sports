@@ -62,7 +62,11 @@ class DatabaseJupyter:
             print(f"An error occurred: {e}")
 
         origin = repo.remotes.origin
-        origin.pull()
+        origin.fetch()
+
+        # Get the branch name
+        branch_name = "main"
+        repo.git.reset("--hard", f"origin/{branch_name}")
 
         with open(
             os.path.join(
@@ -222,6 +226,7 @@ class DatabaseJupyter:
             "page": page,
             "page_size": page_size,
             "search_term": search_term,
+            "more_results": len(items) == page_size,
         }
 
         return response_object
@@ -230,6 +235,9 @@ class DatabaseJupyter:
 
         term = term.lower()
         cur = -1
+
+        print(page_size)
+
         with open(filename, "r") as file:
             # Use ijson to parse the JSON array item by item
             for key, values in ijson.kvitems(file, ""):
@@ -242,7 +250,6 @@ class DatabaseJupyter:
                     if cur >= (page + 1) * page_size:
                         break
 
-                    cur += 1
                     yield {
                         "club_name": key,
                         "state": values["state"],
@@ -282,18 +289,3 @@ class DatabaseJupyter:
             last_modified=last_modified_time,  # Set Last-Modified header
             max_age=31536000,  # Cache for one year (in seconds)
         )
-
-        # res = None
-        # path_file = os.path.join(
-        #     DatabaseJupyter.REPO_FOLDER,
-        #     DatabaseJupyter.REPO_SUB_FOLDER,
-        #     "logos",
-        #     logoPath,
-        # )
-
-        # if not os.path.exists(path_file):
-        #     return res, 404
-
-        # path_file = Path(__file__).resolve().parent.parent.parent / path_file
-        # res = send_file(path_file, mimetype="image/jpeg")
-        # return res, 200
