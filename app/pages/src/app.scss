@@ -65,6 +65,13 @@ article h2 {
   --pico-typography-spacing-vertical: 0.5rem;
 }
 
+// section#club-list details article div
+em {
+  background-color: #505050;
+  font-weight: 600;
+  // font-size: x-large;
+}
+
 summary.club-result {
   --pico-font-family: var(--pico-font-family-monospace);
   --pico-font-weight: 700;

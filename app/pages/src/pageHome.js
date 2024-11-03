@@ -23,8 +23,11 @@ class PageHome extends Page {
 
     const params = new URLSearchParams(window.location.search);
     const { searchResults } = getData();
-    if (searchResults?.search_term !== params.get("query")) {
-      const data = await searchClubsBySearchTerm(params.get("query"));
+    if (
+      params.has("query") &&
+      searchResults?.search_term !== params.get("query")
+    ) {
+      const data = await searchClubsBySearchTerm(params.get("query") || "");
       setData({
         searchResults: data,
       });

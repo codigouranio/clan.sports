@@ -13,7 +13,7 @@ class ClubList extends Component {
     const results = this.getObject();
     results.innerHTML = "";
 
-    if (searchResults && searchResults.items.length == 0) {
+    if (searchResults && searchResults.total == 0) {
       const noResults = document.createElement("p");
       noResults.innerText = "No results found";
       results.appendChild(noResults);
@@ -70,6 +70,7 @@ class ClubItem extends Component {
     this.$object.appendChild(summary);
 
     const article = document.createElement("article");
+    article.className = "club-info";
     const header = document.createElement("header");
 
     const rank = document.createElement("h2");
