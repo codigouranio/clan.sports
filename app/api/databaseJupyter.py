@@ -1,17 +1,18 @@
 import hashlib
 import json
-import ijson
 import os
+import re
+import time
 from io import BytesIO
 from pathlib import Path
-import re
-import jellyfish
 
 import git
+import ijson
+import jellyfish
 import markdown
+import pandas as pd
 from flask import Flask, jsonify, send_file
 from git import Repo
-import pandas as pd
 
 
 class DatabaseJupyter:
@@ -162,6 +163,8 @@ class DatabaseJupyter:
 
     def searchClubsBySearchTerm(self, search_term, page=0, page_size=30):
 
+        start_time = time.time()
+
         # Define the path to the JSON file
         db_path_file = os.path.join(
             DatabaseJupyter.REPO_FOLDER,
@@ -189,6 +192,7 @@ class DatabaseJupyter:
             "page_size": page_size,
             "search_term": search_term,
             "more_results": len(items) == page_size,
+            "execution_time": round(time.time() - start_time, 2),
         }
 
         return response_object

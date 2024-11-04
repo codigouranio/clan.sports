@@ -5,7 +5,7 @@ import { getData, setData } from "./loveVanilla/data";
 
 class ClubList extends Component {
   render() {
-    const { searchResults } = getData();
+    const { searchResults, currentState, currentStateName } = getData();
     if (!searchResults) {
       return;
     }
@@ -21,8 +21,21 @@ class ClubList extends Component {
     }
 
     const resultsLabel = document.createElement("p");
-    resultsLabel.innerText = "Results";
-    results.appendChild(resultsLabel);
+    let label = "Results";
+    if (searchResults && searchResults.total > 0) {
+      label = `Results found in ${searchResults.execution_time}s`;
+
+      if (
+        currentStateName &&
+        currentStateName.length > 0 &&
+        searchResults?.search_term === currentState
+      ) {
+        label += ` for ${currentStateName}`;
+      }
+
+      resultsLabel.innerText = label;
+      results.appendChild(resultsLabel);
+    }
 
     let counter = 0;
     for (const item of searchResults?.items) {
@@ -94,6 +107,10 @@ class ClubItem extends Component {
     clubElement.innerHTML = sanitizeHtml(this.props.info);
 
     article.appendChild(clubElement);
+
+    const teamHeader = document.createElement("h5");
+    teamHeader.innerText = `Teams (${props?.teams.length || 0})`;
+    article.appendChild(teamHeader);
 
     const teamTable = new TeamTable("team-table", { teams: props.teams });
     article.appendChild(teamTable.getObject());
@@ -187,23 +204,6 @@ class TeamTable extends Component {
     }
 
     this.$object.appendChild(tbody);
-
-    // const title = document.createElement("h5");
-    // title.innerText = "Teams";
-    // this.$object.appendChild(title);
-
-    // const table = document.createElement("table");
-    // table.className = "team-table";
-    // const thead = document.createElement("thead");
-    // const tbody = document.createElement("tbody");
-
-    // const headerRow = document.createElement("tr");
-    // const headers = ["#", "Name", "Position", "National"];
-    // for (const header of headers) {
-    //   const th = document.createElement("th");
-    //   th.innerText = header;
-    //   headerRow.appendChild(th);
-    // }
   }
 }
 

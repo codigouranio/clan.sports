@@ -41,11 +41,11 @@ class App extends BaseApp {
         );
         const data = await response.json();
         // Extract the state from the response
-        const state = data.address?.["state"].toLowerCase().replace(" ", "-");
-        console.log(`You are currently in: ${state}`);
+        console.log(`You are currently in: ${data.address?.["state"]}`);
 
         setData({
-          currentState: state,
+          currentState: data.address?.["state"].toLowerCase().replace(" ", "-"),
+          currentStateName: data.address?.["state"],
         });
       },
       (error) => {
