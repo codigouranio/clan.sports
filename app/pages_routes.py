@@ -71,7 +71,7 @@ def not_found(e):
     )
 
 
-# # app name
+# app name
 # @app.errorhandler(404)
 # def not_found(e):
 #     return render_template("404.html")

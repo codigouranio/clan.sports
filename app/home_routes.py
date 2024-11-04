@@ -37,6 +37,7 @@ home_blueprint = Blueprint(
 @home_blueprint.route("/", defaults={"path": "index.html"})
 @home_blueprint.route("/<string:path>")
 def catch_all(path):
+    print("pepe!")
     return home_blueprint.send_static_file(path)
 
 
