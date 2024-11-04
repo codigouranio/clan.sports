@@ -72,6 +72,11 @@ module.exports = {
         { from: "./src/assets/vendor", to: "vendor", noErrorOnMissing: true },
       ],
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "./src/assets/img", to: "img", noErrorOnMissing: true },
+      ],
+    }),
     new WebpackManifestPlugin({
       writeToFileEmit: true,
     }),

@@ -187,3 +187,54 @@ button {
   font-size: larger;
   font-weight: 700;
 }
+
+// .footer-badge {
+//   // margin: 0 0.2rem;
+//   height: 10em;
+//   width: auto;
+//   background-color: hsl(0, 0%, 100%);
+//   padding: 1px 1px;
+//   display: inline-flex;
+//   align-items: center;
+//   border-radius: 5px;
+// }
+
+.footer-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: #e5e5e5;
+  padding: 0.6em 1em;
+  border-radius: 5px;
+  text-decoration: none;
+  color: black !important;
+  font-weight: bold;
+  cursor: default;
+}
+
+.footer-badge img {
+  height: 30px;
+  width: 30px;
+  margin-left: 1em;
+}
+
+.paypal-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #0070ba;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  border: none;
+}
+
+.paypal-button:hover {
+  background-color: #005e94;
+}
+
+.paypal-icon {
+  width: 24px; /* Adjust size as needed */
+  height: auto;
+  margin-right: 10px; /* Space between icon and text */
+}
