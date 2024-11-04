@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getData } from "./loveVanilla/data";
 
 // Setting up an Axios instance with default config
 const api = axios.create({
@@ -33,8 +34,16 @@ export async function searchClubsBySearchTerm(
   pageSize = 30
 ) {
   try {
+    const { currentState } = getData();
+
+    let searchTermParam = searchTerm;
+
+    if (!searchTerm || searchTerm.length == 0) {
+      searchTermParam = currentState;
+    }
+
     const params = new URLSearchParams({
-      query: searchTerm,
+      query: searchTermParam,
       page: page,
       page_size: pageSize,
     });

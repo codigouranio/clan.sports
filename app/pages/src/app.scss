@@ -72,6 +72,22 @@ em {
   // font-size: x-large;
 }
 
+.nav-badges {
+  display: flex;
+  gap: 1rem;
+}
+
+.love-vanilla-js-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #f7df1e;
+  color: #333;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
 summary.club-result {
   --pico-font-family: var(--pico-font-family-monospace);
   --pico-font-weight: 700;
@@ -143,4 +159,31 @@ button {
   z-index: 9998;
   /* Initially hidden */
   display: none;
+}
+
+.page-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #333;
+  color: #fff;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 14px;
+  font-stretch: semi-condensed;
+}
+
+.page-badge svg {
+  margin-right: 5px;
+  height: 18px;
+  width: 18px;
+}
+
+.page-badge:hover {
+  background-color: #24292e;
+}
+
+.site-title {
+  font-size: larger;
+  font-weight: 700;
 }

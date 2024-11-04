@@ -41,7 +41,7 @@ class App extends BaseApp {
         );
         const data = await response.json();
         // Extract the state from the response
-        const state = data.address?.["state"];
+        const state = data.address?.["state"].toLowerCase().replace(" ", "-");
         console.log(`You are currently in: ${state}`);
 
         setData({

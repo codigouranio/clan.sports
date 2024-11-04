@@ -59,7 +59,11 @@ class ClubItem extends Component {
     curProps?.open && this.$object.setAttribute("open", "");
 
     const summary = document.createElement("summary");
-    summary.appendChild(document.createTextNode(`${this.props.club_name}`));
+    summary.appendChild(
+      document.createTextNode(
+        `Rank ${this.props?.rank} - ${this.props.club_name}`
+      )
+    );
     summary.className = `contrast club-result`;
     summary.addEventListener("click", () => {
       this.setState({
@@ -73,10 +77,10 @@ class ClubItem extends Component {
     article.className = "club-info";
     const header = document.createElement("header");
 
-    const rank = document.createElement("h2");
-    rank.className = "rank";
-    rank.innerText = `Ranked ${this.props.rank}`;
-    header.appendChild(rank);
+    // const rank = document.createElement("h2");
+    // rank.className = "rank";
+    // rank.innerText = `Ranked ${this.props.rank}`;
+    // header.appendChild(rank);
 
     const clubLogo = document.createElement("img");
     clubLogo.className = "club-logo";
@@ -90,6 +94,9 @@ class ClubItem extends Component {
     clubElement.innerHTML = sanitizeHtml(this.props.info);
 
     article.appendChild(clubElement);
+
+    const teamTable = new TeamTable("team-table", { teams: props.teams });
+    article.appendChild(teamTable.getObject());
 
     const footer = document.createElement("footer");
     footer.innerText = `Last updated: ${this.props.last_update}`;
@@ -135,6 +142,68 @@ class MoreResults extends Component {
         },
       });
     });
+  }
+}
+
+class TeamTable extends Component {
+  constructor(id, props) {
+    super(id, props);
+
+    const { teams } = props;
+
+    this.$object = document.createElement("table");
+    this.$object.id = id;
+    this.$object.className = "team-table";
+
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    const headers = ["#Rank", "Name", "Gender", "Year"];
+    for (const header of headers) {
+      const th = document.createElement("th");
+      th.innerText = header;
+      th.scope = "col";
+      headerRow.appendChild(th);
+    }
+    thead.appendChild(headerRow);
+
+    this.$object.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
+    for (const team of teams) {
+      const row = document.createElement("tr");
+      const cells = [team.rank_num, team.team_name, team.gender, team.year];
+
+      for (let i = 0; i < cells.length; i++) {
+        const cell = cells[i];
+        const th = document.createElement("th");
+        if (i == 0) {
+          th.scope = "row";
+        }
+        th.innerText = cell;
+        row.appendChild(th);
+      }
+
+      tbody.appendChild(row);
+    }
+
+    this.$object.appendChild(tbody);
+
+    // const title = document.createElement("h5");
+    // title.innerText = "Teams";
+    // this.$object.appendChild(title);
+
+    // const table = document.createElement("table");
+    // table.className = "team-table";
+    // const thead = document.createElement("thead");
+    // const tbody = document.createElement("tbody");
+
+    // const headerRow = document.createElement("tr");
+    // const headers = ["#", "Name", "Position", "National"];
+    // for (const header of headers) {
+    //   const th = document.createElement("th");
+    //   th.innerText = header;
+    //   headerRow.appendChild(th);
+    // }
   }
 }
 
