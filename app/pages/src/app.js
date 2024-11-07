@@ -3,6 +3,7 @@ import "./app.scss";
 import BaseApp from "./loveVanilla/baseApp";
 import { setData } from "./loveVanilla/data";
 import PageHome from "./pageHome";
+import PageTeam from "./pageTeam";
 
 class App extends BaseApp {
   constructor() {
@@ -58,4 +59,5 @@ class App extends BaseApp {
 console.log("INITIALIZING APP");
 const app = new App();
 app.addPage(new PageHome(app, "/"));
+app.addPage(new PageTeam(app, "/team"));
 app.init();

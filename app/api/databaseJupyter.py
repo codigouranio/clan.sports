@@ -22,7 +22,7 @@ class DatabaseJupyter:
     STATES_FILE = "states.json"
     YEARS_FILE = "years.json"
     GENDERS_FILE = "genders.json"
-    CLUBS_AND_TEAMS_FILE = "clubs_and_teams.json"
+    CLUBS_AND_TEAMS_FILE = "clubs_and_teams_new_jersey.json"
     TEAMS_FOLDER = "data/states"
     TEAMS_SUB_FOLDER = "teams"
     TEAMS_FILE = "teams_data_enriched.json"
@@ -57,7 +57,9 @@ class DatabaseJupyter:
                 repo.git.push()  # Push changes
 
             # Now you can safely pull or merge
+            repo.git.fetch()  # Pull
             repo.git.pull()  # or repo.git.merge('branch_name')
+            # repo.git.reset()
 
         except git.exc.GitCommandError as e:
             print(f"Git command error: {e}")
@@ -105,11 +107,11 @@ class DatabaseJupyter:
             os.path.join(
                 DatabaseJupyter.REPO_FOLDER,
                 DatabaseJupyter.REPO_SUB_FOLDER,
-                DatabaseJupyter.GENDERS_FILE,
+                DatabaseJupyter.STATES_FILE,
             ),
             "r",
         ) as file:
-            self.genders = json.load(file)
+            self.states = json.load(file)
 
     def getState(self):
         return self.states
@@ -161,7 +163,7 @@ class DatabaseJupyter:
 
         return jsonify(transformed_clubs)
 
-    def searchClubsBySearchTerm(self, search_term, page=0, page_size=30):
+    def searchClubsBySearchTerm(self, search_term, page=0, page_size=10):
 
         start_time = time.time()
 
@@ -261,9 +263,11 @@ class DatabaseJupyter:
                         "last_update": values["last_update"],
                         "teams": [team for team in values["teams"].values()],
                         "similarity_score": similarity_score,
+                        "type_item": "club",
+                        "search_title": f"{key}",
                     }
 
-    def processClubInfo(self, term, info):
+    def processClubInfo(self, term, info, word_limit=50):
         res = ""
 
         if not term or len(term) == 0:
@@ -299,6 +303,9 @@ class DatabaseJupyter:
             else:
                 res += info[i]
                 i += 1
+
+        words = res.split()
+        res = " ".join(words[:word_limit]) + "..." if len(words) > word_limit else res
 
         return markdown.markdown(res)
 

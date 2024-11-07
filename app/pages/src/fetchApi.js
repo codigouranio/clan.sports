@@ -31,7 +31,7 @@ export async function getAppInfo() {
 export async function searchClubsBySearchTerm(
   searchTerm,
   page = 0,
-  pageSize = 30
+  pageSize = 15
 ) {
   try {
     const { currentState } = getData();

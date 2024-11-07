@@ -63,6 +63,44 @@ class ClubItem extends Component {
   constructor(id, props) {
     super(id, props);
 
+    this.$object = document.createElement("article");
+    this.$object.id = this.id;
+
+    this.$object.className = "club-info";
+    const header = document.createElement("header");
+
+    const clubLogo = document.createElement("img");
+    clubLogo.className = "club-logo";
+    clubLogo.title = this.props.club_name;
+    clubLogo.src = `/api/getClubLogo/${this.props.image_file}`;
+
+    header.appendChild(clubLogo);
+
+    const title = document.createElement("a");
+    title.className = "search-title";
+    title.href = "#";
+    title.appendChild(clubLogo);
+    title.appendChild(document.createTextNode(this.props.search_title));
+    header.appendChild(title);
+
+    this.$object.appendChild(header);
+
+    const headerInfoRight = document.createElement("small");
+    headerInfoRight.className = "rank";
+    headerInfoRight.innerText = `Soccer Club - Rank: ${this.props.rank}`;
+    header.appendChild(headerInfoRight);
+
+    const clubElement = document.createElement("div");
+    clubElement.innerHTML = sanitizeHtml(this.props?.info);
+
+    this.$object.appendChild(clubElement);
+  }
+}
+
+class ClubItem2 extends Component {
+  constructor(id, props) {
+    super(id, props);
+
     this.$object = document.createElement("details");
     this.$object.id = this.id;
 
@@ -72,11 +110,27 @@ class ClubItem extends Component {
     curProps?.open && this.$object.setAttribute("open", "");
 
     const summary = document.createElement("summary");
-    summary.appendChild(
-      document.createTextNode(
-        `Rank ${this.props?.rank} - ${this.props.club_name}`
-      )
-    );
+
+    // const clubLogoFrame = document.createElement("span");
+    // clubLogoFrame.className = "club-logo-frame";
+    const clubLogo = document.createElement("img");
+    clubLogo.className = "club-logo";
+    clubLogo.title = this.props.club_name;
+    clubLogo.src = `/api/getClubLogo/${this.props.image_file}`;
+    // clubLogoFrame.appendChild(clubLogo);
+
+    // summary.appendChild(clubLogo);
+    const title = document.createElement("div");
+    // title.innerText = props?.search_title;
+    title.appendChild(clubLogo);
+    title.appendChild(document.createTextNode(this.props.search_title));
+    summary.appendChild(title);
+
+    // const rank = document.createElement("h6");
+    // rank.innerText = `Rank ${this.props.rank}`;
+    // summary.appendChild(rank);
+
+    // `Rank ${this.props?.rank} - ${this.props.club_name}`
     summary.className = `contrast club-result`;
     summary.addEventListener("click", () => {
       this.setState({
@@ -90,16 +144,52 @@ class ClubItem extends Component {
     article.className = "club-info";
     const header = document.createElement("header");
 
+    const teams = props?.teams || [];
+
+    const teamsSummary = teams.reduce((acc, team) => {
+      acc[team.gender] = acc[team.gender] ? acc[team.gender] + 1 : 1;
+      return acc; // Ensure the accumulator is returned
+    }, {});
+
+    const totalPlayers = teams.reduce((acc, team) => {
+      return acc + (team?.players_count || 0);
+    }, 0);
+
+    console.log(totalPlayers);
+
+    console.log(teamsSummary);
+
+    const headerInfoLeft = document.createElement("small");
+    headerInfoLeft.className = "rank";
+    headerInfoLeft.innerText = `Total Teams: ${teams.length} (`;
+    if (teamsSummary["boys"]) {
+      headerInfoLeft.innerText += `boys: ${teamsSummary["boys"]} `;
+    }
+    if (teamsSummary["girls"]) {
+      headerInfoLeft.innerText += `girls: ${teamsSummary["girls"]}`;
+    }
+    headerInfoLeft.innerText += ") ";
+    if (totalPlayers > 0) {
+      headerInfoLeft.innerText += `Total Players: ${totalPlayers}`;
+    }
+
+    header.appendChild(headerInfoLeft);
+
+    const headerInfoRight = document.createElement("small");
+    headerInfoRight.className = "rank";
+    headerInfoRight.innerText = `Soccer Club - Rank: ${this.props.rank}`;
+    header.appendChild(headerInfoRight);
+
     // const rank = document.createElement("h2");
     // rank.className = "rank";
     // rank.innerText = `Ranked ${this.props.rank}`;
     // header.appendChild(rank);
 
-    const clubLogo = document.createElement("img");
-    clubLogo.className = "club-logo";
-    clubLogo.title = this.props.club_name;
-    clubLogo.src = `/api/getClubLogo/${this.props.image_file}`;
-    header.appendChild(clubLogo);
+    // const clubLogo = document.createElement("img");
+    // clubLogo.className = "club-logo";
+    // clubLogo.title = this.props.club_name;
+    // clubLogo.src = `/api/getClubLogo/${this.props.image_file}`;
+    // header.appendChild(clubLogo);
 
     article.appendChild(header);
 

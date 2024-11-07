@@ -32,10 +32,6 @@ footer {
   // --pico-typography-spacing-vertical: 0.5rem;
 }
 
-.club-logo {
-  margin-right: 10px; /* Space between the logo and the title */
-}
-
 h1 {
   --pico-font-weight: 400;
   --pico-typography-spacing-vertical: 0.5rem;
@@ -97,15 +93,20 @@ summary.club-result {
   text-decoration-skip-ink: none;
 }
 
-button {
+a.search-title {
   --pico-font-weight: 700;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  color: #e5e5e5;
+  padding: 0em 1em 0 0;
 }
 
-#club-list {
-  .club-logo {
-    max-width: 5em;
-    max-height: 5em;
-  }
+a.search-title:hover {
+  opacity: 0.8;
+}
+
+button {
+  --pico-font-weight: 700;
 }
 
 #code-inputs {
@@ -188,17 +189,6 @@ button {
   font-weight: 700;
 }
 
-// .footer-badge {
-//   // margin: 0 0.2rem;
-//   height: 10em;
-//   width: auto;
-//   background-color: hsl(0, 0%, 100%);
-//   padding: 1px 1px;
-//   display: inline-flex;
-//   align-items: center;
-//   border-radius: 5px;
-// }
-
 .footer-badge {
   display: inline-flex;
   align-items: center;
@@ -237,4 +227,31 @@ button {
   width: 24px; /* Adjust size as needed */
   height: auto;
   margin-right: 10px; /* Space between icon and text */
+}
+
+summary {
+  display: flex;
+  align-items: center;
+  vertical-align: middle;
+}
+
+#club-list {
+  .club-logo {
+    width: 2em;
+    height: 2em;
+  }
+}
+
+.club-logo {
+  margin-right: 10px; /* Space between the logo and the title */
+}
+
+span.club-logo-frame {
+  justify-content: center;
+  align-items: center;
+  width: 5em;
+  height: 5em;
+  border: 1px solid #000;
+  border-radius: 50%;
+  overflow: hidden;
 }
