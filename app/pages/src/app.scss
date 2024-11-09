@@ -187,6 +187,10 @@ button {
 .site-title {
   font-size: larger;
   font-weight: 700;
+  color: #f8f9fa; /* Light text color */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+  font-family: "Poppins", sans-serif; /* Modern and clean font */
+  letter-spacing: 0.05em; /* Adds slight spacing between letters */
 }
 
 .footer-badge {
@@ -254,4 +258,36 @@ span.club-logo-frame {
   border: 1px solid #000;
   border-radius: 50%;
   overflow: hidden;
+}
+
+article.club-info header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+article.club-info header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  vertical-align: bottom;
+}
+
+article.club-info header img {
+  width: 3.8em;
+  height: auto;
+  border-radius: 0.5rem;
+  border: #e5e5e5 solid 8px;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
+    0 1px 3px rgba(255, 255, 255, 0.2);
+}
+
+article.club-info header h5 {
+  margin: auto 0;
+}
+
+table.team-table a {
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  color: #e5e5e5;
 }

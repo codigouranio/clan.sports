@@ -1,33 +1,33 @@
 import AppInfo from "./appInfo";
 import ClubList from "./clubList";
 import { searchClubsBySearchTerm } from "./fetchApi";
-import { getData, setData } from "./loveVanilla/data";
-import Page from "./loveVanilla/page";
+import { getData, Page, setData } from "./loveVanilla";
 import { SearchForm } from "./searchForm";
 
 class PageHome extends Page {
   children = [];
 
-  constructor(page, url) {
-    super(page, url);
+  constructor(app, url) {
+    super(app, url);
 
     this.createChild(new AppInfo("#app-info"));
     this.createChild(new SearchForm("#search-form"));
 
-    this.clubList = new ClubList("#club-list");
+    this.clubList = new ClubList("#w-board");
     this.createChild(this.clubList);
   }
 
   async init() {
     super.init();
 
-    const params = new URLSearchParams(window.location.search);
     const { searchResults } = getData();
     if (
-      params.has("query") &&
-      searchResults?.search_term !== params.get("query")
+      this.getUrlParams("query") &&
+      searchResults?.search_term !== this.getUrlParams("query")
     ) {
-      const data = await searchClubsBySearchTerm(params.get("query") || "");
+      const data = await searchClubsBySearchTerm(
+        this.getUrlParams("query") || ""
+      );
       setData({
         searchResults: data,
       });

@@ -1,6 +1,5 @@
 import { searchClubsBySearchTerm } from "./fetchApi";
-import Component from "./loveVanilla/component";
-import { setData } from "./loveVanilla/data";
+import { Component, setData, getData } from "./loveVanilla";
 
 export class SearchForm extends Component {
   constructor(id, props) {
@@ -12,14 +11,6 @@ export class SearchForm extends Component {
   }
   init(props) {
     super.init(props);
-    // this.searchBox = new SearchBox("#search-box");
-    // this.searchButton = new SearchButton("#search-button");
-    // this.searchButton.searchBox = this.searchBox;
-
-    // this.createChild(this.searchBox);
-    // this.createChild(this.searchButton);
-
-    // this.obj.addEventListener("onsubmit", this.handleSubmit.bind(this));
   }
 
   handleSubmit(event) {
@@ -35,18 +26,7 @@ export class SearchBox extends Component {
   async handleKey(event) {
     if (event.key == "Enter") {
       event.preventDefault();
-
-      const searchTerm = this.getValue();
-      const urlSearchParams = new URLSearchParams({
-        query: searchTerm,
-      });
-
-      history.replaceState(null, "", `/?${urlSearchParams.toString()}`);
-
-      const data = await searchClubsBySearchTerm(searchTerm);
-      setData({
-        searchResults: data,
-      });
+      await searchClubsBySearchTerm(this.getValue());
     }
   }
 
@@ -64,16 +44,6 @@ export class SearchButton extends Component {
     ev.preventDefault();
 
     const searchTerm = this.props.searchBox.getValue();
-
-    const urlSearchParams = new URLSearchParams({
-      query: searchTerm,
-    });
-
-    history.replaceState(null, "", `/?${urlSearchParams.toString()}`);
-
-    const data = await searchClubsBySearchTerm(searchTerm);
-    setData({
-      searchResults: data,
-    });
+    await searchClubsBySearchTerm(searchTerm);
   }
 }

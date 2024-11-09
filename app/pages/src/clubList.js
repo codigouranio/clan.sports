@@ -1,7 +1,6 @@
 import sanitizeHtml from "sanitize-html";
 import { searchClubsBySearchTerm } from "./fetchApi";
-import Component from "./loveVanilla/component";
-import { getData, setData } from "./loveVanilla/data";
+import { Component, getData, setData } from "./loveVanilla";
 
 class ClubList extends Component {
   render() {
@@ -78,7 +77,9 @@ class ClubItem extends Component {
 
     const title = document.createElement("a");
     title.className = "search-title";
-    title.href = "#";
+    const params = new URLSearchParams();
+    params.set("club_name", this.props.club_name);
+    title.href = `/?${params.toString()}`;
     title.appendChild(clubLogo);
     title.appendChild(document.createTextNode(this.props.search_title));
     header.appendChild(title);
@@ -198,13 +199,6 @@ class ClubItem2 extends Component {
 
     article.appendChild(clubElement);
 
-    const teamHeader = document.createElement("h5");
-    teamHeader.innerText = `Teams (${props?.teams.length || 0})`;
-    article.appendChild(teamHeader);
-
-    const teamTable = new TeamTable("team-table", { teams: props.teams });
-    article.appendChild(teamTable.getObject());
-
     const footer = document.createElement("footer");
     footer.innerText = `Last updated: ${this.props.last_update}`;
     article.appendChild(footer);
@@ -246,54 +240,10 @@ class MoreResults extends Component {
           search_term: data.search_term,
           total: data.total,
           more_results: data.more_results,
+          execution_time: data.execution_time,
         },
       });
     });
-  }
-}
-
-class TeamTable extends Component {
-  constructor(id, props) {
-    super(id, props);
-
-    const { teams } = props;
-
-    this.$object = document.createElement("table");
-    this.$object.id = id;
-    this.$object.className = "team-table";
-
-    const thead = document.createElement("thead");
-    const headerRow = document.createElement("tr");
-    const headers = ["#Rank", "Name", "Gender", "Year"];
-    for (const header of headers) {
-      const th = document.createElement("th");
-      th.innerText = header;
-      th.scope = "col";
-      headerRow.appendChild(th);
-    }
-    thead.appendChild(headerRow);
-
-    this.$object.appendChild(thead);
-
-    const tbody = document.createElement("tbody");
-    for (const team of teams) {
-      const row = document.createElement("tr");
-      const cells = [team.rank_num, team.team_name, team.gender, team.year];
-
-      for (let i = 0; i < cells.length; i++) {
-        const cell = cells[i];
-        const th = document.createElement("th");
-        if (i == 0) {
-          th.scope = "row";
-        }
-        th.innerText = cell;
-        row.appendChild(th);
-      }
-
-      tbody.appendChild(row);
-    }
-
-    this.$object.appendChild(tbody);
   }
 }
 

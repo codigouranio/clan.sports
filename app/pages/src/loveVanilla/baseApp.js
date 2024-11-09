@@ -1,11 +1,14 @@
-import { getData, setData } from "./data";
+import { getData, setData, getDataHashCode, setDataHashCode } from "./data";
+import { UrlMatcher } from "./urlMatcher";
 
-class BaseApp {
+export class BaseApp {
   pages = [];
 
-  constructor() {
+  constructor(id) {
+    this.id = id;
+
     const data = JSON.parse(localStorage.getItem("data"));
-    setData(data);
+    setData(data, false, true);
 
     window.addEventListener("__popstate__", () => this.render());
 
@@ -39,24 +42,29 @@ class BaseApp {
     }
   }
 
+  getObject() {
+    if (!this.id) {
+      return document.body;
+    }
+    return document.querySelector(this.id);
+  }
+
   addPage(page) {
     this.pages.push(page);
   }
 
   render() {
-    this.curUrl = {
-      pathname: window.location.pathname,
-      search: window.location.search,
-      hash: window.location.hash,
-    };
+    this.curUrl = new UrlMatcher(
+      window.location.pathname,
+      window.location.search,
+      window.location.hash
+    );
 
     for (const page of this.pages) {
-      if (page.url == this.curUrl.pathname) {
+      if (page.url.isMatch(this.curUrl)) {
         page.render();
         return;
       }
     }
   }
 }
-
-export default BaseApp;

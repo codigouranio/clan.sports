@@ -1,10 +1,10 @@
 import sanitizeHtml from "sanitize-html";
 import { murmurhash3_32_gc } from "./crypto";
 import { getData, setData } from "./data";
-import Page from "./page";
+import { Page } from "./page";
 import { asyncDebounce } from "./utils";
 
-class Component {
+export class Component {
   changedVisibility = async (visible) => {};
   parent = null;
   children = [];
@@ -179,5 +179,3 @@ class Component {
     return getData()?.[`${this.getObjectPath()}-${this.getHashCode()}`];
   }
 }
-
-export default Component;

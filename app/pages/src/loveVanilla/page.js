@@ -1,6 +1,6 @@
-import Component from "./component";
+import { Component } from "./component";
 
-class Page {
+export class Page {
   children = [];
 
   constructor(app, url) {
@@ -10,6 +10,19 @@ class Page {
 
   getUrl() {
     return this.url;
+  }
+
+  getUrlParams(paramName) {
+    const params = new URLSearchParams(window.location.search);
+
+    if (paramName && paramName.length > 0) {
+      if (params.has(paramName)) {
+        return params.get(paramName);
+      }
+      return "";
+    }
+
+    return params;
   }
 
   init(props) {
@@ -48,5 +61,3 @@ class Page {
     return child;
   }
 }
-
-export default Page;

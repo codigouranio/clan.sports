@@ -1,9 +1,10 @@
 import "./app.scss";
 
-import BaseApp from "./loveVanilla/baseApp";
-import { setData } from "./loveVanilla/data";
+import { getAppInfo } from "./fetchApi";
+import { BaseApp, setData, UrlMatcher } from "./loveVanilla";
+import PageClub from "./pageClub";
 import PageHome from "./pageHome";
-import PageTeam from "./pageTeam";
+import TeamClub from "./pageTeam";
 
 class App extends BaseApp {
   constructor() {
@@ -58,6 +59,11 @@ class App extends BaseApp {
 
 console.log("INITIALIZING APP");
 const app = new App();
-app.addPage(new PageHome(app, "/"));
-app.addPage(new PageTeam(app, "/team"));
+
+app.addPage(new TeamClub(app, new UrlMatcher("/", "?team_name=*", "")));
+app.addPage(new PageClub(app, new UrlMatcher("/", "?club_name=*", "")));
+app.addPage(new PageHome(app, new UrlMatcher("/", "", "")));
+
+await getAppInfo();
+
 app.init();

@@ -1,15 +1,6 @@
-import Component from "./loveVanilla/component";
-import { getAppInfo } from "./fetchApi";
-import { getData, setData } from "./loveVanilla/data";
+import { Component, getData } from "./loveVanilla";
 
 class AppInfo extends Component {
-  async init() {
-    super.init();
-
-    const appInfo = await getAppInfo();
-    setData({ appInfo });
-  }
-
   render() {
     const { appInfo } = getData();
     if (!appInfo) {

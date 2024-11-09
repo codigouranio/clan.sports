@@ -1,4 +1,4 @@
-import Component from "./component";
+import { Component } from "./component";
 import { asyncDebounce } from "./utils";
 
 class Button extends Component {
@@ -10,7 +10,7 @@ class Button extends Component {
   }
 
   handleClick() {
-    this.obj.addEventListener(
+    this.getObject().addEventListener(
       "click",
       asyncDebounce(() => this.click(), 150)
     );
