@@ -189,7 +189,7 @@ class DatabaseJupyter:
         response_object = {
             "status": "success",
             "items": items,
-            "total": len(items),
+            "total": len(items[:10]),
             "page": page,
             "page_size": page_size,
             "search_term": search_term,
@@ -244,7 +244,7 @@ class DatabaseJupyter:
                 else:
                     similarity_score = 0
 
-                if 0 <= similarity_score <= 3:
+                if 0 <= similarity_score <= 1:
 
                     cur += 1
 
