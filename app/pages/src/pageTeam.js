@@ -77,7 +77,15 @@ export class TeamInfo extends Component {
       for (const coachKey in team.coaches) {
         const coach = team.coaches[coachKey];
         const li = document.createElement("li");
-        li.innerText = `${coach.full_name}`;
+        const params = new URLSearchParams({
+          q: `${coach.full_name} soccer`,
+        });
+        const a = new Link(`coach-link-${coachKey}`, {
+          href: `https://www.google.com/search?${params.toString()}`,
+          text: " 🔍 ",
+        });
+        li.appendChild(a.getObject());
+        li.appendChild(document.createTextNode(`${coach.full_name}`));
         ul.appendChild(li);
       }
 
@@ -115,7 +123,7 @@ export class PlayersTable extends Component {
 
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
-    const headers = ["#Num", "Last Name", "First Name", "Goals", ""];
+    const headers = ["", "#Num", "Last Name", "First Name", "Goals"];
     for (const header of headers) {
       const th = document.createElement("th");
       th.innerText = header;
@@ -131,11 +139,11 @@ export class PlayersTable extends Component {
       const player = team.players[playerKey];
       const row = document.createElement("tr");
       const cells = [
+        "🔍",
         player.shirt,
         player.first_name,
         player.last_name,
         player.total_goals,
-        "🔍",
       ];
 
       for (let i = 0; i < cells.length; i++) {
@@ -145,9 +153,9 @@ export class PlayersTable extends Component {
         if (i == 0) {
           th.scope = "row";
         }
-        if (i == 4) {
+        if (i == 0) {
           const params = new URLSearchParams({
-            q: `${player.first_name} ${player.last_name} ${club.club_name} soccer`,
+            q: `${player.last_name} ${player.first_name} ${club.club_name} ${player.year} soccer`,
           });
           const a = new Link(`player-link-${i}`, {
             href: `https://www.google.com/search?${params.toString()}`,

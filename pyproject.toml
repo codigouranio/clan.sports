@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clan-sports"
-version = "0.4.6"
+version = "0.4.9"
 description = ""
 authors = ["codigouranio"]
 license = "GPL-3.0"

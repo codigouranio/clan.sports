@@ -691,3 +691,9 @@ def searchClubsBySearchTerm():
 @app.limiter.limit(None)
 def getClubLogo(logoPath: str):
     return app.database_jupyter.getClubLogo(logoPath)
+
+
+@api_blueprint.route("/getClubInfo/", methods=["GET"])
+def getClubInfo():
+    club_name = request.args.get("club_name")
+    return app.database_jupyter.getClubInfo(club_name)

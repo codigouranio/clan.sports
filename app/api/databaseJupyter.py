@@ -267,7 +267,7 @@ class DatabaseJupyter:
                         "search_title": f"{key}",
                     }
 
-    def processClubInfo(self, term, info, word_limit=50):
+    def processClubInfo(self, term, info, word_limit=75):
         res = ""
 
         if not term or len(term) == 0:
@@ -345,3 +345,31 @@ class DatabaseJupyter:
             last_modified=last_modified_time,  # Set Last-Modified header
             max_age=31536000,  # Cache for one year (in seconds)
         )
+
+    def getClubInfo(self, club_name: str):
+        # Define the path to the JSON file
+        db_path_file = os.path.join(
+            DatabaseJupyter.REPO_FOLDER,
+            DatabaseJupyter.REPO_SUB_FOLDER,
+            DatabaseJupyter.CLUBS_AND_TEAMS_FILE,
+        )
+
+        with open(db_path_file, "r") as file:
+            # Use ijson to parse the JSON array item by item
+            for key, values in ijson.kvitems(file, ""):
+                if key == club_name:
+                    return jsonify(
+                        {
+                            "club_name": key,
+                            "state": values["state"],
+                            "info": self.processClubInfo("", values["info"]),
+                            "image_file": values["image_file"],
+                            "rank": values["rank_num"],
+                            "last_update": values["last_update"],
+                            "teams": [team for team in values["teams"].values()],
+                            "type_item": "club",
+                            "search_title": f"{key}",
+                        }
+                    )
+
+        return {}, 404
