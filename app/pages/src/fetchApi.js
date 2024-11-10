@@ -21,7 +21,9 @@ export async function getClubFilterTerms() {
 export async function getAppInfo() {
   try {
     const response = await api.get(`getAppInfo`);
-    setData(response?.data);
+    setData({
+      appInfo: response?.data,
+    });
   } catch (error) {
     console.error("Error:", error.message);
     throw error;

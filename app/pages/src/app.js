@@ -10,13 +10,6 @@ class App extends BaseApp {
   constructor() {
     super("body");
   }
-
-  async init() {
-    super.init();
-
-    console.log("GETTING LOCATION");
-    await this.getCurrentState();
-  }
 }
 
 console.log("INITIALIZING APP");

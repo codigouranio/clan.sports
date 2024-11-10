@@ -69,6 +69,17 @@ module.exports = {
     }),
     new CopyWebpackPlugin({
       patterns: [
+        {
+          from: "./src/assets/*.ico",
+          to({ context, absoluteFilename }) {
+            return "./[name][ext]";
+          },
+          noErrorOnMissing: true,
+        },
+      ],
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
         { from: "./src/assets/vendor", to: "vendor", noErrorOnMissing: true },
       ],
     }),
