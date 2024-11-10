@@ -9,9 +9,6 @@ export class SearchForm extends Component {
     this.createChild(searchBox);
     this.createChild(new SearchButton("#search-button", { searchBox }));
   }
-  init(props) {
-    super.init(props);
-  }
 
   handleSubmit(event) {
     event.preventDefault();
@@ -19,7 +16,9 @@ export class SearchForm extends Component {
 }
 
 export class SearchBox extends Component {
-  init() {
+  constructor(id, props) {
+    super(id, props);
+
     this.getObject().addEventListener("keydown", this.handleKey.bind(this));
   }
 
@@ -36,7 +35,9 @@ export class SearchBox extends Component {
 }
 
 export class SearchButton extends Component {
-  init() {
+  constructor(id, props) {
+    super(id, props);
+
     this.getObject().addEventListener("click", this.handleClick.bind(this));
   }
 

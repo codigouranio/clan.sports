@@ -7,11 +7,6 @@ export class BaseApp {
   constructor(id) {
     this.id = id;
 
-    const data = JSON.parse(localStorage.getItem("data"));
-    setData(data, false, true);
-
-    window.addEventListener("__popstate__", () => this.render());
-
     document.addEventListener("DOMContentLoaded", async () => {
       setTimeout(() => {
         document.body.classList.add("show-up");
@@ -21,25 +16,6 @@ export class BaseApp {
         document.body.classList.add("fade-in");
       }, 520);
     });
-
-    window.addEventListener("beforeunload", (event) => {
-      localStorage.setItem("lastVisited", new Date().toISOString());
-      const data = getData();
-      localStorage.setItem("data", JSON.stringify(data));
-
-      event.returnValue = "";
-    });
-  }
-
-  init() {
-    // window.dispatchEvent(new Event("__init_state__"));
-    for (const page of this.pages) {
-      try {
-        page.init();
-      } catch (e) {
-        console.error(e);
-      }
-    }
   }
 
   getObject() {
@@ -53,7 +29,7 @@ export class BaseApp {
     this.pages.push(page);
   }
 
-  render() {
+  getCurrentPage() {
     this.curUrl = new UrlMatcher(
       window.location.pathname,
       window.location.search,
@@ -62,9 +38,48 @@ export class BaseApp {
 
     for (const page of this.pages) {
       if (page.url.isMatch(this.curUrl)) {
-        page.render();
-        return;
+        return page;
       }
     }
+    return undefined;
+  }
+
+  start() {
+    window.addEventListener("beforeunload", (event) => {
+      localStorage.setItem("lastVisited", new Date().toISOString());
+      const data = getData();
+      localStorage.setItem("data", JSON.stringify(data));
+
+      event.returnValue = "";
+    });
+
+    window.addEventListener("__@_popstate_forward", () => {
+      this.triggerRenderingEvent();
+    });
+
+    window.addEventListener("__@_updated_data", () => {
+      this.triggerUpdatedDataEvent();
+    });
+
+    window.addEventListener("popstate", () => {
+      this.triggerRenderingEvent();
+    });
+
+    this.triggerRenderingEvent();
+
+    const data = JSON.parse(localStorage.getItem("data"));
+    setData(data);
+  }
+
+  triggerRenderingEvent() {
+    this.getCurrentPage()?.beforeRender();
+    this.getCurrentPage()?.render();
+    this.getCurrentPage()?.afterRender();
+  }
+
+  triggerUpdatedDataEvent() {
+    this.getCurrentPage()?.beforeRender();
+    this.getCurrentPage()?.render();
+    this.getCurrentPage()?.updatedData();
   }
 }

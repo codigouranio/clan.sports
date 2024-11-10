@@ -21,9 +21,9 @@ const setData = (value, noTrigger = true, force = false) => {
   source.data = Object.assign({}, source.data, value);
   source.dataHashCode = newDataHashCode;
 
-  if (noTrigger) {
-    window.dispatchEvent(new Event("__popstate__"));
-  }
+  // if (noTrigger) {
+  window.dispatchEvent(new Event("__@_updated_data"));
+  // }
 };
 const getData = () => source.data;
 const getDataHashCode = () => source.dataHashCode;

@@ -15,13 +15,10 @@ export class Component {
     this.id = id;
     this.props = props;
 
-    this.keys = [...[this.id], ...(this.props?.keys || [])];
-
-    // console.log(this.id, this.keys);
-
-    // window.addEventListener("__popstate__", () => this.render());
-    // window.addEventListener("__pop_off_state__", () => this.destroy());
-    // window.addEventListener("__init_state__", () => this.init());
+    this.keys = [this.id];
+    for (let i = 0; i < this.props?.keys?.length; i++) {
+      this.keys.push(this.props.keys[i]);
+    }
 
     if (props?.parent) {
       this.parent = props.parent;
@@ -147,7 +144,13 @@ export class Component {
     return murmurhash3_32_gc(JSON.stringify(this.keys.join("")));
   }
 
+  beforeRender() {}
+
   render() {}
+
+  afterRender() {}
+
+  updatedData() {}
 
   getObjectPath() {
     let obj = this;
@@ -177,5 +180,16 @@ export class Component {
 
   getState() {
     return getData()?.[`${this.getObjectPath()}-${this.getHashCode()}`];
+  }
+
+  appendChild(child) {
+    if (child instanceof Component) {
+      child.setParent(this);
+      this.children.push(child);
+
+      if (this.getObject()) {
+        this.getObject().prepend(child.getObject());
+      }
+    }
   }
 }

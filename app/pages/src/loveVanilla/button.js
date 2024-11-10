@@ -1,7 +1,7 @@
 import { Component } from "./component";
 import { asyncDebounce } from "./utils";
 
-class Button extends Component {
+export default class Button extends Component {
   click = async () => {};
 
   constructor(id) {
@@ -18,5 +18,3 @@ class Button extends Component {
 
   render() {}
 }
-
-export default Button;

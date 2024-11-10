@@ -39,7 +39,7 @@ export async function searchClubsBySearchTerm(
     let searchTermParam = searchTerm;
 
     if (!searchTerm || searchTerm.length == 0) {
-      searchTermParam = currentState;
+      searchTermParam = currentState || "";
     }
 
     const urlPageParams = new URLSearchParams({
@@ -72,7 +72,7 @@ export async function getClubInfo(clubName) {
       club_name: clubName,
     });
 
-    const response = await api.get(`getClubInfo?${params.toString()}`);
+    const response = await api.get(`getClubInfo/?${params.toString()}`);
 
     setData({
       club: response.data,
@@ -82,4 +82,37 @@ export async function getClubInfo(clubName) {
     console.error("Error:", error.message);
     throw error;
   }
+}
+
+export async function getCurrentState() {
+  // Check if geolocation is available
+  if (!navigator.geolocation) {
+    console.log("Geolocation is not supported by this browser.");
+    return;
+  }
+
+  // Get the current position
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      console.log(`Latitude: ${latitude}, Longitude: ${longitude}`);
+
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+      );
+      const data = await response.json();
+      // Extract the state from the response
+      console.log(`You are currently in: ${data.address?.["state"]}`);
+
+      setData({
+        currentState: data.address?.["state"].toLowerCase().replace(" ", "-"),
+        currentStateName: data.address?.["state"],
+      });
+    },
+    (error) => {
+      console.error("Error getting location: ", error.message);
+    }
+  );
 }

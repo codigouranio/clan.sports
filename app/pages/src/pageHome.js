@@ -17,20 +17,13 @@ class PageHome extends Page {
     this.createChild(this.clubList);
   }
 
-  async init() {
-    super.init();
-
+  async afterRender() {
     const { searchResults } = getData();
     if (
       this.getUrlParams("query") &&
       searchResults?.search_term !== this.getUrlParams("query")
     ) {
-      const data = await searchClubsBySearchTerm(
-        this.getUrlParams("query") || ""
-      );
-      setData({
-        searchResults: data,
-      });
+      await searchClubsBySearchTerm(this.getUrlParams("query") || "");
     }
   }
 }
