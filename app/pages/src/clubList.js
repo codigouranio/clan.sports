@@ -1,6 +1,6 @@
 import sanitizeHtml from "sanitize-html";
 import { searchClubsBySearchTerm } from "./fetchApi";
-import { Component, getData, Image, Link, setData } from "./loveVanilla";
+import { Component, getData, Image, Link } from "./loveVanilla";
 
 class ClubList extends Component {
   render() {
@@ -119,23 +119,7 @@ class MoreResults extends Component {
       console.log([page, search_term]);
       console.log(getData());
 
-      const data = await searchClubsBySearchTerm(
-        search_term,
-        page + 1,
-        page_size
-      );
-
-      setData({
-        searchResults: {
-          items: [...getData().searchResults.items, ...data.items],
-          page: data.page,
-          page_size: data.page_size,
-          search_term: data.search_term,
-          total: data.total,
-          more_results: data.more_results,
-          execution_time: data.execution_time,
-        },
-      });
+      await searchClubsBySearchTerm(search_term, page + 1, page_size, true);
     });
   }
 }

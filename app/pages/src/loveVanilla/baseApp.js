@@ -54,6 +54,7 @@ export class BaseApp {
     });
 
     window.addEventListener("__@_popstate_forward", () => {
+      window.scroll(0, 0);
       this.triggerRenderingEvent();
     });
 

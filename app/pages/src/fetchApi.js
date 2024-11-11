@@ -33,10 +33,11 @@ export async function getAppInfo() {
 export async function searchClubsBySearchTerm(
   searchTerm = "",
   page = 0,
-  pageSize = 15
+  pageSize = 10,
+  addResults = false
 ) {
   try {
-    const { currentState } = getData();
+    const { currentState, searchResults } = getData();
 
     let searchTermParam = searchTerm;
 
@@ -59,8 +60,21 @@ export async function searchClubsBySearchTerm(
     const urlWithParams = `searchClubsBySearchTerm?${urlRequestParams.toString()}`;
     const response = await api.get(urlWithParams);
 
+    if (response.status !== 200) {
+      return;
+    }
+
+    const newResults = {
+      ...response.data,
+      ...{
+        items: addResults
+          ? searchResults?.items.concat(response.data.items)
+          : response.data.items,
+      },
+    };
+
     setData({
-      searchResults: response.data,
+      searchResults: newResults,
     });
   } catch (error) {
     console.error("Error:", error.message);
