@@ -16,7 +16,7 @@ export class Link extends Component {
   click(event) {
     event.preventDefault();
 
-    const newUrl = this.$object.href;
+    const newUrl = this.props?.href;
 
     if (newUrl.startsWith("https://")) {
       window.location.assign(newUrl);

@@ -1,4 +1,4 @@
-import { getData, setData, getDataHashCode, setDataHashCode } from "./data";
+import { getData, setData } from "./data";
 import { UrlMatcher } from "./urlMatcher";
 
 export class BaseApp {
