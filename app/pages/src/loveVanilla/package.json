@@ -1,0 +1,24 @@
+{
+  "name": "lovevanilla",
+  "version": "0.8.9",
+  "description": "Celebrating the Art of Simplicity in Web Development",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codigouranio/clan.sports/tree/25b079b4c7ac186d911cb0d2b75b1f536acbd218/app/pages/src/loveVanilla"
+  },
+  "keywords": [
+    "vanilla-javascript",
+    "web-development",
+    "lightweight-framework"
+  ],
+  "author": "codigouranio",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codigouranio/clan.sports/issues"
+  },
+  "homepage": "https://github.com/codigouranio/clan.sports#readme"
+}
