@@ -25,7 +25,7 @@ The BaseApp uses a lifecycle model with the following methods:
 
 ### Data Management  
 Two core methods ensure seamless data handling:  
-- **`setData()`**: Updates the data and triggers a re-render. When this method is called, the `beforeRender()` and `render()` methods are executed. Instead of running `afterRender()` again, the **`updateData()`** method is called to avoid infinite loops.  
+- **`setData()`**: Updates the data and triggers a re-render. When this method is called, the `beforeRender()` and `render()` methods are executed. Instead of running `afterRender()` again, the **`updatedData()`** method is called to avoid infinite loops.  
 - **`getData()`**: Retrieves the current data for the page or component.  
 
 ### Handling Dynamic Pages  
@@ -44,7 +44,7 @@ This dynamic system makes it easy to handle multi-page applications with minimal
 2. When calling **`setData()`**:  
    - **`beforeRender()`**: Prepares for the update.  
    - **`render()`**: Re-renders the UI with the updated state.  
-   - **`updateData()`**: Updates specific components or parts of the page without restarting the entire lifecycle.  
+   - **`updatedData()`**: Updates specific components or parts of the page without restarting the entire lifecycle.  
 
 ### Benefits  
 This approach provides a lightweight yet powerful framework that allows you to:  
