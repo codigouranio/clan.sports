@@ -116,9 +116,6 @@ class MoreResults extends Component {
         searchResults: { page, page_size, search_term },
       } = getData();
 
-      console.log([page, search_term]);
-      console.log(getData());
-
       await searchClubsBySearchTerm(search_term, page + 1, page_size, true);
     });
   }
