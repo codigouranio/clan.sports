@@ -270,13 +270,14 @@ class DatabaseJupyter:
     def processClubInfo(self, term, info, word_limit=75):
         res = ""
 
-        if not term or len(term) == 0:
-            return markdown.markdown(info)
+        # if not term or len(term) == 0:
+        #     return markdown.markdown(info)
+        len_term = len(term) if len(term) > 0 else 1
 
         i = 0
-        while i <= len(info) - len(term):
-            next_word = info[i : i + len(term)]
-            if term == next_word.lower():
+        while i <= len(info) - len_term:
+            next_word = info[i : i + len_term]
+            if term == next_word.lower() and len(term) > 0:
                 res += f"*{next_word}*"
                 i += len(term)
             elif info[i] == "[":
@@ -304,8 +305,11 @@ class DatabaseJupyter:
                 res += info[i]
                 i += 1
 
-        words = res.split()
-        res = " ".join(words[:word_limit]) + "..." if len(words) > word_limit else res
+        if word_limit > 0:
+            words = res.split()
+            res = (
+                " ".join(words[:word_limit]) + "..." if len(words) > word_limit else res
+            )
 
         return markdown.markdown(res)
 
@@ -362,7 +366,7 @@ class DatabaseJupyter:
                         {
                             "club_name": key,
                             "state": values["state"],
-                            "info": self.processClubInfo("", values["info"]),
+                            "info": self.processClubInfo("", values["info"], -1),
                             "image_file": values["image_file"],
                             "rank": values["rank_num"],
                             "last_update": values["last_update"],
