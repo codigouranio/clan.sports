@@ -60,7 +60,12 @@ def create_app():
     # Configure CORS to only allow requests from specified origins
     CORS(app, resources={r"/*": {"origins": allowed_origins}})
 
-    Talisman(app, content_security_policy={"default-src": ["'self'"]})
+    Talisman(
+        app,
+        content_security_policy={
+            "default-src": ["'self'", "https://www.googletagmanager.com"]
+        },
+    )
 
     Compress(app)
 
