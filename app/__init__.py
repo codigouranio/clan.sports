@@ -63,7 +63,11 @@ def create_app():
     csp = {
         "default-src": ["'self'"],
         "style-src": ["'self'", "'unsafe-inline'"],
-        "script-src": ["'self'", "https://www.googletagmanager.com"],
+        "script-src": [
+            "'self'",
+            "https://www.googletagmanager.com",
+            "sha256-N1hxir6SXYxnogIPikvQHpy9irsgHzpo7IMD8WbypFo=",
+        ],
         "connect-src": ["'self'", "https://nominatim.openstreetmap.org"],
         "img-src": ["'self'", "data:", "blob:"],
     }
