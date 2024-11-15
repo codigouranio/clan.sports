@@ -34,15 +34,6 @@ from .container import Container
 app = Flask(__name__, instance_relative_config=False)
 
 
-# def generate_nonce():
-#     return base64.b64encode(os.urandom(16)).decode("utf-8")
-
-
-# @app.before_request
-# def set_nonce():
-#     g.nonce = generate_nonce()  # Store nonce in `g` for the request
-
-
 def create_app():
 
     allowed_origins = ["http://localhost:5000", "https://clansports.club"]
@@ -54,7 +45,8 @@ def create_app():
         "default-src": ["'self'"],
         "style-src": ["'self'", "'unsafe-inline'"],
         "script-src": ["'self'"],
-        "connect-src": ["'self'", "*.openstreetmap.org"],
+        "script-src-elem": ["'self'", "*.googletagmanager.com"],
+        "connect-src": ["'self'", "*.openstreetmap.org", "*.google-analytics.com"],
         "img-src": ["'self'", "data:", "blob:"],
     }
 
