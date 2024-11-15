@@ -42,15 +42,15 @@ def set_nonce():
     g.nonce = generate_nonce()  # Store nonce in `g` for the request
 
 
-@app.after_request
-def set_csp(response):
-    response.headers["Content-Security-Policy"] = (
-        f"default-src 'self'; "
-        f"style-src 'self' 'unsafe-inline'; "
-        f"connect-src 'self' https://nominatim.openstreetmap.org;"
-        f"img-src 'self' data:;"
-    )
-    return response
+# @app.after_request
+# def set_csp(response):
+#     response.headers["Content-Security-Policy"] = (
+#         f"default-src 'self'; "
+#         f"style-src 'self' 'unsafe-inline'; "
+#         f"connect-src 'self' https://nominatim.openstreetmap.org;"
+#         f"img-src 'self' data:;"
+#     )
+#     return response
 
 
 def create_app():
@@ -60,12 +60,15 @@ def create_app():
     # Configure CORS to only allow requests from specified origins
     CORS(app, resources={r"/*": {"origins": allowed_origins}})
 
-    Talisman(
-        app,
-        content_security_policy={
-            "default-src": ["'self'", "https://www.googletagmanager.com"]
-        },
-    )
+    csp = {
+        "default-src": ["'self'"],
+        "style-src": ["'self'", "'unsafe-inline'"],
+        "script-src": ["'self'", "https://www.googletagmanager.com"],
+        "connect-src": ["'self'", "https://nominatim.openstreetmap.org"],
+        "img-src": ["'self'", "data:", "blob:"],
+    }
+
+    Talisman(app, content_security_policy=csp)
 
     Compress(app)
 
