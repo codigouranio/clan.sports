@@ -3,6 +3,7 @@
 import base64
 import logging
 import os
+import secrets
 from datetime import timedelta
 from os import environ, path
 
@@ -33,24 +34,13 @@ from .container import Container
 app = Flask(__name__, instance_relative_config=False)
 
 
-def generate_nonce():
-    return base64.b64encode(os.urandom(16)).decode("utf-8")
+# def generate_nonce():
+#     return base64.b64encode(os.urandom(16)).decode("utf-8")
 
 
-@app.before_request
-def set_nonce():
-    g.nonce = generate_nonce()  # Store nonce in `g` for the request
-
-
-# @app.after_request
-# def set_csp(response):
-#     response.headers["Content-Security-Policy"] = (
-#         f"default-src 'self'; "
-#         f"style-src 'self' 'unsafe-inline'; "
-#         f"connect-src 'self' https://nominatim.openstreetmap.org;"
-#         f"img-src 'self' data:;"
-#     )
-#     return response
+# @app.before_request
+# def set_nonce():
+#     g.nonce = generate_nonce()  # Store nonce in `g` for the request
 
 
 def create_app():
@@ -63,16 +53,16 @@ def create_app():
     csp = {
         "default-src": ["'self'"],
         "style-src": ["'self'", "'unsafe-inline'"],
-        "script-src": [
-            "'self'",
-            "https://www.googletagmanager.com",
-            "sha256-N1hxir6SXYxnogIPikvQHpy9irsgHzpo7IMD8WbypFo=",
-        ],
-        "connect-src": ["'self'", "https://nominatim.openstreetmap.org"],
+        "script-src": ["'self'"],
+        "connect-src": ["'self'", "*.openstreetmap.org"],
         "img-src": ["'self'", "data:", "blob:"],
     }
 
-    Talisman(app, content_security_policy=csp)
+    Talisman(
+        app,
+        content_security_policy=csp,
+        content_security_policy_nonce_in=["script-src", "script-src-elem"],
+    )
 
     Compress(app)
 

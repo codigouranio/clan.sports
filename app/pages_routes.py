@@ -67,7 +67,7 @@ def test() -> str:
 @pages_blueprint.errorhandler(404)
 def not_found(e):
     return render_template(
-        "404.html", title="Not Found", template="404.html", test={"test": "test"}
+        "/404.html", title="Not Found", template="404.html", test={"test": "test"}
     )
 
 
