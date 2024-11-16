@@ -15,8 +15,14 @@
     "email": "john.smith@gmail.com"
   },
   {
+<<<<<<< HEAD
     "id": 4,
     "name": "Jane Smith",
     "email": "jane.smith@gmail.com"
+=======
+    "id": 5,
+    "name": "Peter Parker",
+    "email": "peter.parker@gmail.com"
+>>>>>>> d1941d7f2934b323840ac19df023150a7a7b440e
   }
 ]
