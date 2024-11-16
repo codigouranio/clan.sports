@@ -1,7 +1,8 @@
-{"id":1,"name":"John Doe","email":"john.doe@gmail.com"}
-{"id":2,"name":"Jane Doe","email":"jane.doe@gmail.com"}
-{"id":3,"name":"John Smith","email":"john.smith@gmail.com"}
-{"id":4,"name":"Jane Smith","email":"jane.smith@gmail.com"}
-{"id":5,"name":"Peter Parker","email":"peter.parker@gmail.com"}
-{"id":7,"name":"Jose Sanchez","email":"jose.sanchez@gmail.com"}
-{"id":6,"name":"Camilo Sesto","email":"camilo.sesto@gmail.com"}
+{"id":1,"name":"John Doe","email":"john.doe@gmail.com","follow":true}
+{"id":2,"name":"Jane Doe","email":"jane.doe@gmail.com","follow":true}
+{"id":3,"name":"John Smith","email":"john.smith@gmail.com","follow":true}
+{"id":4,"name":"Jane Smith","email":"jane.smith@gmail.com","follow":true}
+{"id":5,"name":"Peter Parker","email":"peter.parker@gmail.com","follow":true}
+{"id":7,"name":"Jose Sanchez","email":"jose.sanchez@gmail.com","follow":true}
+{"id":7,"name":"Jose Azul","email":"jose.azul@gmail.com","follow":true}
+{"id":6,"name":"Camilo Sesto","email":"camilo.sesto@gmail.com","follow":true}
