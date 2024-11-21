@@ -1,49 +1,39 @@
 import sanitizeHtml from "sanitize-html";
 import AppInfo from "./appInfo";
 import { getClubInfo } from "./fetchApi";
-import { Component, getData, Link, Page } from "./loveVanilla";
+import { Component, getData, getUrlParams, Link, Page } from "./loveVanilla";
 
 export default class PageClub extends Page {
   constructor(app, urlMatcher) {
     super(app, urlMatcher);
 
-    this.$object = document.querySelector("#w-board");
     this.createChild(new AppInfo("#app-info"));
+    this.createChild(new ClubInfo("#w-board"));
   }
 
   requireQueryData() {
     const { club } = getData();
     return (
       !club ||
-      (this.getUrlParams().has("club_name") &&
-        club?.club_name !== this.getUrlParams("club_name"))
+      (getUrlParams().has("club_name") &&
+        club?.club_name !== getUrlParams("club_name"))
     );
   }
 
   async afterRender() {
     if (this.requireQueryData()) {
-      await getClubInfo(this.getUrlParams("club_name") || "");
+      await getClubInfo(getUrlParams("club_name") || "");
     }
-  }
-
-  render() {
-    super.render();
-
-    this.$object.innerHTML = "";
-
-    if (this.requireQueryData()) {
-      return;
-    }
-
-    const { club } = getData();
-    const clubInfo = new ClubInfo("#club-info", club);
-    this.$object.appendChild(clubInfo.getObject());
   }
 }
 
 export class ClubInfo extends Component {
-  constructor(id, props) {
-    super(id, props);
+  render() {
+    const { club } = getData();
+
+    if (!club) {
+      return;
+    }
 
     const article = document.createElement("article");
     article.className = "club-info";
@@ -52,14 +42,14 @@ export class ClubInfo extends Component {
 
     const headerInfoLeft = document.createElement("h5");
     headerInfoLeft.className = "rank";
-    headerInfoLeft.innerText = `Soccer Club - (Rank: ${props.rank})`;
+    headerInfoLeft.innerText = `Soccer Club - (Rank: ${club.rank})`;
     header.appendChild(headerInfoLeft);
 
     const headerInfoRight = document.createElement("div");
     headerInfoRight.className = "club-logo";
     const clubLogo = document.createElement("img");
-    clubLogo.title = props.club_name;
-    clubLogo.src = `/api/getClubLogo/${props.image_file}`;
+    clubLogo.title = club.club_name;
+    clubLogo.src = `/api/getClubLogo/${club.image_file}`;
     headerInfoRight.appendChild(clubLogo);
     header.appendChild(headerInfoRight);
 
@@ -67,37 +57,33 @@ export class ClubInfo extends Component {
 
     const content = document.createElement("div");
     content.className = "club-info-content";
-    content.innerHTML = sanitizeHtml(props?.info) || "No info available";
+    content.innerHTML = sanitizeHtml(club?.info) || "No info available";
 
     article.appendChild(content);
 
     const teamHeader = document.createElement("h5");
-    teamHeader.innerText = `Teams (${props?.teams.length || 0})`;
+    teamHeader.innerText = `Teams (${club?.teams.length || 0})`;
     article.appendChild(teamHeader);
 
-    const teamTable = new TeamTable("team-table", {
-      teams: props.teams,
-      clubName: props.club_name,
-    });
-    article.appendChild(teamTable.getObject());
+    const teamTable = new TeamTable("#team-table");
+    article.appendChild(teamTable.render());
 
     const footer = document.createElement("footer");
-    footer.innerText = `Last updated: ${props.last_update}`;
+    footer.innerText = `Last updated: ${club.last_update}`;
     article.appendChild(footer);
 
-    this.$object = article;
+    this.renderChild(article);
   }
 }
 
 export class TeamTable extends Component {
-  constructor(id, props) {
-    super(id, props);
+  render() {
+    const {
+      club: { teams, club_name },
+    } = getData();
 
-    const { teams, clubName } = props;
-
-    this.$object = document.createElement("table");
-    this.$object.id = id;
-    this.$object.className = "team-table";
+    const table = document.createElement("table");
+    table.className = "team-table";
 
     const thead = document.createElement("thead");
     const headerRow = document.createElement("tr");
@@ -110,7 +96,7 @@ export class TeamTable extends Component {
     }
     thead.appendChild(headerRow);
 
-    this.$object.appendChild(thead);
+    table.appendChild(thead);
 
     const tbody = document.createElement("tbody");
     for (const team of teams) {
@@ -125,7 +111,7 @@ export class TeamTable extends Component {
         }
         if (i == 1) {
           const params = new URLSearchParams({
-            club_name: clubName,
+            club_name: club_name,
             team_name: team.team_name,
           });
           const a = new Link(`team-link-${i}`, {
@@ -145,6 +131,8 @@ export class TeamTable extends Component {
       tbody.appendChild(row);
     }
 
-    this.$object.appendChild(tbody);
+    table.appendChild(tbody);
+
+    return table;
   }
 }

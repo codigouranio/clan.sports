@@ -9,15 +9,14 @@ class ClubList extends Component {
       return;
     }
 
-    const results = this.getObject();
-    results.innerHTML = "";
-
     if (searchResults && searchResults.total == 0) {
       const noResults = document.createElement("p");
       noResults.innerText = "No results found";
-      results.appendChild(noResults);
-      return;
+      this.renderChild(noResults);
+      return noResults;
     }
+
+    const results = document.createElement("span");
 
     const resultsLabel = document.createElement("p");
     let label = "Results";
@@ -55,6 +54,10 @@ class ClubList extends Component {
       this.moreResults = new MoreResults("more-results");
       results.appendChild(this.moreResults.getObject());
     }
+
+    this.renderChild(results);
+
+    return results;
   }
 }
 

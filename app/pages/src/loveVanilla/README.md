@@ -6,7 +6,7 @@ Welcome to the **Vanilla Lovers' Project**! This initiative is a tribute to deve
 
 If you’re passionate about simplicity and want to explore the raw power of JavaScript, this project is your playground.
 
-**Example in Action**: Check out [Clan Sports](https://staging.clansports.club), a real-world project utilizing concepts from Vanilla Lovers' Project.  
+**Example in Action**: Check out [Clan Sports](https://www.clansports.club), a real-world project utilizing concepts from Vanilla Lovers' Project.  
 
 ## What's Inside  
 This project is a showcase of how much can be achieved with pure JavaScript. No frameworks, no libraries—just clean, efficient, and well-documented code to inspire and empower developers. It's designed to help you:  

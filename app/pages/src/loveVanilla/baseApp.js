@@ -1,8 +1,10 @@
+import { Component } from "./component";
 import { getData, setData } from "./data";
 import { UrlMatcher } from "./urlMatcher";
 
 export class BaseApp {
   pages = [];
+  lastPage = null;
 
   constructor(id) {
     this.id = id;
@@ -73,14 +75,18 @@ export class BaseApp {
   }
 
   triggerRenderingEvent() {
-    this.getCurrentPage()?.beforeRender();
-    this.getCurrentPage()?.render();
-    this.getCurrentPage()?.afterRender();
+    this.lastPage = this.getCurrentPage();
+
+    this.lastPage?.beforeRender();
+    this.lastPage?.render();
+    this.lastPage?.afterRender();
   }
 
   triggerUpdatedDataEvent() {
-    this.getCurrentPage()?.beforeRender();
-    this.getCurrentPage()?.render();
-    this.getCurrentPage()?.updatedData();
+    this.lastPage = this.getCurrentPage();
+
+    this.lastPage?.beforeRender();
+    this.lastPage?.render();
+    this.lastPage?.updatedData();
   }
 }

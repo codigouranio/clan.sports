@@ -10,6 +10,7 @@ from os import environ, path
 from dependency_injector.wiring import Provide, inject
 from flask import Flask, g, json, session
 from flask_assets import Environment
+from app.api.xHubDatabase import XHubDatabase
 from flask_caching import Cache
 from flask_compress import Compress
 from flask_cors import CORS

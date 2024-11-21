@@ -13,19 +13,6 @@ export class Page {
     return this.url;
   }
 
-  getUrlParams(paramName) {
-    const params = new URLSearchParams(window.location.search);
-
-    if (paramName && paramName.length > 0) {
-      if (params.has(paramName)) {
-        return params.get(paramName);
-      }
-      return "";
-    }
-
-    return params;
-  }
-
   getApp() {
     return this.app;
   }
@@ -55,6 +42,7 @@ export class Page {
 
   render() {
     this.callMethodOnChildren("render");
+    return document.createElement("span");
   }
 
   afterRender() {
@@ -63,5 +51,6 @@ export class Page {
 
   updatedData() {
     this.callMethodOnChildren("updatedData");
+    return document.createElement("span");
   }
 }

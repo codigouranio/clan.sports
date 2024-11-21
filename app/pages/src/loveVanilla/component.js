@@ -6,6 +6,7 @@ import { asyncDebounce } from "./utils";
 
 export class Component {
   changedVisibility = async (visible) => {};
+
   parent = null;
   children = [];
   $object = null;
@@ -123,7 +124,14 @@ export class Component {
     if (this.$object) {
       return this.$object;
     }
-    return document.querySelector(this.id);
+
+    if (this.id === undefined) {
+      this.$object = document.createElement("span");
+    } else {
+      this.$object = document.querySelector(this.id);
+    }
+
+    return this.$object;
   }
 
   setHtml(html) {
@@ -133,7 +141,7 @@ export class Component {
   }
 
   remove() {
-    this.getObject()?.remove();
+    this.children.forEach((child) => child.getObject()?.remove());
   }
 
   getKeys() {
@@ -190,6 +198,14 @@ export class Component {
       if (this.getObject()) {
         this.getObject().prepend(child.getObject());
       }
+    }
+  }
+
+  renderChild(newChild) {
+    if (this.getObject().children.length > 0) {
+      this.getObject().replaceChild(newChild, this.getObject().children[0]);
+    } else {
+      this.getObject().appendChild(newChild);
     }
   }
 }

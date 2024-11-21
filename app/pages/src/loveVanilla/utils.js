@@ -19,4 +19,17 @@ function asyncDebounce(func, delay) {
   };
 }
 
-export { asyncDebounce };
+function getUrlParams(paramName) {
+  const params = new URLSearchParams(window.location.search);
+
+  if (paramName && paramName.length > 0) {
+    if (params.has(paramName)) {
+      return params.get(paramName);
+    }
+    return "";
+  }
+
+  return params;
+}
+
+export { asyncDebounce, getUrlParams };

@@ -251,14 +251,36 @@ summary {
 }
 
 span.club-logo-frame {
-  justify-content: center;
-  align-items: center;
-  width: 5em;
+  display: flex; /* Flexbox to center the logo */
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  width: 5em; /* Equal width and height for round shape */
   height: 5em;
-  border: 1px solid #000;
-  border-radius: 50%;
-  overflow: hidden;
+  border: 1px solid #000; /* Frame border */
+  border-radius: 50%; /* Makes the frame circular */
+  overflow: hidden; /* Ensures the logo doesn't overflow */
 }
+
+// #club-list {
+//   .club-logo {
+//     width: 2em;
+//     height: 2em;
+//   }
+// }
+
+// .club-logo {
+//   margin-right: 10px; /* Space between the logo and the title */
+// }
+
+// span.club-logo-frame {
+//   justify-content: center;
+//   align-items: center;
+//   width: 5em;
+//   height: 5em;
+//   border: 1px solid #000;
+//   border-radius: 80%;
+//   overflow: hidden;
+// }
 
 article.club-info header {
   display: flex;
@@ -287,6 +309,20 @@ article.club-info header h5 {
 }
 
 table.team-table a {
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  color: #e5e5e5;
+}
+
+a.coach-search-google,
+a.player-search-google {
+  margin-right: 0.5em;
+  text-decoration: none;
+  text-decoration-skip-ink: none;
+  color: #e5e5e5;
+}
+
+a.player-page {
   text-decoration: underline;
   text-decoration-skip-ink: none;
   color: #e5e5e5;

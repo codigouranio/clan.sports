@@ -4,7 +4,8 @@ import { getAppInfo, getCurrentState } from "./fetchApi";
 import { BaseApp, UrlMatcher } from "./loveVanilla";
 import PageClub from "./pageClub";
 import PageHome from "./pageHome";
-import TeamClub from "./pageTeam";
+import PagePlayer from "./pagePlayer";
+import PageTeam from "./pageTeam";
 
 class App extends BaseApp {
   constructor() {
@@ -15,7 +16,8 @@ class App extends BaseApp {
 console.log("INITIALIZING APP");
 const app = new App();
 
-app.addPage(new TeamClub(app, new UrlMatcher("/", "?team_name=*", "")));
+app.addPage(new PagePlayer(app, new UrlMatcher("/", "?player_name=*", "")));
+app.addPage(new PageTeam(app, new UrlMatcher("/", "?team_name=*", "")));
 app.addPage(new PageClub(app, new UrlMatcher("/", "?club_name=*", "")));
 app.addPage(new PageHome(app, new UrlMatcher("/", "", "")));
 
