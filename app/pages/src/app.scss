@@ -277,8 +277,10 @@ article.club-info header {
 article.club-info header img {
   width: 3.8em;
   height: auto;
-  border-radius: 0.5rem;
-  border: #e5e5e5 solid 8px;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  padding: 0.01em;
+  border: #e5e5e5 solid 3px;
   box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
     0 1px 3px rgba(255, 255, 255, 0.2);
 }

@@ -2,139 +2,25 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    /*// Glow Border Animation //*/
-
-    .animated-border-box,
-    .animated-border-box-glow {
-      max-height: 200px;
-      max-width: 250px;
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      overflow: hidden;
-      z-index: 0;
-      /* Border Radius */
-      border-radius: 10px;
-    }
-
-    .animated-border-box-glow {
-      overflow: hidden;
-      /* Glow Blur */
-      filter: blur(20px);
-    }
-
-    .animated-border-box:before,
-    .animated-border-box-glow:before {
-      content: '';
-      z-index: -2;
-      text-align: center;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) rotate(0deg);
-      position: absolute;
-      width: 99999px;
-      height: 99999px;
-      background-repeat: no-repeat;
-      background-position: 0 0;
-      /*border color, change middle color*/
-      background-image: conic-gradient(rgba(0, 0, 0, 0), #1976ed, rgba(0, 0, 0, 0) 25%);
-      /* change speed here */
-      animation: rotate 4s linear infinite;
-    }
-
-    .animated-border-box:after {
-      content: '';
-      position: absolute;
-      z-index: -1;
-      /* border width */
-      left: 5px;
-      top: 5px;
-      /* double the px from the border width left */
-      width: calc(100% - 10px);
-      height: calc(100% - 10px);
-      /*bg color*/
-      background: #292a2e;
-      /*box border radius*/
-      border-radius: 7px;
-    }
-
-    @keyframes rotate {
-      100% {
-        transform: translate(-50%, -50%) rotate(1turn);
-      }
-    }
-
-    /*// Border Animation END//*/
-
-
-
-    /*// Ignore This //*/
-    body {
-      margin: 0px;
-    }
-
-    .center-box {
-      height: 100vh;
+    span.club-logo-frame {
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #1D1E22;
-    }
-
-    img {
-      width: 100%;
-      height: 100%;
-    }
-
-    .box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 250px;
-      height: 250px;
+      width: 5em;
+      height: 5em;
+      border: 1px solid #000;
+      border-radius: 50%;
       overflow: hidden;
-      border-radius: 10%;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1)
-    }
-
-    .box:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -300px;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: skewX(-30deg);
-      transition: 0.3s;
-    }
-
-    .box:hover:before {
-      left: 250px;
-      background: rgba(255, 255, 255, 0.2);
+      box-sizing: border-box;
     }
   </style>
 </head>
 
 <body>
-  <!-- START Box -->
-  <div class="animated-border-box-glow"></div>
-  <div class="animated-border-box">
-    <!-- Inside the Box -->
-  </div>
-  <!-- END -->
-  <div class="animated-border-box-glow"></div>
-  <div class="animated-border-box">
-    <div class="box">
-      <img
-        src="https://i.postimg.cc/8zn1Gzjf/kisspng-social-media-computer-icons-tulane-university-face-drawing-vector-twitter-5ab02d6b50a397-886.png"
-        </img>
-    </div>
-  </div>
+  <span class="club-logo-frame">
+    <img src="logo.png" alt="Club Logo" style="width: 100%; height: 100%; object-fit: cover;">
+  </span>
 </body>
 
 </html>

@@ -19,7 +19,7 @@ export class Link extends Component {
     const newUrl = this.props?.href;
 
     if (newUrl.startsWith("https://")) {
-      window.location.assign(newUrl);
+      window.open(newUrl, "_blank");
     } else if (location.href !== newUrl) {
       history.pushState({}, "", newUrl);
       window.dispatchEvent(new Event("__@_popstate_forward"));
