@@ -10,7 +10,7 @@ export class BaseApp {
 
     document.addEventListener("DOMContentLoaded", async () => {
       setTimeout(() => this.startLoading(), 100);
-      setTimeout(() => this.stopLoading(), 800);
+      setTimeout(() => this.stopLoading(), 600);
     });
   }
 
