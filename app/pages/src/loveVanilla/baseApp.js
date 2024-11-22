@@ -1,4 +1,3 @@
-import { Component } from "./component";
 import { getData, setData } from "./data";
 import { UrlMatcher } from "./urlMatcher";
 
@@ -10,13 +9,8 @@ export class BaseApp {
     this.id = id;
 
     document.addEventListener("DOMContentLoaded", async () => {
-      setTimeout(() => {
-        document.body.classList.add("show-up");
-      }, 100);
-
-      setTimeout(() => {
-        document.body.classList.add("fade-in");
-      }, 520);
+      setTimeout(() => this.startLoading(), 100);
+      setTimeout(() => this.stopLoading(), 800);
     });
   }
 
@@ -88,5 +82,13 @@ export class BaseApp {
     this.lastPage?.beforeRender();
     this.lastPage?.render();
     this.lastPage?.updatedData();
+  }
+
+  startLoading() {
+    document.querySelector(".love-vanilla-body")?.classList.add("show-up");
+  }
+
+  stopLoading() {
+    document.querySelector(".love-vanilla-body")?.classList.add("fade-in");
   }
 }

@@ -11,6 +11,12 @@ class App extends BaseApp {
   constructor() {
     super("body");
   }
+
+  startLoading() {}
+
+  stopLoading() {
+    document.querySelector(".love-vanilla-loading")?.classList.add("hidden");
+  }
 }
 
 console.log("INITIALIZING APP");

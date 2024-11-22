@@ -261,27 +261,6 @@ span.club-logo-frame {
   overflow: hidden; /* Ensures the logo doesn't overflow */
 }
 
-// #club-list {
-//   .club-logo {
-//     width: 2em;
-//     height: 2em;
-//   }
-// }
-
-// .club-logo {
-//   margin-right: 10px; /* Space between the logo and the title */
-// }
-
-// span.club-logo-frame {
-//   justify-content: center;
-//   align-items: center;
-//   width: 5em;
-//   height: 5em;
-//   border: 1px solid #000;
-//   border-radius: 80%;
-//   overflow: hidden;
-// }
-
 article.club-info header {
   display: flex;
   align-items: center;
@@ -326,4 +305,41 @@ a.player-page {
   text-decoration: underline;
   text-decoration-skip-ink: none;
   color: #e5e5e5;
+}
+
+/* Full-page loader */
+#loading-screen {
+  position: fixed;
+  /* Ensure it covers the whole viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  background-color: rgba(29, 98, 209, 1);
+  /* White background with slight transparency */
+  display: flex;
+  /* Flexbox to center content */
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  /* Place above all other content */
+}
+
+/* Optional: Add a fade-out animation when loading is done */
+.hidden {
+  animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.spinner {
+  width: 8em;
+  height: 8em;
 }

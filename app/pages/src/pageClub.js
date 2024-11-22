@@ -20,6 +20,11 @@ export default class PageClub extends Page {
     );
   }
 
+  beforeRender() {
+    super.beforeRender();
+    console.log(this.requireQueryData());
+  }
+
   async afterRender() {
     if (this.requireQueryData()) {
       await getClubInfo(getUrlParams("club_name") || "");
