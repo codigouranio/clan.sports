@@ -7,7 +7,7 @@ export class SearchForm extends Component {
 
     const searchBox = new SearchBox("#search-box");
     this.createChild(searchBox);
-    this.createChild(new SearchButton("#search-button", { searchBox }));
+    // this.createChild(new SearchButton("#search-button", { searchBox }));
   }
 
   handleSubmit(event) {

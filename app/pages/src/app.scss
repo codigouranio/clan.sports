@@ -15,6 +15,9 @@
   --pico-typography-spacing-vertical: 1.5rem;
   --pico-form-element-spacing-vertical: 1rem;
   --pico-form-element-spacing-horizontal: 1.25rem;
+  --spacing-company: 3rem;
+  --font-weight: 400;
+  --border-radius: 0;
 }
 
 header {
@@ -91,18 +94,6 @@ summary.club-result {
   margin-bottom: 1cap;
   text-decoration: underline;
   text-decoration-skip-ink: none;
-}
-
-a.search-title {
-  --pico-font-weight: 700;
-  text-decoration: underline;
-  text-decoration-skip-ink: none;
-  color: #e5e5e5;
-  padding: 0em 1em 0 0;
-}
-
-a.search-title:hover {
-  opacity: 0.8;
 }
 
 button {
@@ -193,7 +184,7 @@ button {
   letter-spacing: 0.05em; /* Adds slight spacing between letters */
 }
 
-.footer-badge {
+.aws-badge {
   display: inline-flex;
   align-items: center;
   background-color: #e5e5e5;
@@ -205,10 +196,14 @@ button {
   cursor: default;
 }
 
-.footer-badge img {
-  height: 30px;
-  width: 30px;
+.aws-badge img {
+  width: 1.9em;
+  height: auto;
   margin-left: 1em;
+}
+
+.aws-badge small {
+  font-size: 0.8em;
 }
 
 .paypal-button {
@@ -221,6 +216,7 @@ button {
   border-radius: 5px;
   font-weight: bold;
   border: none;
+  font-size: smaller;
 }
 
 .paypal-button:hover {
@@ -228,7 +224,7 @@ button {
 }
 
 .paypal-icon {
-  width: 24px; /* Adjust size as needed */
+  width: 1.5em; /* Adjust size as needed */
   height: auto;
   margin-right: 10px; /* Space between icon and text */
 }
@@ -272,17 +268,6 @@ article.club-info header {
   align-items: center;
   gap: 1rem;
   vertical-align: bottom;
-}
-
-article.club-info header img {
-  width: 3.8em;
-  height: auto;
-  border-radius: 50%;
-  aspect-ratio: 1 / 1;
-  padding: 0.01em;
-  border: #e5e5e5 solid 3px;
-  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
-    0 1px 3px rgba(255, 255, 255, 0.2);
 }
 
 article.club-info header h5 {
@@ -344,4 +329,43 @@ a.player-page {
 .spinner {
   width: 8em;
   height: 8em;
+}
+
+a.search-title {
+  --pico-font-weight: 700;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  color: #e5e5e5;
+  padding: 0em 1em 0 0;
+
+  display: flex; /* Flexbox layout to keep items side-by-side */
+  align-items: center; /* Vertically aligns text with the image */
+  gap: 0.5em; /* Optional spacing between image and text */
+}
+
+a.search-title:hover {
+  opacity: 0.8;
+}
+
+article.club-info header img {
+  width: 3.8em;
+  height: auto;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  padding: 0.01em;
+  border: #e5e5e5 solid 3px;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
+    0 1px 3px rgba(255, 255, 255, 0.2);
+}
+
+header.player-info {
+  padding: var(--spacing-company) 0;
+}
+
+header.player-info hgroup > :last-child {
+  color: var(--h3-color);
+}
+
+header.player-info hgroup {
+  margin-bottom: var(--spacing-company);
 }
