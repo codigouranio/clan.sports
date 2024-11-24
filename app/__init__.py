@@ -48,7 +48,7 @@ def create_app():
         "script-src": ["'self'"],
         "script-src-elem": ["'self'", "*.googletagmanager.com"],
         "connect-src": ["'self'", "*.openstreetmap.org", "*.google-analytics.com"],
-        "img-src": ["'self'", "data:", "blob:"],
+        "img-src": ["'self'", "data:", "blob:", "*.svgrepo.com"],
     }
 
     Talisman(

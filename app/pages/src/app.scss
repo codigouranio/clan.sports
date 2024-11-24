@@ -175,13 +175,19 @@ button {
   background-color: #24292e;
 }
 
-.site-title {
+.site-title a {
   font-size: larger;
   font-weight: 700;
   color: #f8f9fa; /* Light text color */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+  // text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
   font-family: "Poppins", sans-serif; /* Modern and clean font */
   letter-spacing: 0.05em; /* Adds slight spacing between letters */
+  text-decoration: none;
+  color: inherit;
+}
+
+.site-title:hover a {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .aws-badge {
@@ -199,7 +205,7 @@ button {
 .aws-badge img {
   width: 1.9em;
   height: auto;
-  margin-left: 1em;
+  // margin-left: 1em;
 }
 
 .aws-badge small {
@@ -358,14 +364,80 @@ article.club-info header img {
     0 1px 3px rgba(255, 255, 255, 0.2);
 }
 
-header.player-info {
-  padding: var(--spacing-company) 0;
+.player-info-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
 }
 
-header.player-info hgroup > :last-child {
-  color: var(--h3-color);
+.player-header {
+  background-color: #0d325d;
+  width: auto;
+  padding: 2em;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-right: 1em;
 }
 
-header.player-info hgroup {
-  margin-bottom: var(--spacing-company);
+.player-header-wrapper {
+  display: block;
+  // margin: 1em 2em;
+  // padding: 2em 0.5em;
+  // background-color: antiquewhite;
+  // min-width: 10em;
+}
+
+.player-name {
+  font-size: 2em;
+  text-align: center;
+  line-height: 1.3cap;
+  margin-bottom: 0.5em;
+}
+
+.player-position {
+  font-size: 0.2em;
+}
+
+.player-picture {
+  width: 5em;
+  height: 5em;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #000;
+  margin-bottom: 2em;
+}
+
+@media (max-width: 480px) {
+  .site-title small {
+    display: none;
+  }
+
+  .player-header-wrapper {
+    width: 100%;
+    min-width: 100%;
+  }
+  .player-info-container {
+    background-color: #fff;
+    border-radius: 20%;
+    // margin-left: calc(calc(100% - 1114px) / 2);
+  }
+
+  .player-header {
+    background-color: #142661;
+    flex-direction: row;
+    padding: 0cap;
+    border-radius: 8px;
+    margin-right: auto;
+  }
+
+  .player-picture {
+    margin: 1em;
+  }
+
+  .player-position {
+    display: none;
+  }
 }

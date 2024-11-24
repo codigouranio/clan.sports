@@ -19,57 +19,54 @@ export class PlayerInfo extends Component {
     super(id, props);
   }
   render() {
-    const playerName = getUrlParams("player_name");
+    const paramPlayerName = getUrlParams("player_name");
 
     const root = document.createElement("div");
-    // root.classList.add("player-info");
-    // root.classList.add("grid");
+    root.classList.add("player-info-container");
 
-    // const section = document.createElement("section");
-    // section.innerHTML = `
-    // <hgroup>
-    //   <h2>Ut sit amet sem ut velit</h2>
-    //   <p>Quisque mi est</p>
-    // </hgroup>
-    // <p>
-    // Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque lobortis est vel velit bibendum ultrices. Sed aliquam tortor vel odio fermentum ullamcorper eu vitae neque. Sed non diam at tellus venenatis viverra. Vestibulum et leo laoreet arcu tempor eleifend venenatis ac leo. Pellentesque euismod justo sed nisl sollicitudin varius. Duis venenatis nisl sit amet ante rutrum posuere. Etiam nec ullamcorper leo, sed placerat mauris.
-    // </p>
-    // <p>
-    // <a href="#" onclick="event.preventDefault()">Suspendisse potenti</a><br>
-    //   <small>Proin non condimentum tortor. Donec in feugiat sapien.</small>
-    // </p>
-    // `;
-    // root.appendChild(section);
-    // grid.appendChild(section);
-    // main.appendChild(grid);
-    // root.appendChild(main);
+    const playerHeaderWrapper = document.createElement("div");
+    playerHeaderWrapper.classList.add("player-header-wrapper");
+    root.appendChild(playerHeaderWrapper);
 
-    const section = document.createElement("section");
-    const hgroup = document.createElement("hgroup");
-    section.appendChild(hgroup);
-    const h2 = document.createElement("h2");
-    const items = playerName.split("_");
-    h2.innerText = items[0].concat(" ", items[1]);
-    hgroup.appendChild(h2);
+    const playerHeader = document.createElement("div");
+    playerHeader.classList.add("player-header");
+    playerHeaderWrapper.appendChild(playerHeader);
 
-    const playerFooter = document.createElement("p");
-    section.appendChild(playerFooter);
-    const playerFooterSmall = document.createElement("small");
-    playerFooterSmall.appendChild(
-      document.createTextNode(
-        "Proin non condimentum tortor. Donec in feugiat sapien."
-      )
-    );
+    const playerPicture = document.createElement("img");
+    playerPicture.classList.add("player-picture");
+    playerPicture.src =
+      "https://www.svgrepo.com/show/261565/football-player-soccer-player.svg";
+    playerHeader.appendChild(playerPicture);
 
-    root.appendChild(section);
+    const playerData = getUrlParams("player_name");
+    const items = playerData.split("_");
 
-    // header.classList.add("header");
-    // root.appendChild(header);
-    // const subheader = document.createElement("hgroup");
-    // const h1 = document.createElement("h1");
-    // h1.textContent = "Player Info";
-    // subheader.appendChild(h1);
-    // root.appendChild(header);
+    const playerName = document.createElement("div");
+    playerName.classList.add("player-name");
+    playerName.innerText = items[0].concat(" ", items[1]);
+    playerHeader.appendChild(playerName);
+
+    const playerPosition = document.createElement("div");
+    playerPosition.classList.add("player-position");
+    playerPosition.innerText = "Year # " + items[2];
+    playerHeader.appendChild(playerPosition);
+
+    const playerBody = document.createElement("div");
+    playerBody.classList.add("player-body");
+    root.appendChild(playerBody);
+
+    const playerContent = document.createElement("div");
+    playerContent.classList.add("player-content");
+    playerBody.appendChild(playerContent);
+
+    // for (let i = 0; i < 10; i++) {
+    //   const article1 = document.createElement("div");
+    //   article1.classList.add("player-article");
+    //   article1.innerHTML =
+    //     "no se que están describiendo aquí en el artículo de la página del jugador";
+    //   playerContent.appendChild(article1);
+    // }
+
     this.renderChild(root);
   }
 }
