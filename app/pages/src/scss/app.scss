@@ -1,0 +1,371 @@
+@use "sass:map";
+
+@use "pico";
+@import "colors";
+@import "../loveVanilla/style.scss";
+
+@import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+
+:root {
+  // --pico-font-family: Pacifico, cursive;
+  --pico-border-radius: 0.5rem;
+  --pico-typography-spacing-vertical: 1.5rem;
+  --pico-form-element-spacing-vertical: 1rem;
+  --pico-form-element-spacing-horizontal: 1.25rem;
+  --spacing-company: 3rem;
+  --font-weight: 400;
+  --border-radius: 0;
+}
+
+h1 {
+  --pico-font-weight: 400;
+  --pico-typography-spacing-vertical: 0.5rem;
+  margin: 0; /* Remove default margin */
+}
+
+h2 {
+  --pico-font-weight: 700;
+  --pico-typography-spacing-vertical: 0.5rem;
+}
+
+article h2.rank {
+  font-size: 1.5rem;
+  --pico-font-weight: 700;
+  --pico-typography-spacing-vertical: 0.5rem;
+}
+
+article h1 {
+  font-size: medium;
+  --pico-font-weight: 700;
+  --pico-typography-spacing-vertical: 0.5rem;
+}
+
+article h2 {
+  font-size: medium;
+  --pico-font-weight: 700;
+  --pico-typography-spacing-vertical: 0.5rem;
+}
+
+.paypal-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #0070ba;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  border: none;
+  font-size: smaller;
+}
+
+.paypal-button:hover {
+  background-color: #005e94;
+}
+
+.paypal-icon {
+  width: 1.5em; /* Adjust size as needed */
+  height: auto;
+  margin-right: 10px; /* Space between icon and text */
+}
+
+footer {
+  font-size: small;
+  font-style: italic;
+  // --pico-font-family: Pacifico, cursive;
+  // --pico-font-weight: 400;
+  // --pico-typography-spacing-vertical: 0.5rem;
+}
+
+article.club-info header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+article.club-info header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  vertical-align: bottom;
+}
+
+article.club-info header h5 {
+  margin: auto 0;
+}
+
+article.club-info header img {
+  width: 3.8em;
+  height: auto;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  padding: 0.01em;
+  border: #e5e5e5 solid 3px;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
+    0 1px 3px rgba(255, 255, 255, 0.2);
+}
+
+/* Full-page loader */
+#loading-screen {
+  position: fixed;
+  /* Ensure it covers the whole viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  background-color: rgba(29, 98, 209, 1);
+  /* White background with slight transparency */
+  display: flex;
+  /* Flexbox to center content */
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  /* Place above all other content */
+}
+
+.hidden {
+  animation: fadeOut 0.5s forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+#club-list {
+  .club-logo {
+    width: 2em;
+    height: 2em;
+  }
+}
+
+.club-logo {
+  margin-right: 10px; /* Space between the logo and the title */
+}
+
+span.club-logo-frame {
+  display: flex; /* Flexbox to center the logo */
+  justify-content: center; /* Centers horizontally */
+  align-items: center; /* Centers vertically */
+  width: 5em; /* Equal width and height for round shape */
+  height: 5em;
+  border: 1px solid #000; /* Frame border */
+  border-radius: 50%; /* Makes the frame circular */
+  overflow: hidden; /* Ensures the logo doesn't overflow */
+}
+
+.site-title a {
+  font-size: larger;
+  font-weight: 700;
+  color: #f8f9fa; /* Light text color */
+  // text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+  font-family: "Poppins", sans-serif; /* Modern and clean font */
+  letter-spacing: 0.05em; /* Adds slight spacing between letters */
+  text-decoration: none;
+  color: inherit;
+  margin-left: 0.3em;
+}
+
+.site-title:hover a {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.page-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #333;
+  color: #fff;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 14px;
+  font-stretch: semi-condensed;
+}
+
+.page-badge svg {
+  margin-right: 5px;
+  height: 18px;
+  width: 18px;
+}
+
+.page-badge:hover {
+  background-color: #24292e;
+}
+
+.player-info-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.player-header-wrapper {
+  background-color: #0d325d;
+  width: auto;
+  padding: 2em;
+  margin-right: 1em;
+  max-width: 12em;
+  border-radius: 1em;
+  z-index: 2;
+}
+
+.player-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.player-header img {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  aspect-ratio: 1 / 1;
+  padding: 0.01em;
+  border: #e5e5e5 solid 3px;
+  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
+    0 1px 3px rgba(255, 255, 255, 0.2);
+  margin-bottom: 2cap;
+}
+
+#player-info #player-name {
+  text-align: center;
+}
+
+#player-info #player-name h3 {
+  // color: #fff;
+  // font-size: clamp(14px, 1.2em, 1.5em);
+  // hyphens: auto;
+  // line-height: 1.3;
+  margin-bottom: 0.3em;
+  // overflow: hidden;
+  // text-align: center;
+  // white-space: normal;
+  // word-break: break-word;
+}
+
+#player-info #player-position h6 {
+  font-size: 0.8em;
+  text-align: center;
+  color: rgb(214, 215, 255);
+}
+
+#player-info #player-number p {
+  text-align: center;
+  color: #e0def7;
+  font-family: "Anton", sans-serif;
+  font-size: 3em;
+  line-height: 0.9em;
+  letter-spacing: 0.1em;
+  text-shadow: 2px 2px 5px black;
+}
+
+#player-following {
+  display: flex; /* Ensures proper alignment if additional elements are added */
+  justify-content: center; /* Center the button horizontally */
+  align-items: center; /* Center the button vertically */
+}
+
+#player-following button {
+  background-color: #e0def7; /* Light background color */
+  color: #333; /* Text color */
+  border: none;
+  border-radius: 5px; /* Slightly rounded corners */
+  padding: 10px 20px; /* Padding inside the button */
+  font-size: 0.8em; /* Font size */
+  display: flex; /* Flex layout for text and icon */
+  align-items: center; /* Align text and icon vertically */
+  gap: 8px; /* Space between text and the star icon */
+  cursor: pointer;
+  transition: background-color 0.3s;
+  position: relative; /* Needed for the pseudo-element positioning */
+  overflow: hidden;
+  padding-left: 3.2em;
+}
+
+#player-following button:hover {
+  background-color: #d3c7e1; /* Slightly darker background on hover */
+}
+
+#player-following button::before {
+  content: "";
+  display: block;
+  width: 1.5em; /* Icon size */
+  height: 1.5em; /* Icon size */
+  background-image: url("../assets/img/star-icon.svg"); /* Path to your external SVG file */
+  background-size: contain; /* Ensures the icon scales properly */
+  background-repeat: no-repeat; /* Prevents repeating */
+  background-position: center; /* Centers the icon */
+  position: absolute;
+  left: 10px; /* Space between the icon and button's left edge */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust vertical centering */
+}
+
+.player-content {
+  padding: 1px;
+  border-radius: 1em;
+  z-index: 1;
+  min-width: 700px;
+  max-width: 700px;
+}
+
+.profile-ownership {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  padding: 10px 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.ownership-status {
+  font-size: 1em;
+  color: #333;
+}
+
+#ownership-label {
+  font-weight: bold;
+  color: #007bff; /* System color, change dynamically */
+}
+
+.ownership-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.3s;
+}
+
+.ownership-button:hover {
+  background-color: #0056b3;
+}
+
+a.coach-search-google,
+a.player-search-google {
+  margin-right: 0.5em;
+  text-decoration: none;
+  text-decoration-skip-ink: none;
+  color: #e5e5e5;
+}
+
+a.player-page {
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  color: #e5e5e5;
+}
+
+footer ul {
+  > li {
+    display: inline;
+    margin-right: 1em !important;
+  }
+}

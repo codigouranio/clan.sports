@@ -7,23 +7,45 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const webpack = require("webpack");
 
-const pageFiles = fs.readdirSync("./src/assets/").filter(function (file) {
-  return file.match(/.*\.html$/);
-});
+// const pageFiles = fs.readdirSync("./src/assets/").filter(function (file) {
+//   return file.match(/.*\.html$/);
+// });
 
-const pageEntries = pageFiles.map((filename) => {
-  return new HtmlWebpackPlugin({
-    template: path.join("./src/assets/", filename),
-    filename: filename,
-  });
-});
+// const pageEntries = pageFiles.map((filename) => {
+//   return new HtmlWebpackPlugin({
+//     template: path.join("./src/assets/", filename),
+//     filename: filename,
+//     chunks: ["app"],
+//   });
+// });
+const pageEntries = [
+  new HtmlWebpackPlugin({
+    template: path.join("./src/assets/index.html"),
+    filename: "index.html",
+    chunks: ["app"],
+  }),
+  new HtmlWebpackPlugin({
+    template: path.join("./src/assets/login.html"),
+    filename: "login.html",
+    chunks: ["login"],
+  }),
+];
 
 module.exports = {
   entry: {
     app: "./src/app.js",
+    login: "./src/login.js",
+  },
+  output: {
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "build"),
+    clean: true, // Cleans the output directory before each build
   },
   resolve: {
     modules: [path.resolve(__dirname, "./src"), "node_modules"],
+    alias: {
+      pico: path.resolve(__dirname, "node_modules/@picocss/pico/scss"),
+    },
   },
   devtool: "source-map",
   module: {
@@ -38,8 +60,21 @@ module.exports = {
       },
       {
         test: /\.(sc|sa|c)ss/,
-        // use: ["style-loader", "css-loader", "sass-loader"],
-        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          {
+            loader: "sass-loader",
+            options: {
+              sassOptions: {
+                includePaths: [
+                  path.resolve(__dirname, "node_modules/@picocss/pico/scss"),
+                  path.resolve(__dirname, "node_modules"),
+                ],
+              },
+            },
+          },
+        ],
         include: [path.resolve(__dirname, "src")],
       },
       {
@@ -55,17 +90,13 @@ module.exports = {
     ],
   },
   mode: "development",
-  output: {
-    path: path.join(__dirname, "/build/"),
-    filename: "./bundle.js",
-  },
   plugins: [
     ...pageEntries,
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
-      filename: "main.css",
-      chunkFilename: "[name].css",
+      filename: "css/[name].css",
+      chunkFilename: "css/[name].css",
     }),
     new CopyWebpackPlugin({
       patterns: [

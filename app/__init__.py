@@ -44,11 +44,12 @@ def create_app():
 
     csp = {
         "default-src": ["'self'"],
-        "style-src": ["'self'", "'unsafe-inline'"],
+        "style-src": ["'self'", "'unsafe-inline'", "*.googleapis.com"],
         "script-src": ["'self'"],
         "script-src-elem": ["'self'", "*.googletagmanager.com"],
         "connect-src": ["'self'", "*.openstreetmap.org", "*.google-analytics.com"],
         "img-src": ["'self'", "data:", "blob:", "*.svgrepo.com"],
+        "font-src": ["'self'", "fonts.gstatic.com"],
     }
 
     Talisman(

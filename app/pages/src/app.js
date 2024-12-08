@@ -1,4 +1,4 @@
-import "./app.scss";
+import "./scss/app.scss";
 
 import { getAppInfo, getCurrentState } from "./fetchApi";
 import { BaseApp, UrlMatcher } from "./loveVanilla";

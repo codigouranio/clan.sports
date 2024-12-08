@@ -1,0 +1,30 @@
+@use "sass:map";
+@use "settings" as *;
+
+body {
+  > main,
+  > footer {
+    max-width: map.get(map.get($breakpoints, "md"), "viewport");
+    margin-inline: auto;
+  }
+
+  > main {
+    svg {
+      display: block;
+      width: 4rem;
+      height: 4rem;
+      margin-bottom: var(#{$css-var-prefix}block-spacing-vertical);
+      margin-inline: auto;
+    }
+
+    form {
+      label {
+        color: var(#{$css-var-prefix}muted-color);
+      }
+
+      :last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

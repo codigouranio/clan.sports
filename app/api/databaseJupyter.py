@@ -376,3 +376,82 @@ class DatabaseJupyter:
                     )
 
         return {}, 404
+
+    def getPlayerInfo(self, player_key):
+        return (
+            jsonify(
+                {
+                    "player_key": player_key,
+                    "player_name": "Player Name",
+                    "player_type": "Player Type",
+                    "player_position": "Player Position",
+                    "player_height": "Player Height",
+                    "player_weight": "Player Weight",
+                    "player_birthdate": "Player Birthdate",
+                    "player_age": "Player Age",
+                    "player_birthplace": "Player Birthplace",
+                    "player_national": "Player National",
+                    "player_club": "Player Club",
+                    "player_image": "Player Image",
+                    "player_info": "Player Info",
+                    "player_rank": "Player Rank",
+                    "player_last_update": "Player Last Update",
+                    "player_teams": "Player Teams",
+                    "type_item": "player",
+                    "search_title": f"Player Name",
+                    "similarity_score": 0,
+                    "more_results": False,
+                    "player_number": "Player Number",
+                    "execution_time": 0,
+                    "goalkeeper": "Goalkeeper",
+                    "defender": "Defender",
+                    "defender_midfielder": "Defender Midfielder",
+                    "defender_midfielder_striker": "Defender Midfielder Striker",
+                    "goals": "Goals",
+                    "assists": "Assists",
+                    "red_cards": "Red Cards",
+                    "yellow_cards": "Yellow Cards",
+                    "clean_sheets": "Clean Sheets",
+                    "club_logo": "Club Logo",
+                    "history": [
+                        {
+                            "year": "Year",
+                            "team": "Team",
+                            "appearances": "Appearances",
+                            "goals": "Goals",
+                            "assists": "Assists",
+                            "yellow_cards": "Yellow Cards",
+                            "red_cards": "Red Cards",
+                            "clean_sheets": "Clean Sheets",
+                        }
+                    ],
+                    "assets": [
+                        {
+                            "type": "trophy",
+                            "name": "Trophy Name",
+                            "description": "",
+                            "value": "Trophy Value",
+                            "image": "Trophy Image",
+                        },
+                        {
+                            "Type": "award",
+                            "name": "Award Name",
+                            "description": "",
+                            "value": "Award Name",
+                            "image": "Award Image",
+                        },
+                        {
+                            "type": "medal",
+                            "name": "Medal Name",
+                            "description": "",
+                            "value": "Medal Value",
+                            "image": "Medal Image",
+                        },
+                    ],
+                }
+            ),
+            200,
+        )
+
+    def setPlayer(self, player_key, player_info):
+        return jsonify({"message": f"Player {player_key} has been updated!"}), 200

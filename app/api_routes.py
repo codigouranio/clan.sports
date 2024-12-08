@@ -697,3 +697,14 @@ def getClubLogo(logoPath: str):
 def getClubInfo():
     club_name = request.args.get("club_name")
     return app.database_jupyter.getClubInfo(club_name)
+
+
+@api_blueprint.route("/getPlayerInfo/", methods=["GET"])
+def getPlayerInfo():
+    player_key = request.args.get("player_key")
+    return app.database_jupyter.getPlayerInfo(player_key)
+
+
+@api_blueprint.route("/setPlayerInfo/", methods=["POST"])
+def setPlayerInfo(player_key, player_info):
+    return app.database_jupyter.setPlayerInfo(player_key, player_info)
