@@ -369,3 +369,19 @@ footer ul {
     margin-right: 1em !important;
   }
 }
+
+ul#login-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+
+  > a {
+    text-decoration: none;
+    color: #e5e5e5;
+  }
+
+  > a:hover {
+    text-decoration: underline;
+  }
+}

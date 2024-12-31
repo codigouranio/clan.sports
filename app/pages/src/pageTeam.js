@@ -1,5 +1,6 @@
 import AppInfo from "./appInfo";
 import { getClubInfo } from "./fetchApi";
+import LoginMenu from "./loginMenu";
 import { Component, getData, getUrlParams, Link, Page } from "./loveVanilla";
 
 export default class PageTeam extends Page {
@@ -8,6 +9,7 @@ export default class PageTeam extends Page {
 
     this.createChild(new AppInfo("#app-info"));
     this.createChild(new TeamInfo("#w-board"));
+    this.createChild(new LoginMenu("#login-menu"));
   }
 
   requireQueryData() {

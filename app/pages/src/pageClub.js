@@ -1,6 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 import AppInfo from "./appInfo";
 import { getClubInfo } from "./fetchApi";
+import LoginMenu from "./loginMenu";
 import { Component, getData, getUrlParams, Link, Page } from "./loveVanilla";
 
 export default class PageClub extends Page {
@@ -9,6 +10,7 @@ export default class PageClub extends Page {
 
     this.createChild(new AppInfo("#app-info"));
     this.createChild(new ClubInfo("#w-board"));
+    this.createChild(new LoginMenu("#login-menu"));
   }
 
   requireQueryData() {
@@ -22,7 +24,7 @@ export default class PageClub extends Page {
 
   beforeRender() {
     super.beforeRender();
-    console.log(this.requireQueryData());
+    // console.log(this.requireQueryData());
   }
 
   async afterRender() {

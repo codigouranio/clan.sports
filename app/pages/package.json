@@ -13,6 +13,7 @@
     "intl-tel-input": "^19.4.0",
     "jquery": "^3.7.1",
     "lodash": "^4.17.21",
+    "moment": "^2.30.1",
     "sanitize-html": "^2.13.1",
     "ts-loader": "^9.5.1",
     "webpack-rimraf-plugin": "^0.0.1-security"

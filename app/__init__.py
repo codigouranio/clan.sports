@@ -6,11 +6,11 @@ import os
 import secrets
 from datetime import timedelta
 from os import environ, path
+from authlib.integrations.flask_client import OAuth
 
 from dependency_injector.wiring import Provide, inject
 from flask import Flask, g, json, session
 from flask_assets import Environment
-from app.api.xHubDatabase import XHubDatabase
 from flask_caching import Cache
 from flask_compress import Compress
 from flask_cors import CORS
@@ -25,6 +25,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.api.databaseJupyter import DatabaseJupyter
+from app.api.xHubDatabase import XHubDatabase
 from app.appInfo import AppInfo
 
 from . import heartbeat_routes, home_routes
@@ -48,7 +49,13 @@ def create_app():
         "script-src": ["'self'"],
         "script-src-elem": ["'self'", "*.googletagmanager.com"],
         "connect-src": ["'self'", "*.openstreetmap.org", "*.google-analytics.com"],
-        "img-src": ["'self'", "data:", "blob:", "*.svgrepo.com"],
+        "img-src": [
+            "'self'",
+            "data:",
+            "blob:",
+            "*.svgrepo.com",
+            "*.googletagmanager.com",
+        ],
         "font-src": ["'self'", "fonts.gstatic.com"],
     }
 
@@ -71,20 +78,33 @@ def create_app():
     app.config.from_pyfile(
         path.join("..", "config.{}.py".format(environ.get("ENVIRONMENT", "dev")))
     )
-    app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000
     app.config["SEC_REPO_TOKEN"] = environ.get("SEC_REPO_TOKEN")
-
-    if not app.config["SEC_REPO_TOKEN"]:
-        print("Please set SEC_REPO_TOKEN environment variable")
+    app.config["MAX_CONTENT_LENGTH"] = 16 * 1000 * 1000
 
     app.logger.setLevel(app.config.get("LOGGER_LEVEL"))
 
     app.container = Container()
+    app.container.config.from_dict(app.config)
+
+    # print(app.container.config.get("USER_POOL_ID"))
+
     app.container.init_resources()
     app.container.wire(modules=[__name__])
 
     app.login_manager = LoginManager()
     app.login_manager.init_app(app)
+
+    app.secret_key = os.urandom(24)  # Use a secure random key in production
+    oauth = OAuth(app)
+
+    oauth.register(
+        name="oidc",
+        authority="https://cognito-idp.us-east-2.amazonaws.com/us-east-2_wOCQFFzH6",
+        client_id="43eb07uj4bm4qci6c2926u644f",
+        client_secret="<client secret>",
+        server_metadata_url="https://cognito-idp.us-east-2.amazonaws.com/us-east-2_wOCQFFzH6/.well-known/openid-configuration",
+        client_kwargs={"scope": "phone openid email"},
+    )
 
     app.assets = Environment()
     app.assets.init_app(app)

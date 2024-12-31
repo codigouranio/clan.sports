@@ -73,6 +73,8 @@ pandas = "^2.2.3"
 ijson = "^3.3.0"
 flask-compress = "^1.17"
 jellyfish = "^1.1.0"
+authlib = "^1.4.0"
+pydantic = "^2.10.4"
 
 [build-system]
 requires = ["poetry-core"]

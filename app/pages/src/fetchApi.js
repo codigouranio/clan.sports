@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getData, setData } from "./loveVanilla/data";
+import moment from "moment";
 
 // Setting up an Axios instance with default config
 const api = axios.create({
@@ -131,4 +132,86 @@ export async function getCurrentState() {
       console.error("Error getting location: ", error.message);
     }
   );
+}
+
+export async function requestCode(
+  email,
+  phoneNumber,
+  latitude = 0,
+  longitude = 0
+) {
+  try {
+    const response = await api.post(`requestCode`, {
+      Email: email,
+      PhoneNumber: phoneNumber,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error.message);
+    throw error;
+  }
+}
+
+export async function verifyCode(
+  email,
+  phoneNumber,
+  code,
+  challengeName,
+  session
+) {
+  try {
+    const response = await api.post(`verifyCode`, {
+      Email: email,
+      PhoneNumber: phoneNumber,
+      Code: code,
+      ChallengeName: challengeName,
+      Session: session,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error.message);
+    throw error;
+  }
+}
+
+export async function verifySession() {
+  try {
+    const session = getData()?.session;
+    if (!session || !session.user || !session.user.Username) {
+      setData({
+        session: {
+          ...session,
+          valid: false,
+          lastRequest: moment().format(),
+        },
+      });
+      return session;
+    }
+
+    const response = await api.post(`getUser`, {
+      AccessToken: session.authentication.AccessToken,
+    });
+    setData({
+      session: {
+        ...session,
+        ...{
+          user: response.data?.["User"],
+          lastRequest: moment().format(),
+          valid: true,
+        },
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error.message);
+    setData({
+      session: {
+        lastRequest: moment().format(),
+        valid: false,
+      },
+    });
+    throw error;
+  }
 }

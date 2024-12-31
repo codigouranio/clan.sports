@@ -2,6 +2,7 @@ import AppInfo from "./appInfo";
 import ClubList from "./clubList";
 import { searchClubsBySearchTerm } from "./fetchApi";
 import Loading from "./loading";
+import LoginMenu from "./loginMenu";
 import { getData, getUrlParams, Page } from "./loveVanilla";
 import { SearchForm } from "./searchForm";
 
@@ -12,14 +13,9 @@ class PageHome extends Page {
     this.createChild(new AppInfo("#app-info"));
     this.createChild(new SearchForm("#search-form"));
     this.createChild(new ClubList("#w-board"));
+    this.createChild(new LoginMenu("#login-menu"));
 
     this.loading = new Loading();
-  }
-
-  async beforeRender() {
-    super.beforeRender();
-    // this.app.getObject().appendChild(this.loading.render());
-    // this.app.getObject().removeChild(this.loading.getObject());
   }
 
   async render() {
@@ -27,6 +23,8 @@ class PageHome extends Page {
   }
 
   async afterRender() {
+    super.afterRender();
+
     const { searchResults } = getData();
 
     if (

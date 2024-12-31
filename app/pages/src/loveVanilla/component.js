@@ -24,6 +24,8 @@ export class Component {
     if (props?.parent) {
       this.parent = props.parent;
     }
+
+    this.self = this;
   }
 
   getParent() {
@@ -52,7 +54,8 @@ export class Component {
   hide(delay = 0) {
     asyncDebounce(() => {
       if (this.isVisible()) {
-        this.obj.classList.add("hidden");
+        // this.obj.classList.add("hidden");
+        this.getObject().style.display = "none";
         this.handleChangedVisibility(false);
       }
     }, delay)();
@@ -60,6 +63,7 @@ export class Component {
 
   show(delay = 0) {
     asyncDebounce(() => {
+      this.getObject().style.display = "block";
       // if (this.obj.classList.contains("love-vanilla-body")) {
       //   this.obj.classList.add("fade-in visible");
       // }
@@ -72,7 +76,9 @@ export class Component {
   }
 
   setText(text) {
-    this.obj.innerHTML = sanitizeHtml(text);
+    if (this.getObject()) {
+      this.getObject().innerHTML = sanitizeHtml(text);
+    }
   }
 
   reset() {
@@ -80,13 +86,7 @@ export class Component {
   }
 
   isVisible() {
-    if (!this.obj) {
-      // throw new Error(`Element with id ${this.id} not found`);
-      return false;
-    }
-    return (
-      !this.obj.classList.contains("hidden") && !this.obj.hasAttribute("hidden")
-    );
+    return this.getObject()?.style.display !== "none";
   }
 
   handleChangedVisibility(visible) {
@@ -152,13 +152,61 @@ export class Component {
     return murmurhash3_32_gc(JSON.stringify(this.keys.join("")));
   }
 
-  beforeRender() {}
+  disable() {
+    this.getObject().disabled = true;
+  }
 
-  render() {}
+  enable() {
+    this.getObject().disabled = false;
+  }
 
-  afterRender() {}
+  setBeforeRender(beforeRender = () => {}) {
+    if (beforeRender) {
+      this.beforeRender = beforeRender;
+    }
+    return this;
+  }
 
-  updatedData() {}
+  setRender(render = () => {}) {
+    if (this.render) {
+      this.render = render;
+    }
+    return this;
+  }
+
+  setAfterRender(afterRender = () => {}) {
+    if (this.afterRender) {
+      this.afterRender = afterRender;
+    }
+    return this;
+  }
+
+  setUpdatedData(updatedData) {
+    if (updatedData) {
+      this.updatedData = updatedData;
+    }
+    return this;
+  }
+
+  beforeRender() {
+    return this;
+  }
+
+  render() {
+    for (var child in this.children) {
+      if (this.children[child] instanceof Component) {
+        this.children[child].render();
+      }
+    }
+  }
+
+  afterRender() {
+    return this;
+  }
+
+  updatedData() {
+    return this;
+  }
 
   getObjectPath() {
     let obj = this;
@@ -190,6 +238,22 @@ export class Component {
     return getData()?.[`${this.getObjectPath()}-${this.getHashCode()}`];
   }
 
+  getValue() {
+    return this.getObject().value;
+  }
+
+  setClass(className) {
+    this.getObject()?.classList.add(className);
+  }
+
+  removeClass(className) {
+    this.getObject()?.classList.remove(className);
+  }
+
+  setAttribute(name, value) {
+    this.getObject()?.setAttribute(name, value);
+  }
+
   appendChild(child) {
     if (child instanceof Component) {
       child.setParent(this);
@@ -199,6 +263,7 @@ export class Component {
         this.getObject().prepend(child.getObject());
       }
     }
+    return child;
   }
 
   renderChild(newChild) {

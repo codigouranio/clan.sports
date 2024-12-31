@@ -36,6 +36,9 @@ jobs:
           key: ${{ runner.os }}-v1-dependencies-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-v1-dependencies-
+      - name: Download config from S3
+        run: |
+          aws s3 cp s3://clan-sports-configs/config.dev.py ./
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx

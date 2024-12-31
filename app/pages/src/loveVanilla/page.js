@@ -27,7 +27,7 @@ export class Page {
     this.children.forEach((child) => {
       if (child instanceof Component) {
         try {
-          child[methodName]();
+          child[methodName](child);
         } catch (e) {
           console.error(e);
         }

@@ -8,7 +8,7 @@ const source = {
   dataHashCode: null,
 };
 
-const setData = (value, noTrigger = true, force = false) => {
+const setData = (value, noTrigger = false, force = false) => {
   const newData = Object.assign({}, source.data, value);
 
   const newDataHashCode = murmurhash3_32_gc(JSON.stringify(newData));
@@ -21,9 +21,9 @@ const setData = (value, noTrigger = true, force = false) => {
   source.data = Object.assign({}, source.data, value);
   source.dataHashCode = newDataHashCode;
 
-  // if (noTrigger) {
-  window.dispatchEvent(new Event("__@_updated_data"));
-  // }
+  if (!noTrigger) {
+    window.dispatchEvent(new Event("__@_updated_data"));
+  }
 };
 const getData = () => source.data;
 const getDataHashCode = () => source.dataHashCode;

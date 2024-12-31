@@ -62,10 +62,10 @@ export class BaseApp {
       this.triggerRenderingEvent();
     });
 
-    this.triggerRenderingEvent();
-
     const data = JSON.parse(localStorage.getItem("data"));
-    setData(data);
+    setData(data, true);
+
+    this.triggerRenderingEvent();
   }
 
   triggerRenderingEvent() {

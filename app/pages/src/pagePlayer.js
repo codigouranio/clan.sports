@@ -1,4 +1,5 @@
 import AppInfo from "./appInfo";
+import LoginMenu from "./loginMenu";
 import { Component, createDiv, getUrlParams, Page } from "./loveVanilla";
 
 export default class PagePlayer extends Page {
@@ -7,6 +8,7 @@ export default class PagePlayer extends Page {
 
     this.createChild(new AppInfo("#app-info"));
     this.createChild(new PlayerInfo("#w-board"));
+    this.createChild(new LoginMenu("#login-menu"));
   }
 
   render() {

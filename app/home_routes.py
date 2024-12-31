@@ -34,10 +34,15 @@ home_blueprint = Blueprint(
 )
 
 
-@home_blueprint.route("/", defaults={"path": "index.html"})
-@home_blueprint.route("/<string:path>")
-def catch_all(path):
-    return home_blueprint.send_static_file(path)
+# @home_blueprint.route("/<page_name>")
+# def serve_page(page_name):
+#     return render_template(f"{page_name}.html")
+
+
+# @home_blueprint.route("/", defaults={"path": "index.html"})
+# @home_blueprint.route("/<string:path>")
+# def catch_all(path):
+#     return home_blueprint.send_static_file(path)
 
 
 @home_blueprint.errorhandler(404)

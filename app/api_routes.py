@@ -4,6 +4,7 @@
 # https://www.digitalocean.com/community/tutorials/how-to-add-authentication-to-your-app-with-flask-login
 
 import base64
+import pickle
 import random
 import uuid
 from datetime import datetime, timedelta
@@ -12,6 +13,7 @@ from io import BytesIO
 from itertools import product
 
 import qrcode
+from botocore.exceptions import ClientError
 from dependency_injector.wiring import Provide, inject
 from flask import Blueprint, Response, abort
 from flask import current_app as app
@@ -34,6 +36,7 @@ from app.api.schemas import (
     TrophySchema,
     UserSchema,
 )
+from app.container import AwsService, Container
 from app.require_api_key import require_api_key
 
 from .api.models import (
@@ -53,89 +56,73 @@ from .api.utils import generate_session_id, generate_sha256_hash
 api_blueprint = Blueprint("api", __name__, url_prefix="/api")
 
 
-# smsService: SmsService = app.container.smsService()
-# ssmClient = app.container.ssmClient()
-
-# try:
-#     print(
-#         ssmClient.get_parameter(Name="/clan.sports.club/staging/test")["Parameter"][
-#             "Value"
-#         ]
-#     )
-# except:
-#     print("An exception occurred")
-
-
 @api_blueprint.route("/test", methods=["GET"])
 def test():
     return jsonify({"success": True})
 
 
 @api_blueprint.route("/requestCode", methods=["POST"])
-def request_code():
-    # with Session(app.engine) as db:
-    phoneNumber = request.get_json(force=True)["phoneNumber"]
-    code = "{:06d}".format(random.randint(0, 999999))
-    today = datetime.now()
-    sessionExpires = today + timedelta(seconds=90)
-    sessionId = generate_sha256_hash(generate_session_id())
-    app.db.session.add(
-        RequestCode(
-            code=code,
-            sessionId=sessionId,
-            expires=sessionExpires,
-            phoneNumber=phoneNumber,
-        )
-    )
-    app.db.session.commit()
-    # smsService.send(
-    #     phoneNumber=phoneNumber, message=f"Clan Sports code: {0}".format(code)
-    # )
-    return jsonify(
-        {
-            "code": code,
-            "sessionExpires": sessionExpires,
-            "sessionId": sessionId,
-            "phoneNumber": phoneNumber,
-        }
-    )
-
-
-@api_blueprint.route("/checkCode", methods=["POST"])
-def check_code():
+def request_code(
+    aws_service: AwsService = app.container.aws_service(),
+):
     data = request.get_json(force=True)
-    code = (
-        app.db.session.query(RequestCode)
-        .filter_by(code=data["code"], sessionId=data["sessionId"])
-        .first()
-    )
-    if not code or code.expires < datetime.now():
-        return jsonify({"success": False})
+    email = data["Email"]
+    phoneNumber = data["PhoneNumber"]
+    ret = aws_service.requestCode(email, phoneNumber)
 
-    user = app.db.session.query(User).filter_by(phone_number=code.phoneNumber).first()
-    if not user:
-        print("adding user to db")
-        api = BlockchainAPI(app.db.session)
-        crypto_data = api.generate_seed_phrase()
-        user = User(
-            phone_number=code.phoneNumber,
-            email_address="",
-            private_key=crypto_data.private_key,
-            public_key=crypto_data.public_key,
-            salt=crypto_data.salt,
-            seed_phrase=crypto_data.seed_phrase,
-        )
-        app.db.session.add(user)
-        app.db.session.commit()
+    return jsonify(ret), HTTPStatus.OK if ret["Success"] else HTTPStatus.BAD_REQUEST
+
+
+@api_blueprint.route("/verifyCode", methods=["POST"])
+def verify_code(
+    aws_service: AwsService = app.container.aws_service(),
+):
+    data = request.get_json(force=True)
+    email = data["Email"]
+    phoneNumber = data["PhoneNumber"]
+    code = data["Code"]
+    challengeName = data["ChallengeName"]
+    session = data["Session"]
+
+    ret = aws_service.verifyCode(email, phoneNumber, code, challengeName, session)
+
+    if ret["Success"]:
+        user = app.db.session.query(User).filter_by(email_address=email).first()
+        if not user:
+            user = User(email_address=email, phone_number=phoneNumber)
+            app.db.session.add(user)
+            app.db.session.commit()
         login_user(
-            user, remember=True, duration=timedelta(days=60), force=True, fresh=True
+            user,
+            remember=True,
+            duration=timedelta(seconds=ret["Authentication"]["ExpiresIn"]),
+            force=True,
+            fresh=True,
         )
         flash("Logged in successfully.")
-        return jsonify({"success": True, "seed_phrase": crypto_data.seed_phrase})
 
-    login_user(user, remember=True, duration=timedelta(days=60), force=True, fresh=True)
-    flash("Logged in successfully.")
-    return jsonify({"success": True})
+    return jsonify(ret), HTTPStatus.OK if ret["Success"] else HTTPStatus.BAD_REQUEST
+
+
+@api_blueprint.route("/refreshToken", methods=["POST"])
+def refresh_token(
+    aws_service: AwsService = app.container.aws_service(),
+):
+    data = request.get_json(force=True)
+    username = data["Username"]
+    refreshToken = data["RefreshToken"]
+    ret = aws_service.refreshToken(username, refreshToken)
+    return jsonify(ret), HTTPStatus.OK if ret["Success"] else HTTPStatus.BAD_REQUEST
+
+
+@api_blueprint.route("/getUser", methods=["POST"])
+def get_user(
+    aws_service: AwsService = app.container.aws_service(),
+):
+    data = request.get_json(force=True)
+    access_token = data["AccessToken"]
+    ret = aws_service.getUser(access_token)
+    return jsonify(ret), HTTPStatus.OK if ret["Success"] else HTTPStatus.BAD_REQUEST
 
 
 @app.login_manager.user_loader
@@ -297,7 +284,7 @@ def get_list_users():
 
 @api_blueprint.route("/user/<int:user_id>", methods=["GET"])
 @login_required
-def get_user(user_id):
+def get_user_by_id(user_id):
     item = app.db.session.query(User).filter_by(id=user_id).first()
     if not item:
         return jsonify({"message": "No item found"}), 404
