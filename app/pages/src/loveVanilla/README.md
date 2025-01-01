@@ -16,8 +16,123 @@ This project is a showcase of how much can be achieved with pure JavaScript. No 
 
 ## Technical Details  
 
-### BaseApp: The Core Framework  
+### The Core Framework  
 The **BaseApp** is the heart of this project, designed to manage different pages in your application. It leverages JavaScript's simplicity while enabling you to create dynamic and responsive applications.  
+
+### ```createDiv``` Function
+The ```createDiv``` function is the primary method for creating HTML elements. It returns an object with methods to customize the element further and add child elements or content.
+
+Parameters:
+* id: (optional) string - The id of the div.
+* type: (optional) string - The tag type (defaults to div).
+* className: (optional) string - The class of the div.
+
+Example Usage:
+```
+const div = createDiv({
+  id: "example-id",
+  className: "example-class",
+});
+```
+
+Methods of ```createDiv```:
+
+```.add(child)```
+Adds a child element to the parent div.
+
+* child: (required) An element created with createDiv or another HTML element.
+
+Example:
+```
+const parentDiv = createDiv({ className: "parent-class"})
+   .add(createDiv({ className: "child-class" }));
+```
+```.addText(tag, text)```
+
+Adds a text element (like h1, p, etc.) to the div.
+* tag: (required) string - The type of text element (e.g., h1, p).
+* text: (required) string - The content of the text element.
+
+```.setHtml(htmlString)```
+
+Sets the inner HTML of the element.
+
+* htmlString: (required) string - HTML content as a string.
+
+### Render Functionality
+
+The framework uses a renderChild function to render elements to the DOM. The renderChild method appends the constructed UI to the desired parent container.
+
+Example Usage:
+```
+render() {
+   const root = createDiv({ id: "app-root" });
+   this.renderChild(root);
+}
+```
+
+### Comprehensive Example
+Below is a full example of how to use the framework to build a complex UI:
+```
+const root = createDiv({
+  id: "player-info",
+  type: "article",
+  className: "player-info-container",
+})
+  .add(
+    createDiv({
+      className: "player-header-wrapper",
+    }).add(
+      createDiv({ className: "player-header" }).add(
+        createDiv({ id: "player-info" })
+          .add(
+            createDiv({ id: "player-name" }).addText(
+              "h3",
+              params[1].concat(" ", params[0])
+            )
+          )
+          .add(
+            createDiv({ id: "player-position" }).addText(
+              "h6",
+              "Year # " + params[2]
+            )
+          )
+          .add(createDiv({ id: "player-number" }).addText("p", "88"))
+          .add(
+            createDiv({
+              id: "player-following",
+              className: "follow-button",
+            }).addText("button", "Follow")
+          )
+      )
+    )
+  )
+  .add(
+    createDiv({ className: "player-body" }).add(
+      createDiv({ className: "player-content" }).add(
+        createDiv({ id: "player-article" }).setHtml(`
+  <h1>Teams</h1>
+  <pre>
+  Player Information:
+  - Full Name
+  - Date of Birth
+  - Age
+  - Gender
+  - Position(s): (e.g., Forward, Midfielder)
+  </pre>
+  <footer>
+    <div class="profile-ownership">
+      <p class="ownership-status">Controlled by: <span id="ownership-label">System</span></p>
+      <button id="change-ownership" class="ownership-button">Change Ownership</button>
+    </div>
+  </footer>
+        `)
+      )
+    )
+  );
+
+return this.renderChild(root);
+```
 
 ### Lifecycle Hooks  
 The BaseApp uses a lifecycle model with the following methods:  

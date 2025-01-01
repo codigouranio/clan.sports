@@ -49,7 +49,7 @@ article h2 {
 .paypal-button {
   display: inline-flex;
   align-items: center;
-  padding: 10px 20px;
+  padding: 5px 20px;
   background-color: #0070ba;
   color: white;
   text-decoration: none;
@@ -66,7 +66,7 @@ article h2 {
 .paypal-icon {
   width: 1.5em; /* Adjust size as needed */
   height: auto;
-  margin-right: 10px; /* Space between icon and text */
+  margin-right: 5px; /* Space between icon and text */
 }
 
 footer {
@@ -197,42 +197,51 @@ span.club-logo-frame {
 }
 
 .player-info-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-direction: row;
-  gap: 10px;
+  // display: flex;
+  // justify-content: center;
+  // align-items: flex-start;
+  // flex-direction: row;
+  // gap: 10px;
 }
 
 .player-header-wrapper {
-  background-color: #0d325d;
-  width: auto;
-  padding: 2em;
-  margin-right: 1em;
-  max-width: 12em;
-  border-radius: 1em;
-  z-index: 2;
+  // background-color: #0d325d;
+  // width: auto;
+  // padding: 2em;
+  // margin-right: 1em;
+  // max-width: 12em;
+  // border-radius: 1em;
+  // z-index: 2;
+
+  .player-header {
+    // display: flex;
+    // flex-direction: column;
+    margin: 0 0 1em 0;
+  }
+
+  .player-body {
+  }
 }
 
 .player-header {
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
 }
 
 .player-header img {
-  width: 100%;
-  height: auto;
-  border-radius: 50%;
-  aspect-ratio: 1 / 1;
-  padding: 0.01em;
-  border: #e5e5e5 solid 3px;
-  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
-    0 1px 3px rgba(255, 255, 255, 0.2);
-  margin-bottom: 2cap;
+  // width: 100%;
+  // height: auto;
+  // border-radius: 50%;
+  // aspect-ratio: 1 / 1;
+  // padding: 0.01em;
+  // border: #e5e5e5 solid 3px;
+  // box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
+  //   0 1px 3px rgba(255, 255, 255, 0.2);
+  // margin-bottom: 2cap;
 }
 
 #player-info #player-name {
-  text-align: center;
+  // text-align: center;
 }
 
 #player-info #player-name h3 {
@@ -240,7 +249,7 @@ span.club-logo-frame {
   // font-size: clamp(14px, 1.2em, 1.5em);
   // hyphens: auto;
   // line-height: 1.3;
-  margin-bottom: 0.3em;
+  // margin-bottom: 0.3em;
   // overflow: hidden;
   // text-align: center;
   // white-space: normal;
@@ -248,61 +257,61 @@ span.club-logo-frame {
 }
 
 #player-info #player-position h6 {
-  font-size: 0.8em;
-  text-align: center;
-  color: rgb(214, 215, 255);
+  // font-size: 0.8em;
+  // text-align: center;
+  // color: rgb(214, 215, 255);
 }
 
 #player-info #player-number p {
-  text-align: center;
-  color: #e0def7;
-  font-family: "Anton", sans-serif;
-  font-size: 3em;
-  line-height: 0.9em;
-  letter-spacing: 0.1em;
-  text-shadow: 2px 2px 5px black;
+  // text-align: center;
+  // color: #e0def7;
+  // font-family: "Anton", sans-serif;
+  // font-size: 3em;
+  // line-height: 0.9em;
+  // letter-spacing: 0.1em;
+  // text-shadow: 2px 2px 5px black;
 }
 
 #player-following {
-  display: flex; /* Ensures proper alignment if additional elements are added */
-  justify-content: center; /* Center the button horizontally */
-  align-items: center; /* Center the button vertically */
+  // display: flex; /* Ensures proper alignment if additional elements are added */
+  // justify-content: center; /* Center the button horizontally */
+  // align-items: center; /* Center the button vertically */
 }
 
 #player-following button {
-  background-color: #e0def7; /* Light background color */
-  color: #333; /* Text color */
-  border: none;
-  border-radius: 5px; /* Slightly rounded corners */
-  padding: 10px 20px; /* Padding inside the button */
-  font-size: 0.8em; /* Font size */
-  display: flex; /* Flex layout for text and icon */
-  align-items: center; /* Align text and icon vertically */
-  gap: 8px; /* Space between text and the star icon */
-  cursor: pointer;
-  transition: background-color 0.3s;
-  position: relative; /* Needed for the pseudo-element positioning */
-  overflow: hidden;
-  padding-left: 3.2em;
+  // background-color: #e0def7; /* Light background color */
+  // color: #333; /* Text color */
+  // border: none;
+  // border-radius: 5px; /* Slightly rounded corners */
+  // padding: 10px 20px; /* Padding inside the button */
+  // font-size: 0.8em; /* Font size */
+  // display: flex; /* Flex layout for text and icon */
+  // align-items: center; /* Align text and icon vertically */
+  // gap: 8px; /* Space between text and the star icon */
+  // cursor: pointer;
+  // transition: background-color 0.3s;
+  // position: relative; /* Needed for the pseudo-element positioning */
+  // overflow: hidden;
+  // padding-left: 3.2em;
 }
 
 #player-following button:hover {
-  background-color: #d3c7e1; /* Slightly darker background on hover */
+  // background-color: #d3c7e1; /* Slightly darker background on hover */
 }
 
 #player-following button::before {
-  content: "";
-  display: block;
-  width: 1.5em; /* Icon size */
-  height: 1.5em; /* Icon size */
-  background-image: url("../assets/img/star-icon.svg"); /* Path to your external SVG file */
-  background-size: contain; /* Ensures the icon scales properly */
-  background-repeat: no-repeat; /* Prevents repeating */
-  background-position: center; /* Centers the icon */
-  position: absolute;
-  left: 10px; /* Space between the icon and button's left edge */
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%); /* Adjust vertical centering */
+  // content: "";
+  // display: block;
+  // width: 1.5em; /* Icon size */
+  // height: 1.5em; /* Icon size */
+  // background-image: url("../assets/img/star-icon.svg"); /* Path to your external SVG file */
+  // background-size: contain; /* Ensures the icon scales properly */
+  // background-repeat: no-repeat; /* Prevents repeating */
+  // background-position: center; /* Centers the icon */
+  // position: absolute;
+  // left: 10px; /* Space between the icon and button's left edge */
+  // top: 50%; /* Center vertically */
+  // transform: translateY(-50%); /* Adjust vertical centering */
 }
 
 .player-content {

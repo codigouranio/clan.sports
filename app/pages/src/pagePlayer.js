@@ -21,58 +21,46 @@ export class PlayerInfo extends Component {
     super(id, props);
   }
   render() {
-    const paramPlayerName = getUrlParams("player_name");
+    const params = getUrlParams("player_name").split("_");
 
-    const root = document.createElement("div");
-    root.classList.add("player-info-container");
-
-    const playerHeaderWrapper = document.createElement("div");
-    playerHeaderWrapper.classList.add("player-header-wrapper");
-    root.appendChild(playerHeaderWrapper);
-
-    const playerHeader = document.createElement("div");
-    playerHeader.classList.add("player-header");
-    playerHeaderWrapper.appendChild(playerHeader);
-
-    const playerPicture = document.createElement("img");
-    playerPicture.classList.add("player-picture");
-    playerPicture.src =
-      "https://www.svgrepo.com/show/261565/football-player-soccer-player.svg";
-    playerHeader.appendChild(playerPicture);
-
-    const playerData = getUrlParams("player_name");
-    const items = playerData.split("_");
-
-    const playerInfo = createDiv({ id: "player-info" })
+    const root = createDiv({
+      id: "player-info",
+      type: "article",
+      className: "player-info-container",
+    })
       .add(
-        createDiv({ id: "player-name" }).addText(
-          "h3",
-          items[1].concat(" ", items[0])
+        createDiv({
+          className: "player-header-wrapper",
+        }).add(
+          createDiv({ className: "player-header" }).add(
+            createDiv({ id: "player-info" })
+              .add(
+                createDiv({ id: "player-name" }).addText(
+                  "h3",
+                  params[1].concat(" ", params[0])
+                )
+              )
+              .add(
+                createDiv({ id: "player-position" }).addText(
+                  "h6",
+                  "Year # " + params[2]
+                )
+              )
+              .add(createDiv({ id: "player-number" }).addText("p", "88"))
+              .add(
+                createDiv({
+                  id: "player-following",
+                  className: "follow-button",
+                }).addText("button", "Follow")
+              )
+          )
         )
       )
       .add(
-        createDiv({ id: "player-position" }).addText("h6", "Year # " + items[2])
-      )
-      .add(createDiv({ id: "player-number" }).addText("p", "88"))
-      .add(
-        createDiv({
-          id: "player-following",
-          className: "follow-button",
-        }).addText("button", "Follow")
-      );
-    playerHeader.appendChild(playerInfo);
-
-    const playerBody = document.createElement("div");
-    playerBody.classList.add("player-body");
-    root.appendChild(playerBody);
-
-    const playerContent = document.createElement("div");
-    playerContent.classList.add("player-content");
-    playerBody.appendChild(playerContent);
-
-    const playerArticle = document.createElement("div");
-    playerArticle.setHTMLUnsafe(`<article>
-  <header><h1>Teams</h1></header>
+        createDiv({ className: "player-body" }).add(
+          createDiv({ className: "player-content" }).add(
+            createDiv({ id: "player-article" }).setHtml(`
+  <h1>Teams</h1>
   
   <h1>1. Profile Overview</h1>
   <pre>
@@ -200,17 +188,11 @@ Hobbies or sports outside soccer.
   <p class="ownership-status">Controlled by: <span id="ownership-label">System</span></p>
   <button id="change-ownership" class="ownership-button">Change Ownership</button>
 </div></footer>
-</article>`);
-    playerContent.appendChild(playerArticle);
+`)
+          )
+        )
+      );
 
-    // for (let i = 0; i < 10; i++) {
-    //   const article1 = document.createElement("div");
-    //   article1.classList.add("player-article");
-    //   article1.innerHTML =
-    //     "no se que están describiendo aquí en el artículo de la página del jugador";
-    //   playerContent.appendChild(article1);
-    // }
-
-    this.renderChild(root);
+    return this.renderChild(root);
   }
 }

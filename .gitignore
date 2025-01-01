@@ -474,4 +474,6 @@ $RECYCLE.BIN/
 
 *_engine
 
+config.*.py
+
 # End of https://www.toptal.com/developers/gitignore/api/node,python,flask,osx,windows,visualstudiocode

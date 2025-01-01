@@ -28,39 +28,10 @@ pages_blueprint = Blueprint(
 )
 
 
-@pages_blueprint.route("/letmein", methods=["GET"])
-def letmein() -> str:
-    if current_user.is_authenticated:
-        return redirect("/app")
-    return render_template(
-        "letmein.html",
-        title="Let Me In",
-        template="letmein-template",
-        test={"test": "test"},
-    )
-
-
-@pages_blueprint.route("/letmeleave", methods=["GET"])
-def letmeleave() -> str:
-    return render_template(
-        "letmeleave.html",
-        title="Let Me In",
-        template="letmeleave-template",
-        test={"test": "test"},
-    )
-
-
 @pages_blueprint.route("/", methods=["GET"])
 def index() -> str:
     return render_template(
         "index.html", title="Test", template="index-template", test={"test": "test"}
-    )
-
-
-@pages_blueprint.route("/test", methods=["GET"])
-def test() -> str:
-    return render_template(
-        "test.html", title="Test", template="test-template", test={"test": "test"}
     )
 
 
