@@ -25,39 +25,49 @@ export class PlayerInfo extends Component {
 
     const root = createDiv({
       id: "player-info",
-      type: "article",
       className: "player-info-container",
     })
       .add(
         createDiv({
           className: "player-header-wrapper",
+          type: "article",
         }).add(
-          createDiv({ className: "player-header" }).add(
-            createDiv({ id: "player-info" })
-              .add(
-                createDiv({ id: "player-name" }).addText(
-                  "h3",
-                  params[1].concat(" ", params[0])
+          createDiv({ className: "player-header" })
+            .add(
+              createDiv({ id: "player-info" })
+                .add(
+                  createDiv({ id: "player-name" }).add(
+                    "h3",
+                    params[1].concat(" ", params[0])
+                  )
                 )
-              )
-              .add(
-                createDiv({ id: "player-position" }).addText(
-                  "h6",
-                  "Year # " + params[2]
+                .add(
+                  createDiv({ id: "player-position" }).add(
+                    "h6",
+                    "Year # " + params[2]
+                  )
                 )
-              )
-              .add(createDiv({ id: "player-number" }).addText("p", "88"))
-              .add(
-                createDiv({
-                  id: "player-following",
-                  className: "follow-button",
-                }).addText("button", "Follow")
-              )
-          )
+                .add(createDiv({ id: "player-number" }).add("p", "88"))
+            )
+            .add(
+              createDiv({ id: "player-buttons" })
+                .add(
+                  createDiv({
+                    id: "player-following",
+                    className: "player-button",
+                  }).add("button", "Follow")
+                )
+                .add(
+                  createDiv({
+                    id: "player-owner",
+                    className: "player-button",
+                  }).add("button", "This is NOT mine")
+                )
+            )
         )
       )
       .add(
-        createDiv({ className: "player-body" }).add(
+        createDiv({ className: "player-body", type: "article" }).add(
           createDiv({ className: "player-content" }).add(
             createDiv({ id: "player-article" }).setHtml(`
   <h1>Teams</h1>
@@ -184,12 +194,32 @@ Volunteer work related to soccer (e.g., coaching younger players, organizing eve
 Other Interests:
 Hobbies or sports outside soccer.
 </pre>
-  <footer><div class="profile-ownership">
-  <p class="ownership-status">Controlled by: <span id="ownership-label">System</span></p>
-  <button id="change-ownership" class="ownership-button">Change Ownership</button>
-</div></footer>
 `)
           )
+        )
+      )
+      .add(
+        createDiv({ type: "footer" }).add(
+          createDiv({ className: "profile-ownership" })
+            .add(
+              createDiv({ type: "p", className: "ownership-status" })
+                .addText("Controlled by: ")
+                .add(
+                  createDiv({
+                    type: "span",
+                    id: "ownership-label",
+                    text: "System",
+                  })
+                )
+            )
+            .add(
+              createDiv({
+                id: "change-ownership",
+                className: "ownership-button",
+                type: "button",
+                text: "Change Ownership",
+              })
+            )
         )
       );
 

@@ -49,7 +49,7 @@ article h2 {
 .paypal-button {
   display: inline-flex;
   align-items: center;
-  padding: 5px 20px;
+  padding: 0.5em 0.9em;
   background-color: #0070ba;
   color: white;
   text-decoration: none;
@@ -57,6 +57,7 @@ article h2 {
   font-weight: bold;
   border: none;
   font-size: smaller;
+  width: 8em;
 }
 
 .paypal-button:hover {
@@ -64,9 +65,10 @@ article h2 {
 }
 
 .paypal-icon {
-  width: 1.5em; /* Adjust size as needed */
+  width: 1.8em; /* Adjust size as needed */
   height: auto;
-  margin-right: 5px; /* Space between icon and text */
+  margin-right: 0.5em; /* Space between icon and text */
+  margin-left: 0em;
 }
 
 footer {
@@ -196,122 +198,80 @@ span.club-logo-frame {
   background-color: #24292e;
 }
 
-.player-info-container {
-  // display: flex;
-  // justify-content: center;
-  // align-items: flex-start;
-  // flex-direction: row;
-  // gap: 10px;
-}
-
 .player-header-wrapper {
-  // background-color: #0d325d;
-  // width: auto;
-  // padding: 2em;
-  // margin-right: 1em;
-  // max-width: 12em;
-  // border-radius: 1em;
-  // z-index: 2;
-
+  padding: 1em 1em;
   .player-header {
-    // display: flex;
-    // flex-direction: column;
-    margin: 0 0 1em 0;
+    display: flex;
+    justify-content: space-between; /* Pushes the items to the edges */
+    align-items: flex-start; /* Vertically centers the items */
+    width: 100%; /* Adjust as needed */
+    height: auto; /* Optional: set a height */
+    // border: 1px solid #ccc; /* Optional: for visibility */
+    padding: 0.2em; /* Optional: add some space inside */
+
+    #player-buttons {
+      display: flex;
+      flex-direction: row;
+      gap: 1em;
+    }
   }
 
   .player-body {
   }
 }
 
-.player-header {
-  // display: flex;
-  // flex-direction: column;
-}
-
-.player-header img {
-  // width: 100%;
-  // height: auto;
-  // border-radius: 50%;
-  // aspect-ratio: 1 / 1;
-  // padding: 0.01em;
-  // border: #e5e5e5 solid 3px;
-  // box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
-  //   0 1px 3px rgba(255, 255, 255, 0.2);
-  // margin-bottom: 2cap;
-}
-
-#player-info #player-name {
-  // text-align: center;
-}
-
-#player-info #player-name h3 {
-  // color: #fff;
-  // font-size: clamp(14px, 1.2em, 1.5em);
-  // hyphens: auto;
-  // line-height: 1.3;
-  // margin-bottom: 0.3em;
-  // overflow: hidden;
-  // text-align: center;
-  // white-space: normal;
-  // word-break: break-word;
-}
-
-#player-info #player-position h6 {
-  // font-size: 0.8em;
-  // text-align: center;
-  // color: rgb(214, 215, 255);
-}
-
-#player-info #player-number p {
-  // text-align: center;
-  // color: #e0def7;
-  // font-family: "Anton", sans-serif;
-  // font-size: 3em;
-  // line-height: 0.9em;
-  // letter-spacing: 0.1em;
-  // text-shadow: 2px 2px 5px black;
-}
-
-#player-following {
+.player-button {
   // display: flex; /* Ensures proper alignment if additional elements are added */
-  // justify-content: center; /* Center the button horizontally */
-  // align-items: center; /* Center the button vertically */
+  // justify-content: right; /* Center the button horizontally */
+  // margin: 0em 0; /* Space above and below the button */
+  // gap: 0.5em; /* Space between buttons */
+}
+
+.player-button button {
+  align-items: center; /* Align text and icon vertically */
+  border-radius: 5px; /* Slightly rounded corners */
+  border: none;
+  color: #333; /* Text color */
+  cursor: pointer;
+  // display: flex; /* Flex layout for text and icon */
+  font-size: 0.8em; /* Font size */
+  // gap: 8px; /* Space between text and the star icon */
+  vertical-align: middle; /* Aligns the button with other elements */
+  overflow: hidden;
+  // padding-left: 3em;
+
+  position: relative; /* Needed for the pseudo-element positioning */
+  transition: background-color 0.3s;
+  width: 100%; /* Full width */
+}
+
+.player-button button:hover {
+  background-color: #d3c7e1; /* Slightly darker background on hover */
+}
+
+#player-owner button {
+  background-color: #bddeb9; /* Light background color */
+  padding: 0px 1em 0 1em; /* Padding inside the button */
 }
 
 #player-following button {
-  // background-color: #e0def7; /* Light background color */
-  // color: #333; /* Text color */
-  // border: none;
-  // border-radius: 5px; /* Slightly rounded corners */
-  // padding: 10px 20px; /* Padding inside the button */
-  // font-size: 0.8em; /* Font size */
-  // display: flex; /* Flex layout for text and icon */
-  // align-items: center; /* Align text and icon vertically */
-  // gap: 8px; /* Space between text and the star icon */
-  // cursor: pointer;
-  // transition: background-color 0.3s;
-  // position: relative; /* Needed for the pseudo-element positioning */
-  // overflow: hidden;
-  // padding-left: 3.2em;
-}
-
-#player-following button:hover {
-  // background-color: #d3c7e1; /* Slightly darker background on hover */
+  background-color: #e0def7; /* Light background color */
+  padding: 0px 1em 0 3em; /* Padding inside the button */
 }
 
 #player-following button::before {
-  // content: "";
-  // display: block;
-  // width: 1.5em; /* Icon size */
-  // height: 1.5em; /* Icon size */
-  // background-image: url("../assets/img/star-icon.svg"); /* Path to your external SVG file */
-  // background-size: contain; /* Ensures the icon scales properly */
-  // background-repeat: no-repeat; /* Prevents repeating */
-  // background-position: center; /* Centers the icon */
-  // position: absolute;
-  // left: 10px; /* Space between the icon and button's left edge */
-  // top: 50%; /* Center vertically */
-  // transform: translateY(-50%); /* Adjust vertical centering */
+  background-image: url("../assets/img/star-icon.svg"); /* Path to your external SVG file */
+  background-position: center; /* Centers the icon */
+  background-repeat: no-repeat; /* Prevents repeating */
+  background-size: contain; /* Ensures the icon scales properly */
+  content: "";
+  display: block;
+  height: 1.5em; /* Icon size */
+  left: 10px; /* Space between the icon and button's left edge */
+  position: absolute;
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust vertical centering */
+  width: 1.5em; /* Icon size */
 }
 
 .player-content {
@@ -392,5 +352,40 @@ ul#login-menu {
 
   > a:hover {
     text-decoration: underline;
+  }
+}
+
+.player-info-container {
+  > h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    margin: 0 0 0em 0;
+  }
+
+  #player-name h3 {
+    font-size: 2em;
+    text-transform: capitalize;
+  }
+
+  #player-number {
+    font-family: "Anton", sans-serif;
+    font-size: 3.2em;
+    // line-height: 0.9em;
+    letter-spacing: 0.1em;
+    text-shadow: 2px 2px 5px black;
+    // margin: 0.2em 0 1em 0;
+    // display: block;
+  }
+
+  .player-header-wrapper {
+    margin: 0 0 1em 0;
+  }
+
+  .player-body {
+    margin: 0 0 0 0;
   }
 }

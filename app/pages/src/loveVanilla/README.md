@@ -28,7 +28,7 @@ Parameters:
 * className: (optional) string - The class of the div.
 
 Example Usage:
-```
+```js
 const div = createDiv({
   id: "example-id",
   className: "example-class",
@@ -43,7 +43,7 @@ Adds a child element to the parent div.
 * child: (required) An element created with createDiv or another HTML element.
 
 Example:
-```
+```js
 const parentDiv = createDiv({ className: "parent-class"})
    .add(createDiv({ className: "child-class" }));
 ```
@@ -64,7 +64,7 @@ Sets the inner HTML of the element.
 The framework uses a renderChild function to render elements to the DOM. The renderChild method appends the constructed UI to the desired parent container.
 
 Example Usage:
-```
+```js
 render() {
    const root = createDiv({ id: "app-root" });
    this.renderChild(root);
@@ -73,7 +73,7 @@ render() {
 
 ### Comprehensive Example
 Below is a full example of how to use the framework to build a complex UI:
-```
+```js
 const root = createDiv({
   id: "player-info",
   type: "article",
