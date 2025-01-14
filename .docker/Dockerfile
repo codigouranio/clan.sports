@@ -28,7 +28,8 @@ WORKDIR /home/flask/app
 
 RUN apt-get update && \
   apt-get install -y && \
-  pip3 install poetry
+  pip3 install poetry && \
+  poetry self add poetry-plugin-export
 
 COPY ./pyproject.toml .  
 RUN poetry export -f requirements.txt --output requirements.txt
