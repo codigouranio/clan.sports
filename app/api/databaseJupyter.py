@@ -377,6 +377,9 @@ class DatabaseJupyter:
 
         return {}, 404
 
+    def getPlayer(self, player_key):
+        return markdown.markdown("# Player Info")
+
     def getPlayerInfo(self, player_key):
         return (
             jsonify(

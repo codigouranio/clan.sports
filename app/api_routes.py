@@ -686,10 +686,10 @@ def getClubInfo():
     return app.database_jupyter.getClubInfo(club_name)
 
 
-@api_blueprint.route("/getPlayerInfo/", methods=["GET"])
+@api_blueprint.route("/getPlayer/", methods=["GET"])
 def getPlayerInfo():
     player_key = request.args.get("player_key")
-    return app.database_jupyter.getPlayerInfo(player_key)
+    return app.database_jupyter.getPlayer(player_key)
 
 
 @api_blueprint.route("/setPlayerInfo/", methods=["POST"])

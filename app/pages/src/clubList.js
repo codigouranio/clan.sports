@@ -1,6 +1,6 @@
 import sanitizeHtml from "sanitize-html";
 import { searchClubsBySearchTerm } from "./fetchApi";
-import { Component, getData, Image, Link } from "./loveVanilla";
+import { Component, createDiv, getData, Image, Link } from "./loveVanilla";
 
 class ClubList extends Component {
   render() {
@@ -9,18 +9,15 @@ class ClubList extends Component {
       return;
     }
 
+    const results = createDiv();
+
     if (searchResults && searchResults.total == 0) {
-      const noResults = document.createElement("p");
-      noResults.innerText = "No results found";
-      this.renderChild(noResults);
-      return noResults;
+      return this.renderChild(results.addText("No results found"));
     }
 
-    const results = document.createElement("span");
-
-    const resultsLabel = document.createElement("p");
-    let label = "Results";
     if (searchResults && searchResults.total > 0) {
+      let label = "Results";
+      const resultsLabel = createDiv({ type: "p" });
       label = `Results found in ${searchResults.execution_time}s`;
 
       if (
@@ -31,8 +28,8 @@ class ClubList extends Component {
         label += ` for ${currentStateName}`;
       }
 
-      resultsLabel.innerText = label;
-      results.appendChild(resultsLabel);
+      results.addText(label);
+      results.add(resultsLabel);
     }
 
     let counter = 0;
@@ -42,85 +39,73 @@ class ClubList extends Component {
         ...{ parent: this },
         ...item,
       });
-      this.createChild(clubItem);
-      results.appendChild(clubItem.getObject());
+      results.add(clubItem);
       counter++;
     }
 
-    const hr = document.createElement("hr");
-    results.appendChild(hr);
-
     if (searchResults.more_results) {
-      this.moreResults = new MoreResults("more-results");
-      results.appendChild(this.moreResults.getObject());
+      results.add(new MoreResults());
     }
 
-    this.renderChild(results);
-
-    return results;
+    return this.renderChild(results);
   }
 }
 
 class ClubItem extends Component {
-  constructor(id, props) {
-    super(id, props);
-
-    this.$object = document.createElement("article");
-    this.$object.id = this.id;
-
-    this.$object.className = "club-info";
-    const header = document.createElement("header");
-
+  render() {
     const params = new URLSearchParams();
     params.set("club_name", this.props.club_name);
-    const clubLink = new Link("club-link", {
-      href: `/?${params.toString()}`,
-      text: this.props.search_title,
-      className: "search-title",
-    });
 
-    const clubLogo = new Image(`club-logo-${this.id}`, {
-      title: this.props.club_name,
-      alt: this.props.club_name,
-      className: "club-logo",
-      src: `/api/getClubLogo/${this.props.image_file}`,
-    });
-    clubLink.appendChild(clubLogo);
-
-    header.appendChild(clubLink.getObject());
-
-    this.$object.appendChild(header);
-
-    const headerInfoRight = document.createElement("small");
-    headerInfoRight.className = "rank";
-    headerInfoRight.innerText = `Soccer Club - Rank: ${this.props.rank}`;
-    header.appendChild(headerInfoRight);
-
-    const clubElement = document.createElement("div");
-    clubElement.innerHTML = sanitizeHtml(this.props?.info);
-
-    this.$object.appendChild(clubElement);
+    return createDiv({ type: "article", className: "club-info" })
+      .add(
+        createDiv({ type: "header" })
+          .add(
+            new Image(`club-logo-${this.id}`, {
+              title: this.props.club_name,
+              alt: this.props.club_name,
+              className: "club-logo",
+              src: `/api/getClubLogo/${this.props.image_file}`,
+            })
+          )
+          .add(
+            createDiv({ type: "div", className: "item-details" })
+              .add(
+                new Link("club-link", {
+                  href: `/?${params.toString()}`,
+                  text: this.props.search_title,
+                  className: "search-title",
+                })
+              )
+              .add(
+                createDiv({ type: "small", className: "rank" }).addText(
+                  `Soccer Club - Rank: ${this.props.rank}`
+                )
+              )
+          )
+      )
+      .add(createDiv().setHtml(this.props?.info))
+      .add(
+        createDiv({
+          type: "footer",
+          text: `Last updated: ${this.props?.last_update}`,
+        })
+      );
   }
 }
 
 class MoreResults extends Component {
-  constructor(id, props) {
-    super(id, props);
+  render() {
+    return this.renderChild(
+      new Link("more-results", { text: "More Results..." }).setClick(
+        async () => {
+          const {
+            searchResults: { page, page_size, search_term },
+          } = getData();
 
-    this.$object = document.createElement("a");
-    this.$object.id = id;
-    this.$object.href = "#";
-    this.$object.className = "contrast";
-    this.$object.appendChild(document.createTextNode("More results"));
-    this.$object.addEventListener("click", async (event) => {
-      event.preventDefault();
-
-      const {
-        searchResults: { page, page_size, search_term },
-      } = getData();
-
-      await searchClubsBySearchTerm(search_term, page + 1, page_size, true);
-    });
+          await searchClubsBySearchTerm(search_term, page + 1, page_size, true);
+        }
+      )
+    );
   }
 }
 

@@ -5,8 +5,9 @@
 @import "../loveVanilla/style.scss";
 
 @import url("https://fonts.googleapis.com/css2?family=Anton&display=swap");
+@import url("../../node_modules/easymde/dist/easymde.min.css");
 
-:root {
+root {
   // --pico-font-family: Pacifico, cursive;
   --pico-border-radius: 0.5rem;
   --pico-typography-spacing-vertical: 1.5rem;
@@ -16,6 +17,8 @@
   --font-weight: 400;
   --border-radius: 0;
 }
+
+$title-main-color: #3f9afc;
 
 h1 {
   --pico-font-weight: 400;
@@ -74,37 +77,58 @@ article h2 {
 footer {
   font-size: small;
   font-style: italic;
-  // --pico-font-family: Pacifico, cursive;
-  // --pico-font-weight: 400;
-  // --pico-typography-spacing-vertical: 0.5rem;
 }
 
-article.club-info header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
+article.club-info {
+  header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
 
-article.club-info header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  vertical-align: bottom;
-}
+  header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    vertical-align: bottom;
+  }
 
-article.club-info header h5 {
-  margin: auto 0;
-}
+  header h5 {
+    margin: auto 0;
+  }
 
-article.club-info header img {
-  width: 3.8em;
-  height: auto;
-  border-radius: 50%;
-  aspect-ratio: 1 / 1;
-  padding: 0.01em;
-  border: #e5e5e5 solid 3px;
-  box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
-    0 1px 3px rgba(255, 255, 255, 0.2);
+  header img {
+    width: 3.8em;
+    height: auto;
+    border-radius: 50%;
+    aspect-ratio: 1 / 1;
+    padding: 0.01em;
+    border: #e5e5e5 solid 3px;
+    box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
+      0 1px 3px rgba(255, 255, 255, 0.2);
+  }
+
+  .item-details {
+    margin-bottom: 10px; /* Adds spacing between items */
+  }
+
+  .search-title {
+    display: block; /* Ensures the title is on its own line */
+    font-size: 1.2em; /* Makes the title larger */
+    font-weight: bold; /* Emphasizes the title */
+    color: $title-main-color; /* Optional: changes the link color */
+    text-decoration: none; /* Removes underline from the link */
+  }
+
+  .search-title:hover {
+    text-decoration: underline; /* Adds underline on hover for accessibility */
+  }
+
+  .rank {
+    display: block; /* Places the rank on its own line */
+    font-size: 0.9em; /* Makes the rank text slightly smaller */
+    color: #6c757d; /* Optional: gives a muted color */
+  }
 }
 
 /* Full-page loader */
@@ -123,12 +147,12 @@ article.club-info header img {
   /* Flexbox to center content */
   align-items: center;
   justify-content: center;
-  z-index: 1000;
   /* Place above all other content */
 }
 
 .hidden {
   animation: fadeOut 0.5s forwards;
+  z-index: -1;
 }
 
 @keyframes fadeOut {
@@ -136,17 +160,6 @@ article.club-info header img {
     opacity: 0;
     visibility: hidden;
   }
-}
-
-#club-list {
-  .club-logo {
-    width: 2em;
-    height: 2em;
-  }
-}
-
-.club-logo {
-  margin-right: 10px; /* Space between the logo and the title */
 }
 
 span.club-logo-frame {
@@ -198,88 +211,22 @@ span.club-logo-frame {
   background-color: #24292e;
 }
 
-.player-header-wrapper {
-  padding: 1em 1em;
-  .player-header {
-    display: flex;
-    justify-content: space-between; /* Pushes the items to the edges */
-    align-items: flex-start; /* Vertically centers the items */
-    width: 100%; /* Adjust as needed */
-    height: auto; /* Optional: set a height */
-    // border: 1px solid #ccc; /* Optional: for visibility */
-    padding: 0.2em; /* Optional: add some space inside */
-
-    #player-buttons {
-      display: flex;
-      flex-direction: row;
-      gap: 1em;
-    }
-  }
-
-  .player-body {
-  }
+.player-name {
+  font-size: 1.5rem; /* 24px */
+  font-weight: bold;
+  color: #fff;
+  text-transform: capitalize;
 }
 
-.player-button {
-  // display: flex; /* Ensures proper alignment if additional elements are added */
-  // justify-content: right; /* Center the button horizontally */
-  // margin: 0em 0; /* Space above and below the button */
-  // gap: 0.5em; /* Space between buttons */
+.player-born {
+  font-size: 0.875rem; /* 14px */
+  color: #aaa;
 }
 
-.player-button button {
-  align-items: center; /* Align text and icon vertically */
-  border-radius: 5px; /* Slightly rounded corners */
-  border: none;
-  color: #333; /* Text color */
-  cursor: pointer;
-  // display: flex; /* Flex layout for text and icon */
-  font-size: 0.8em; /* Font size */
-  // gap: 8px; /* Space between text and the star icon */
-  vertical-align: middle; /* Aligns the button with other elements */
-  overflow: hidden;
-  // padding-left: 3em;
-
-  position: relative; /* Needed for the pseudo-element positioning */
-  transition: background-color 0.3s;
-  width: 100%; /* Full width */
-}
-
-.player-button button:hover {
-  background-color: #d3c7e1; /* Slightly darker background on hover */
-}
-
-#player-owner button {
-  background-color: #bddeb9; /* Light background color */
-  padding: 0px 1em 0 1em; /* Padding inside the button */
-}
-
-#player-following button {
-  background-color: #e0def7; /* Light background color */
-  padding: 0px 1em 0 3em; /* Padding inside the button */
-}
-
-#player-following button::before {
-  background-image: url("../assets/img/star-icon.svg"); /* Path to your external SVG file */
-  background-position: center; /* Centers the icon */
-  background-repeat: no-repeat; /* Prevents repeating */
-  background-size: contain; /* Ensures the icon scales properly */
-  content: "";
-  display: block;
-  height: 1.5em; /* Icon size */
-  left: 10px; /* Space between the icon and button's left edge */
-  position: absolute;
-  top: 50%; /* Center vertically */
-  transform: translateY(-50%); /* Adjust vertical centering */
-  width: 1.5em; /* Icon size */
-}
-
-.player-content {
-  padding: 1px;
-  border-radius: 1em;
-  z-index: 1;
-  min-width: 700px;
-  max-width: 700px;
+.player-number {
+  font-size: 1.125rem; /* 18px */
+  font-weight: bold;
+  color: #f39c12;
 }
 
 .profile-ownership {
@@ -326,6 +273,7 @@ a.player-search-google {
   color: #e5e5e5;
 }
 
+a.coach-page,
 a.player-page {
   text-decoration: underline;
   text-decoration-skip-ink: none;
@@ -355,37 +303,232 @@ ul#login-menu {
   }
 }
 
-.player-info-container {
-  > h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  p {
-    margin: 0 0 0em 0;
+.artifact-container {
+  .artifact-header-wrapper {
+    .artifact-header {
+      .artifact-info {
+        .club-logo {
+          img {
+            min-width: 100px;
+            max-width: max-content;
+            height: auto;
+            border-radius: 50%;
+            aspect-ratio: 1 / 1;
+            padding: 0.01em;
+            border: #e5e5e5 solid 3px;
+            box-shadow: 0 4px 6px rgba(255, 255, 255, 0.3),
+              0 1px 3px rgba(255, 255, 255, 0.2);
+          }
+        }
+
+        .artifact-key {
+          margin: 0 1em 0 1em;
+
+          .artifact-name {
+            display: block; /* Ensures the title is on its own line */
+            font-size: 1.2em; /* Makes the title larger */
+            font-weight: bold; /* Emphasizes the title */
+            color: $title-main-color; /* Optional: changes the link color */
+            text-decoration: none; /* Removes underline from the link */
+            text-transform: capitalize;
+            margin-bottom: 0;
+          }
+
+          .artifact-sub-name {
+            display: flex; /* Places the rank on its own line */
+            flex-direction: flex-start;
+            gap: 0.2em;
+            align-items: center;
+            font-size: 0.9em; /* Makes the rank text slightly smaller */
+            color: #6c757d; /* Optional: gives a muted color */
+          }
+        }
+      }
+    }
+  }
+}
+
+.follow-button {
+  background: linear-gradient(45deg, #6a11cb, #2575fc);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 25px;
+  cursor: pointer;
+  font-size: small;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.follow-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: skewX(-45deg);
+  transition: left 0.4s ease;
+}
+
+.follow-button:hover::before {
+  left: 100%;
+}
+
+.follow-button:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+}
+
+.follower-count {
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 15px;
+  border-radius: 25px;
+  text-align: center;
+}
+
+.player-content {
+  border-radius: 1em;
+  display: flex;
+  height: 90vh;
+  padding: 1px;
+  width: 100%;
+  width: auto;
+}
+
+.player-article {
+  width: 100%;
+  height: 100%;
+
+  .player-article-editor-parent {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+textarea {
+  height: 100%;
+  width: 100%;
+}
+
+.editor-toolbar button.active,
+.editor-toolbar button:hover {
+  background: #1a1b1b !important;
+  border-color: #95a5a6;
+}
+
+.editor-toolbar button {
+  color: #908f8f;
+}
+
+/* Target the scroll bar for the entire document */
+::-webkit-scrollbar {
+  width: 12px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f4; /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Scrollbar thumb (the draggable part) */
+  border-radius: 6px; /* Rounded corners for the scrollbar */
+  border: 2px solid #f4f4f4; /* Adds space around the thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Darker color on hover */
+}
+
+// Define media expressions
+$media-expressions: (
+  "phone": "(max-width: 640px)",
+  "tablet": "(min-width: 641px) and (max-width: 1024px)",
+  "desktop": "(min-width: 1024px)",
+) !default;
+
+// Mixin to use media expressions
+@mixin media($types...) {
+  @each $type in $types {
+    $query: map-get($media-expressions, $type); // Get the query from the map
+    @if $query {
+      @media #{$query} {
+        @content;
+      }
+    } @else {
+      @error "No media query defined for '#{$type}' in $media-expressions.";
+    }
+  }
+}
+
+// Use the mixin with defined media types
+@include media("phone", "tablet") {
+  body {
+    // background-color: #f4f4f4;
   }
 
-  #player-name h3 {
-    font-size: 2em;
-    text-transform: capitalize;
-  }
+  .artifact-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    height: auto;
+    padding: 0.2em;
+    // border: 1px dashed #ccc; /* Optional: for visibility */
 
-  #player-number {
-    font-family: "Anton", sans-serif;
-    font-size: 3.2em;
-    // line-height: 0.9em;
-    letter-spacing: 0.1em;
-    text-shadow: 2px 2px 5px black;
-    // margin: 0.2em 0 1em 0;
-    // display: block;
-  }
+    .artifact-info {
+      display: flex; /* Creates a horizontal layout */
+      align-items: center; /* Vertically aligns the logo and text */
+      margin-bottom: 10px; /* Adds spacing between items */
+    }
 
-  .player-header-wrapper {
-    margin: 0 0 1em 0;
+    .artifact-menu {
+      padding-top: 1em;
+      display: flex;
+      flex-direction: column;
+      gap: 1em;
+      width: 100%;
+    }
   }
+}
 
-  .player-body {
-    margin: 0 0 0 0;
+@include media("desktop") {
+  body {
+    // background-color: #b51212;
   }
+  .artifact-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    height: auto;
+    // border: 1px dashed #ccc; /* Optional: for visibility */
+    padding: 0.2em;
+
+    .artifact-info {
+      display: flex; /* Creates a horizontal layout */
+      align-items: flex-start; /* Vertically aligns the logo and text */
+      margin-bottom: 10px; /* Adds spacing between items */
+      // max-width: 50vh;
+    }
+
+    .artifact-menu {
+      padding-top: 1em;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+  }
+}
+
+.table-col-player-name {
+  width: 85%;
 }

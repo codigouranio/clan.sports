@@ -68,19 +68,33 @@ export class BaseApp {
     this.triggerRenderingEvent();
   }
 
-  triggerRenderingEvent() {
+  async triggerRenderingEvent() {
     this.lastPage = this.getCurrentPage();
 
     this.lastPage?.beforeRender();
-    this.lastPage?.render();
+    const element = await this.lastPage?.render();
+    if (element && this.getObject()) {
+      if (this.getObject().childNodes.length == 0) {
+        this.getObject().appendChild(element);
+      } else {
+        this.getObject().replaceChild(element, this.getObject().childNodes[0]);
+      }
+    }
     this.lastPage?.afterRender();
   }
 
-  triggerUpdatedDataEvent() {
+  async triggerUpdatedDataEvent() {
     this.lastPage = this.getCurrentPage();
 
     this.lastPage?.beforeRender();
-    this.lastPage?.render();
+    const element = await this.lastPage?.render();
+    if (element && this.getObject()) {
+      if (this.getObject().childNodes.length == 0) {
+        this.getObject().appendChild(element);
+      } else {
+        this.getObject().replaceChild(element, this.getObject().childNodes[0]);
+      }
+    }
     this.lastPage?.updatedData();
   }
 

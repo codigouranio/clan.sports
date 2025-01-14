@@ -45,10 +45,20 @@ def create_app():
 
     csp = {
         "default-src": ["'self'"],
-        "style-src": ["'self'", "'unsafe-inline'", "*.googleapis.com"],
+        "style-src": [
+            "'self'",
+            "'unsafe-inline'",
+            "*.googleapis.com",
+            "*.bootstrapcdn.com",
+        ],
         "script-src": ["'self'"],
         "script-src-elem": ["'self'", "*.googletagmanager.com"],
-        "connect-src": ["'self'", "*.openstreetmap.org", "*.google-analytics.com"],
+        "connect-src": [
+            "'self'",
+            "*.openstreetmap.org",
+            "*.google-analytics.com",
+            "*.jsdelivr.net",
+        ],
         "img-src": [
             "'self'",
             "data:",
@@ -56,7 +66,7 @@ def create_app():
             "*.svgrepo.com",
             "*.googletagmanager.com",
         ],
-        "font-src": ["'self'", "fonts.gstatic.com"],
+        "font-src": ["'self'", "fonts.gstatic.com", "*.bootstrapcdn.com"],
     }
 
     Talisman(
@@ -95,16 +105,6 @@ def create_app():
     app.login_manager.init_app(app)
 
     app.secret_key = os.urandom(24)  # Use a secure random key in production
-    oauth = OAuth(app)
-
-    oauth.register(
-        name="oidc",
-        authority="https://cognito-idp.us-east-2.amazonaws.com/us-east-2_wOCQFFzH6",
-        client_id="43eb07uj4bm4qci6c2926u644f",
-        client_secret="<client secret>",
-        server_metadata_url="https://cognito-idp.us-east-2.amazonaws.com/us-east-2_wOCQFFzH6/.well-known/openid-configuration",
-        client_kwargs={"scope": "phone openid email"},
-    )
 
     app.assets = Environment()
     app.assets.init_app(app)

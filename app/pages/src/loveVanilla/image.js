@@ -11,5 +11,7 @@ export class Image extends Component {
     this.$object.alt = props?.alt;
   }
 
-  render() {}
+  render() {
+    return this.getObject();
+  }
 }

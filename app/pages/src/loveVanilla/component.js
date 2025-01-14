@@ -1,4 +1,5 @@
 import sanitizeHtml from "sanitize-html";
+import { createDiv, createSpan } from "./createDiv";
 import { murmurhash3_32_gc } from "./crypto";
 import { getData, setData } from "./data";
 import { Page } from "./page";
@@ -126,9 +127,9 @@ export class Component {
     }
 
     if (this.id === undefined) {
-      this.$object = document.createElement("span");
+      this.$object = createSpan();
     } else {
-      this.$object = document.querySelector(this.id);
+      this.$object = createDiv({ selector: this.id });
     }
 
     return this.$object;
@@ -267,10 +268,42 @@ export class Component {
   }
 
   renderChild(newChild) {
-    if (this.getObject().children.length > 0) {
-      this.getObject().replaceChild(newChild, this.getObject().children[0]);
-    } else {
-      this.getObject().appendChild(newChild);
+    if (newChild instanceof Component) {
+      if (this.getObject().children.length > 0) {
+        this.getObject().replaceChild(
+          newChild.render(),
+          this.getObject().children[0]
+        );
+      } else {
+        this.getObject().appendChild(newChild.render());
+      }
+      return this.getObject();
     }
+    if (newChild instanceof HTMLElement) {
+      if (this.getObject().children.length > 0) {
+        this.getObject().replaceChild(newChild, this.getObject().children[0]);
+      } else {
+        this.getObject().appendChild(newChild);
+      }
+    }
+    return newChild;
+  }
+
+  add(newChild) {
+    if (this.getObject()) {
+      let child;
+      if (newChild instanceof Component) {
+        newChild.setParent(this);
+        this.children.push(newChild);
+        child = newChild.render();
+      }
+      if (newChild instanceof HTMLElement) {
+        child = newChild;
+      }
+      if (child && child instanceof HTMLElement) {
+        this.getObject().appendChild(child);
+      }
+    }
+    return this;
   }
 }

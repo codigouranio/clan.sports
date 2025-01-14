@@ -20,6 +20,7 @@ class PageHome extends Page {
 
   async render() {
     super.render();
+    return null;
   }
 
   async afterRender() {

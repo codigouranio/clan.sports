@@ -10,6 +10,9 @@ export class InputBox extends Component {
 
     this.handleBlur();
     this.blur = () => {};
+
+    this.handleChanged();
+    this.changed = () => {};
   }
 
   setBlur(blur) {
@@ -40,10 +43,25 @@ export class InputBox extends Component {
     }
   }
 
+  setChanged(changed) {
+    this.changed = changed.bind(this);
+    return this;
+  }
+
+  handleChanged() {
+    if (this.getObject()) {
+      this.getObject().addEventListener(
+        "input",
+        asyncDebounce((event) => this.changed(this, event), 150)
+      );
+    }
+  }
+
   setValue(value) {
     if (this.getObject()) {
       this.getObject().value = value;
     }
+    return this;
   }
 
   getValue() {
@@ -51,5 +69,12 @@ export class InputBox extends Component {
       return "";
     }
     return this.getObject().value;
+  }
+
+  getName() {
+    if (!this.getObject()) {
+      return "";
+    }
+    return this.getObject().getAttribute("name");
   }
 }

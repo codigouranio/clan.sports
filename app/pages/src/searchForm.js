@@ -1,49 +1,26 @@
 import { searchClubsBySearchTerm } from "./fetchApi";
-import { Component, setData, getData } from "./loveVanilla";
+import { Form, InputBox, getUrlParams } from "./loveVanilla";
 
-export class SearchForm extends Component {
+export class SearchForm extends Form {
   constructor(id, props) {
     super(id, props);
 
-    const searchBox = new SearchBox("#search-box");
-    this.createChild(searchBox);
+    this.searchBox = this.createChild(
+      new InputBox("#search-box")
+        .setValue(getUrlParams("query") || "")
+        .setChanged((self, event) => {
+          if (self.getValue() === "") {
+            searchClubsBySearchTerm("");
+          }
+        })
+    );
+
+    super.setSubmit(async (form, event) => {
+      await searchClubsBySearchTerm(this.getValues()?.["search"]);
+    });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-  }
-}
-
-export class SearchBox extends Component {
-  constructor(id, props) {
-    super(id, props);
-
-    this.getObject().addEventListener("keydown", this.handleKey.bind(this));
-  }
-
-  async handleKey(event) {
-    if (event.key == "Enter") {
-      event.preventDefault();
-      await searchClubsBySearchTerm(this.getValue());
-    }
-  }
-
-  getValue() {
-    return this.getObject().value;
-  }
-}
-
-export class SearchButton extends Component {
-  constructor(id, props) {
-    super(id, props);
-
-    this.getObject().addEventListener("click", this.handleClick.bind(this));
-  }
-
-  async handleClick(ev) {
-    ev.preventDefault();
-
-    const searchTerm = this.props.searchBox.getValue();
-    await searchClubsBySearchTerm(searchTerm);
+  render() {
+    return;
   }
 }
