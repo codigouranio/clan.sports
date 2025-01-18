@@ -115,7 +115,7 @@ export class PlayerInfo extends Component {
                     createDiv({
                       className: "follow-button",
                       type: "button",
-                      text: "Request Ownership",
+                      text: "Claim",
                     })
                   )
                   .add(
@@ -164,7 +164,7 @@ export class PlayerInfo extends Component {
                 id: "change-ownership",
                 className: "ownership-button",
                 type: "button",
-                text: "Request Ownership",
+                text: "Claim",
               })
             )
         )

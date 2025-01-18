@@ -50,7 +50,7 @@ export default class PageCoach extends Page {
                   createDiv({
                     className: "follow-button",
                     type: "button",
-                    text: "Request Ownership",
+                    text: "Claim",
                   })
                 )
                 .add(

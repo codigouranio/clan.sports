@@ -103,7 +103,7 @@ export class ClubInfo extends Component {
                     createDiv({
                       className: "follow-button",
                       type: "button",
-                      text: "Request Ownership",
+                      text: "Claim",
                     })
                   )
                   .add(
