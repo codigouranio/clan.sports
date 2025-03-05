@@ -4,7 +4,6 @@
 # https://www.digitalocean.com/community/tutorials/how-to-add-authentication-to-your-app-with-flask-login
 
 import base64
-import pickle
 import random
 import uuid
 from datetime import datetime, timedelta
@@ -660,18 +659,25 @@ def searchClubs(state: str, gender: str, year: int):
     return app.database_jupyter.searchClubs(state, gender, year)
 
 
-@api_blueprint.route("/searchClubsBySearchTerm", methods=["GET"])
-def searchClubsBySearchTerm():
+@api_blueprint.route("/searchByTerm", methods=["GET"])
+# @app.cache.cached(timeout=30000)
+def searchByTerm():
     try:
         search_term = request.args.get("query")
         page = int(request.args.get("page", 0))
         page_size = int(request.args.get("page_size", 30))
-        results = app.database_jupyter.searchClubsBySearchTerm(
-            search_term, page, page_size
-        )
+        state = request.args.get("state")
+        results = app.database_jupyter.searchByTerm(search_term, state, page, page_size)
         return jsonify(results)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@api_blueprint.route("/searchItemByUniqueId/<string:unique_id>", methods=["GET"])
+@app.cache.cached(timeout=30000)
+def searchItemByUniqueId(unique_id: str):
+    print(unique_id)
+    return app.database_jupyter.searchItemByUniqueId(unique_id)
 
 
 @api_blueprint.route("/getClubLogo/<path:logoPath>", methods=["GET"])

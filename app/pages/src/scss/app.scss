@@ -310,7 +310,7 @@ ul#login-menu {
         .club-logo {
           img {
             min-width: 100px;
-            max-width: max-content;
+            max-width: 100px;
             height: auto;
             border-radius: 50%;
             aspect-ratio: 1 / 1;
@@ -339,7 +339,7 @@ ul#login-menu {
             flex-direction: flex-start;
             gap: 0.2em;
             align-items: center;
-            font-size: 0.9em; /* Makes the rank text slightly smaller */
+            font-size: 1.3em; /* Makes the rank text slightly smaller */
             color: #6c757d; /* Optional: gives a muted color */
           }
         }
@@ -361,6 +361,7 @@ ul#login-menu {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  z-index: 1;
 }
 
 .follow-button::before {

@@ -1,17 +1,29 @@
+import gzip
 import hashlib
 import json
 import os
+import pickle
+import sys
 import time
+from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from io import BytesIO
 from pathlib import Path
 
 import git
 import ijson
 import jellyfish
+import Levenshtein
 import markdown
 import pandas as pd
+import spacy
 from flask import Flask, jsonify, send_file
+from fuzzywuzzy import fuzz, process
 from git import Repo
+from rapidfuzz.distance import JaroWinkler
+
+from .bktree import BKTree
+from .seacher import Searcher
 
 
 class DatabaseJupyter:
@@ -21,7 +33,7 @@ class DatabaseJupyter:
     STATES_FILE = "states.json"
     YEARS_FILE = "years.json"
     GENDERS_FILE = "genders.json"
-    CLUBS_AND_TEAMS_FILE = "clubs_and_teams_new_jersey.json"
+    CLUBS_AND_TEAMS_FILE = "data_inv_index.json"
     TEAMS_FOLDER = "data/states"
     TEAMS_SUB_FOLDER = "teams"
     TEAMS_FILE = "teams_data_enriched.json"
@@ -40,7 +52,7 @@ class DatabaseJupyter:
     def loadDataToMemory(self):
         repoFolder = os.path.join(DatabaseJupyter.REPO_FOLDER)
         if not os.path.exists(repoFolder):
-            print("Cloning database repository...")
+            print("Cloning database repository...", self.repoUrl)
             Repo.clone_from(self.repoUrl, DatabaseJupyter.REPO_FOLDER)
 
         repo = Repo(DatabaseJupyter.REPO_FOLDER)
@@ -71,6 +83,38 @@ class DatabaseJupyter:
         # Get the branch name
         branch_name = "main"
         repo.git.reset("--hard", f"origin/{branch_name}")
+
+        self.data = {}
+        data_file = os.path.join(
+            DatabaseJupyter.REPO_FOLDER,
+            DatabaseJupyter.REPO_SUB_FOLDER,
+            "data_inv_index.json",
+        )
+        with open(data_file, "r", encoding="utf-8") as json_file:
+            self.data = json.load(json_file)
+
+        print("Loaded %s items" % len(self.data))
+
+        map_data_file = os.path.join(
+            DatabaseJupyter.REPO_FOLDER,
+            DatabaseJupyter.REPO_SUB_FOLDER,
+            "map.pk.gz",
+        )
+
+        # BKTree.__module__ = "BKTree"
+        sys.modules["__main__"].BKTree = BKTree
+        sys.modules["__main__"].Searcher = Searcher
+
+        self.root = {}
+        with gzip.open(map_data_file, "rb") as file:
+            self.root = pickle.load(file)
+
+        # print(sorted(self.root["bk_tree"].search("premier", 2), key=lambda x: x[1])[:5])
+        # print(sorted(self.root["bk_tree"].search("nj", 2), key=lambda x: x[1])[:5])
+        # print(sorted(self.root["bk_tree"].search("2014", 2), key=lambda x: x[1])[:15])
+        # print(len(self.root["index_by_state"]))
+        # print(self.root["searcher"].searchByWords("nj premier"))
+        # print(self.root["searcher"].searchByPos("nj premier 2014"))
 
         with open(
             os.path.join(
@@ -162,90 +206,120 @@ class DatabaseJupyter:
 
         return jsonify(transformed_clubs)
 
-    def searchClubsBySearchTerm(self, search_term, page=0, page_size=10):
+    def searchByTerm(self, search_term, state, page=0, page_size=10):
+        ret = []
 
-        start_time = time.time()
+        ret = self.root["searcher"].searchByPos(search_term, state)
+        start_index = page * page_size
+        end_index = start_index + page_size
 
-        # Define the path to the JSON file
-        db_path_file = os.path.join(
-            DatabaseJupyter.REPO_FOLDER,
-            DatabaseJupyter.REPO_SUB_FOLDER,
-            DatabaseJupyter.CLUBS_AND_TEAMS_FILE,
-        )
-
-        items = []
-
-        print("Filtering by search term:", search_term, db_path_file)
-
-        for filtered_item in self.filter_clubs(
-            db_path_file, search_term, page, page_size
-        ):
-            items.append(filtered_item)
-
-        items.sort(key=lambda x: x["similarity_score"])
-
-        # Create a response object
-        response_object = {
-            "status": "success",
-            "items": items,
-            "total": len(items[:10]),
-            "page": page,
-            "page_size": page_size,
-            "search_term": search_term,
-            "more_results": len(items) == page_size,
-            "execution_time": round(time.time() - start_time, 2),
+        return {
+            "items": [
+                {**item, "info": self.processInfo(search_term, item["info"])}
+                for item in ret[start_index:end_index]
+            ],
+            "metadata": {
+                "page": page,
+                "page_size": page_size,
+                "total": len(ret),
+                "search_term": search_term,
+                "state": state,
+                "more_results": page_size * (page + 1) < len(ret),
+            },
         }
 
-        return response_object
+    def searchItemByUniqueId(self, unique_id):
+        if unique_id in self.root["index_by_uuid"]:
+            item = self.root["index_by_uuid"][unique_id]
+            item = {**item, "info": self.processInfo("", item["info"], -1)}
 
-    def find_similar_substrings(self, input_string, long_string, threshold=2):
-        input_string = input_string.lower()
-        i = 0
-        while i <= len(long_string) - len(input_string):
-            next_word = long_string[i : i + len(input_string)]
+            if item["item_type"] == "CLUB":
+                item["teams"] = list(
+                    map(
+                        lambda x: {
+                            **self.root["index_by_uuid"][x],
+                            "total_players": len(
+                                self.root["index_by_uuid"][x].get("players", [])
+                            ),
+                        },
+                        filter(
+                            lambda x: x in self.root["index_by_uuid"], item["teams"]
+                        ),
+                    )
+                )
 
-            similarity_score = jellyfish.levenshtein_distance(
-                next_word.lower(), input_string
-            )
+            if item["item_type"] == "TEAM":
+                item["players"] = list(
+                    map(
+                        lambda x: {
+                            **self.root["index_by_uuid"][x],
+                        },
+                        filter(
+                            lambda x: x in self.root["index_by_uuid"], item["players"]
+                        ),
+                    )
+                )
 
-            # If the score is above the threshold, consider it similar
-            if similarity_score <= threshold:
-                return True, similarity_score
+                item["coaches"] = list(
+                    map(
+                        lambda x: self.root["index_by_uuid"][x],
+                        filter(
+                            lambda x: x in self.root["index_by_uuid"], item["coaches"]
+                        ),
+                    )
+                )
 
-            i += len(input_string)
+            return item
 
-        return False, -1
+        return {}, 404
 
-    def filter_clubs(self, filename, term, page=0, page_size=30):
+    def filter_items(self, filename, term, state, page=0, page_size=30):
 
         term = term.lower()
         cur = -1
+        count_results = {}
 
         with open(filename, "r") as file:
-            # Use ijson to parse the JSON array item by item
             for key, values in ijson.kvitems(file, ""):
-                # if any(term in str(values[innerKey]).lower() for innerKey in values):
 
-                similarity_score = 999
+                similarity_score = 0
+                best_match_result = ""
+
+                if state and len(state) > 0 and state != values["state"]:
+                    continue
 
                 if term and len(term) > 0:
-                    found, score = self.find_similar_substrings(term, key)
+                    found, best_match, score = self.find_similar_substrings(term, key)
+                    # print(found, best_match, score)
                     if found:
-                        similarity_score = score
+                        best_match_result = best_match
+                        similarity_score = max(similarity_score, score)
 
-                    found, score = self.find_similar_substrings(term, values["info"])
-                    if found:
-                        similarity_score = min(similarity_score, score * 1.5)
+                    # found, best_match, score = self.find_similar_substrings(
+                    #     term, values["info"]
+                    # )
+                    # if found:
+                    #     best_match_result = best_match
+                    #     similarity_score = max(similarity_score, score)
 
-                    found, score = self.find_similar_substrings(term, values["state"])
-                    if found:
-                        similarity_score = min(similarity_score, score * 1.2)
+                    # found, best_match, score = self.find_similar_substrings(
+                    #     term, values["state"]
+                    # )
+                    # if found:
+                    #     best_match_result = best_match
+                    #     similarity_score = max(similarity_score, score)
+
                 else:
                     similarity_score = 0
 
-                if 0 <= similarity_score <= 1:
+                if 0 < similarity_score <= 1.0:
 
-                    cur += 1
+                    if not values["item_type"] in count_results:
+                        count_results[values["item_type"]] = 0
+
+                    count_results[values["item_type"]] += 1
+
+                    cur = min(count_results.values())
 
                     if page * page_size > cur:
                         continue
@@ -253,24 +327,38 @@ class DatabaseJupyter:
                     if cur >= (page + 1) * page_size:
                         break
 
+                    search_title = key
+                    if values["item_type"] == "CLUB":
+                        search_title = f"{values['name']}"
+                        similarity_score = 1.0
+                    if values["item_type"] == "TEAM":
+                        search_title = f"{values['name']}"
+                        similarity_score = 0.1
+                    if values["item_type"] == "PLAYER":
+                        search_title = f"{values['first_name']} {values['last_name']}"
+                        similarity_score = 0.1
+                    if values["item_type"] == "COACH":
+                        search_title = f"{values['full_name']}"
+                        similarity_score = 0.1
+
                     yield {
-                        "club_name": key,
+                        "item_name": key,
+                        "unique_id": values["unique_id"],
                         "state": values["state"],
-                        "info": self.processClubInfo(term, values["info"]),
+                        "info": self.processInfo(term, values["info"]),
                         "image_file": values["image_file"],
                         "rank": values["rank_num"],
                         "last_update": values["last_update"],
-                        "teams": [team for team in values["teams"].values()],
-                        "similarity_score": similarity_score,
-                        "type_item": "club",
-                        "search_title": f"{key}",
+                        "item_type": values["item_type"],
+                        "similarity_score": round(similarity_score, 5),
+                        "search_title": f"{search_title}",
+                        "best_match": best_match_result,
+                        "meta": {},
                     }
 
-    def processClubInfo(self, term, info, word_limit=75):
+    def processInfo(self, term, info, word_limit=75):
         res = ""
 
-        # if not term or len(term) == 0:
-        #     return markdown.markdown(info)
         len_term = len(term) if len(term) > 0 else 1
 
         i = 0
@@ -365,7 +453,7 @@ class DatabaseJupyter:
                         {
                             "club_name": key,
                             "state": values["state"],
-                            "info": self.processClubInfo("", values["info"], -1),
+                            "info": self.processInfo("", values["info"], -1),
                             "image_file": values["image_file"],
                             "rank": values["rank_num"],
                             "last_update": values["last_update"],

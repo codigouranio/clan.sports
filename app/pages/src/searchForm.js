@@ -1,5 +1,11 @@
-import { searchClubsBySearchTerm } from "./fetchApi";
-import { Form, InputBox, getUrlParams } from "./loveVanilla";
+import { searchByTerm } from "./fetchApi";
+import {
+  Form,
+  InputBox,
+  createDiv,
+  getData,
+  getUrlParams,
+} from "./loveVanilla";
 
 export class SearchForm extends Form {
   constructor(id, props) {
@@ -10,17 +16,22 @@ export class SearchForm extends Form {
         .setValue(getUrlParams("query") || "")
         .setChanged((self, event) => {
           if (self.getValue() === "") {
-            searchClubsBySearchTerm("");
+            searchByTerm("", 0, 10);
           }
         })
     );
 
     super.setSubmit(async (form, event) => {
-      await searchClubsBySearchTerm(this.getValues()?.["search"]);
+      await searchByTerm(this.getValues()?.["search"], 0, 10);
     });
   }
 
   render() {
-    return;
+    const data = getData();
+    const searchTerm = data?.searchResults?.metadata?.search_term;
+    if (searchTerm && searchTerm.length > 0) {
+      this.searchBox.setValue(searchTerm);
+    }
+    return createDiv();
   }
 }

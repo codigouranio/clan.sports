@@ -1,9 +1,9 @@
 import moment from "moment";
 import AppInfo from "./appInfo";
 import LoginMenu from "./loginMenu";
-import { Page, createDiv, getUrlParams } from "./loveVanilla";
+import { Component, createDiv, getData } from "./loveVanilla";
 
-export default class PageCoach extends Page {
+export class BlockCoachInfo extends Component {
   constructor(app, url) {
     super(app, url);
 
@@ -14,7 +14,11 @@ export default class PageCoach extends Page {
   async render() {
     super.render();
 
-    const params = getUrlParams("coach_name");
+    const { current_item } = getData();
+
+    if (!current_item) {
+      return;
+    }
 
     return createDiv({
       id: "artifact-container",
@@ -32,14 +36,9 @@ export default class PageCoach extends Page {
                   .add(
                     createDiv({ className: "artifact-name" }).add(
                       "span",
-                      params[1].concat(" ", params),
+                      current_item?.name,
                       "player-name"
                     )
-                  )
-                  .add(
-                    createDiv({ className: "artifact-sub-name" })
-                      // .add("span", "#12", "player-number")
-                      .add("span", "Year " + params, "player-year")
                   )
                   .add("small", "Coach", "artifact-type")
               )

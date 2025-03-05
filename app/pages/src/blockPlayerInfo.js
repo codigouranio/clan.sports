@@ -1,25 +1,8 @@
 import EasyMDE from "easymde";
 import moment from "moment";
-import AppInfo from "./appInfo";
-import LoginMenu from "./loginMenu";
-import { Component, createDiv, getUrlParams, Page } from "./loveVanilla";
+import { Component, createDiv, getData } from "./loveVanilla";
 
-export default class PagePlayer extends Page {
-  constructor(app, urlMatcher) {
-    super(app, urlMatcher);
-
-    this.createChild(new AppInfo("#app-info"));
-    this.createChild(new PlayerInfo("#w-board"));
-    this.createChild(new LoginMenu("#login-menu"));
-  }
-
-  render() {
-    super.render();
-    return null;
-  }
-}
-
-export class PlayerInfo extends Component {
+export class BlockPlayerInfo extends Component {
   constructor(id, props) {
     super(id, props);
 
@@ -78,7 +61,11 @@ export class PlayerInfo extends Component {
     });
   }
   render() {
-    const params = getUrlParams("player_name").split("_");
+    const { current_item } = getData();
+
+    if (!current_item) {
+      return;
+    }
 
     const root = createDiv({
       id: "artifact-container",
@@ -97,14 +84,22 @@ export class PlayerInfo extends Component {
                     .add(
                       createDiv({ className: "artifact-name" }).add(
                         "span",
-                        params[1].concat(" ", params[0]),
+                        current_item?.name,
                         "player-name"
                       )
                     )
                     .add(
                       createDiv({ className: "artifact-sub-name" })
-                        // .add("span", "#12", "player-number")
-                        .add("span", "Year " + params[2], "player-year")
+                        .add(
+                          "span",
+                          current_item?.shirt_num || "#",
+                          "player-number"
+                        )
+                        .add(
+                          "span",
+                          "Year " + current_item?.year,
+                          "player-year"
+                        )
                     )
                     .add("small", "Player", "artifact-type")
                 )
@@ -170,7 +165,7 @@ export class PlayerInfo extends Component {
         )
       );
 
-    return this.renderChild(root);
+    return root;
   }
 
   afterRender() {}

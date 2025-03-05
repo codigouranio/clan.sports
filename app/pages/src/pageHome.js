@@ -1,6 +1,6 @@
 import AppInfo from "./appInfo";
-import ClubList from "./clubList";
-import { searchClubsBySearchTerm } from "./fetchApi";
+import HitList from "./hitList";
+import { searchByTerm } from "./fetchApi";
 import Loading from "./loading";
 import LoginMenu from "./loginMenu";
 import { getData, getUrlParams, Page } from "./loveVanilla";
@@ -12,7 +12,7 @@ class PageHome extends Page {
 
     this.createChild(new AppInfo("#app-info"));
     this.createChild(new SearchForm("#search-form"));
-    this.createChild(new ClubList("#w-board"));
+    this.createChild(new HitList("#w-board"));
     this.createChild(new LoginMenu("#login-menu"));
 
     this.loading = new Loading();
@@ -28,12 +28,14 @@ class PageHome extends Page {
 
     const { searchResults } = getData();
 
-    if (
-      getUrlParams("query") &&
-      searchResults?.search_term !== getUrlParams("query")
-    ) {
-      await searchClubsBySearchTerm(getUrlParams("query") || "");
-    }
+    await searchByTerm(getUrlParams("query") || "");
+
+    // if (
+    //   getUrlParams("query") &&
+    //   searchResults?.search_term !== getUrlParams("query")
+    // ) {
+    //   await searchByTerm(getUrlParams("query") || "");
+    // }
   }
 }
 

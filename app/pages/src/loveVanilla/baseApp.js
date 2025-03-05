@@ -56,10 +56,28 @@ export class BaseApp {
 
     window.addEventListener("__@_updated_data", () => {
       this.triggerUpdatedDataEvent();
+
+      requestIdleCallback(() => {
+        if (history.state?.scrollPos) {
+          const scrollPos = history.state?.scrollPos;
+          const maxScrollY = document.body.scrollHeight - window.innerHeight;
+          const targetY = Math.min(scrollPos.y, maxScrollY);
+          window.scrollTo(scrollPos.x, targetY);
+        }
+      });
     });
 
-    window.addEventListener("popstate", () => {
+    window.addEventListener("popstate", async (event) => {
       this.triggerRenderingEvent();
+
+      requestIdleCallback(() => {
+        if (history.state?.scrollPos) {
+          const scrollPos = history.state?.scrollPos;
+          const maxScrollY = document.body.scrollHeight - window.innerHeight;
+          const targetY = Math.min(scrollPos.y, maxScrollY);
+          window.scrollTo(scrollPos.x, targetY);
+        }
+      });
     });
 
     const data = JSON.parse(localStorage.getItem("data"));
@@ -68,11 +86,12 @@ export class BaseApp {
     this.triggerRenderingEvent();
   }
 
-  async triggerRenderingEvent() {
+  async triggerRenderingEvent(afterRender = true) {
     this.lastPage = this.getCurrentPage();
 
     this.lastPage?.beforeRender();
     const element = await this.lastPage?.render();
+
     if (element && this.getObject()) {
       if (this.getObject().childNodes.length == 0) {
         this.getObject().appendChild(element);
@@ -80,7 +99,7 @@ export class BaseApp {
         this.getObject().replaceChild(element, this.getObject().childNodes[0]);
       }
     }
-    this.lastPage?.afterRender();
+    afterRender && this.lastPage?.afterRender();
   }
 
   async triggerUpdatedDataEvent() {

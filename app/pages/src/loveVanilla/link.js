@@ -37,6 +37,10 @@ export class Link extends Component {
     if (newUrl.startsWith("https://")) {
       window.open(newUrl, "_blank");
     } else if (location.href !== newUrl) {
+      const scrollPos = { x: window.scrollX, y: window.scrollY };
+      const currentState = history.state || {};
+      history.replaceState({ ...currentState, scrollPos }, document.title);
+
       history.pushState({}, "", newUrl);
       window.dispatchEvent(new Event("__@_popstate_forward"));
     }

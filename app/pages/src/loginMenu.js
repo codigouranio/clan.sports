@@ -25,7 +25,7 @@ class LoginMenu extends Component {
 
     const session = getData()?.session;
 
-    if (session.valid) {
+    if (session?.valid) {
       this.loginOption.hide();
       this.logoutOption.show();
     } else {

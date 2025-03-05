@@ -1,8 +1,8 @@
 import sanitizeHtml from "sanitize-html";
-import { searchClubsBySearchTerm } from "./fetchApi";
+import { searchByTerm } from "./fetchApi";
 import { Component, createDiv, getData, Image, Link } from "./loveVanilla";
 
-class ClubList extends Component {
+class HitList extends Component {
   render() {
     const { searchResults, currentState, currentStateName } = getData();
     if (!searchResults) {
@@ -34,7 +34,7 @@ class ClubList extends Component {
 
     let counter = 0;
     for (const item of searchResults?.items) {
-      const clubItem = new ClubItem(`club_${counter}`, {
+      const clubItem = new HitItem(`club_${counter}`, {
         ...{ keys: [item?.club_name] },
         ...{ parent: this },
         ...item,
@@ -43,7 +43,7 @@ class ClubList extends Component {
       counter++;
     }
 
-    if (searchResults.more_results) {
+    if (searchResults?.metadata?.more_results) {
       results.add(new MoreResults());
     }
 
@@ -51,18 +51,18 @@ class ClubList extends Component {
   }
 }
 
-class ClubItem extends Component {
+class HitItem extends Component {
   render() {
     const params = new URLSearchParams();
-    params.set("club_name", this.props.club_name);
+    params.set("unique_id", this.props.unique_id);
 
     return createDiv({ type: "article", className: "club-info" })
       .add(
         createDiv({ type: "header" })
           .add(
             new Image(`club-logo-${this.id}`, {
-              title: this.props.club_name,
-              alt: this.props.club_name,
+              title: this.props.name,
+              alt: this.props.name,
               className: "club-logo",
               src: `/api/getClubLogo/${this.props.image_file}`,
             })
@@ -72,13 +72,13 @@ class ClubItem extends Component {
               .add(
                 new Link("club-link", {
                   href: `/?${params.toString()}`,
-                  text: this.props.search_title,
+                  text: this.props.name,
                   className: "search-title",
                 })
               )
               .add(
                 createDiv({ type: "small", className: "rank" }).addText(
-                  `Soccer Club - Rank: ${this.props.rank}`
+                  `${this.props.item_type} - Rank: ${this.props.rank_num}`
                 )
               )
           )
@@ -94,19 +94,33 @@ class ClubItem extends Component {
 }
 
 class MoreResults extends Component {
+  constructor(id, props) {
+    super(id, props);
+
+    this.defaultPageSize = 10;
+  }
+
   render() {
     return this.renderChild(
       new Link("more-results", { text: "More Results..." }).setClick(
         async () => {
           const {
-            searchResults: { page, page_size, search_term },
+            searchResults: {
+              metadata: { search_term, page, page_size, state },
+            },
           } = getData();
 
-          await searchClubsBySearchTerm(search_term, page + 1, page_size, true);
+          await searchByTerm(
+            search_term,
+            page,
+            page_size + this.defaultPageSize,
+            state,
+            false
+          );
         }
       )
     );
   }
 }
 
-export default ClubList;
+export default HitList;

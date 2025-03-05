@@ -22,7 +22,7 @@ COPY ./app/home .
 COPY --from=deps_home /home/node/app/node_modules ./node_modules
 RUN npm run build
 
-FROM python:3.11 AS builder
+FROM python:3.12 AS builder
 
 WORKDIR /home/flask/app
 

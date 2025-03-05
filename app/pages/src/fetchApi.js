@@ -31,19 +31,24 @@ export async function getAppInfo() {
   }
 }
 
-export async function searchClubsBySearchTerm(
+export async function searchByTerm(
   searchTerm = "",
   page = 0,
-  pageSize = 10,
+  pageSize = -1,
+  state = "",
   addResults = false
 ) {
   try {
     const { currentState, searchResults } = getData();
 
+    if (pageSize === -1) {
+      pageSize = searchResults?.metadata?.page_size || 10;
+    }
+
     let searchTermParam = searchTerm;
 
     if (!searchTerm || searchTerm.length == 0) {
-      searchTermParam = currentState || "";
+      state = currentState || "";
     }
 
     const urlPageParams = new URLSearchParams({
@@ -54,11 +59,12 @@ export async function searchClubsBySearchTerm(
 
     const urlRequestParams = new URLSearchParams({
       query: searchTermParam,
-      page: page,
+      page,
       page_size: pageSize,
+      state,
     });
 
-    const urlWithParams = `searchClubsBySearchTerm?${urlRequestParams.toString()}`;
+    const urlWithParams = `searchByTerm?${urlRequestParams.toString()}`;
     const response = await api.get(urlWithParams);
 
     if (response.status !== 200) {
@@ -77,6 +83,20 @@ export async function searchClubsBySearchTerm(
     setData({
       searchResults: newResults,
     });
+  } catch (error) {
+    console.error("Error:", error.message);
+    throw error;
+  }
+}
+
+export async function searchItemByUniqueId(uniqueId) {
+  try {
+    const response = await api.get(`searchItemByUniqueId/${uniqueId}`);
+
+    setData({
+      current_item: response.data,
+    });
+    return response.data;
   } catch (error) {
     console.error("Error:", error.message);
     throw error;

@@ -3,5 +3,8 @@
 		{
 			"path": "../../clan.sports"
 		}
-	]
+	],
+	"settings": {
+		"bitoAI.codeCompletion.enableAutoCompletion": false
+	}
 }
